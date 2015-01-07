@@ -1,13 +1,19 @@
 package cz.kinst.jakub.diploma.deecooffload;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -17,49 +23,72 @@ import butterknife.OnClick;
 
 public class MainActivity extends ActionBarActivity {
 
-    public static final String[] BACKENDS = new String[]{"127.0.0.1", "192.168.0.107", "192.168.0.109"};
+    public static final String[] BACKENDS = new String[]{"192.168.0.107", "192.168.0.109"};
     private static final String HELLO_URI = "/hello";
     private static final int PORT = 8182;
+    public static final String PREF_OFFLOAD = "offload";
 
     @InjectView(R.id.backend_spinner)
     Spinner mBackendSpinner;
     @InjectView(R.id.get_hello_button)
     Button mGetHelloButton;
-    private HelloResourceImpl helloResource;
+    @InjectView(R.id.offloading_switch)
+    Switch mOffloadingSwitch;
+    @InjectView(R.id.backend_settings)
+    LinearLayout mBackendSettings;
+    private HelloResourceImpl mHelloResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        mOffloadingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(PREF_OFFLOAD, isChecked).commit();
+                mBackendSettings.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            }
+        });
+        mOffloadingSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_OFFLOAD, false));
+        mBackendSettings.setVisibility(mOffloadingSwitch.isChecked() ? View.VISIBLE : View.GONE);
 
         // setup Spinner for selecting backend
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, BACKENDS); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBackendSpinner.setAdapter(spinnerArrayAdapter);
         try {
-            helloResource = new HelloResourceImpl(HELLO_URI, PORT);
-            helloResource.startServing();
+            mHelloResource = new HelloResourceImpl(HELLO_URI, PORT);
+            mHelloResource.startServing();
             Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            e.printStackTrace();
         }
     }
 
     @OnClick(R.id.get_hello_button)
     void onGetHelloClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = helloResource.getProxy(HelloResource.class, getSelectedBackend());
+        final HelloResource backend = mOffloadingSwitch.isChecked() ? mHelloResource.getProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
 
         new AsyncTask<Void, Void, Message>() {
             @Override
             protected Message doInBackground(Void... params) {
-                return backend.getHello(android.os.Build.MODEL);
+                try {
+                    return backend.getHello(Build.MODEL);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(Message message) {
-                Toast.makeText(MainActivity.this, message.message, Toast.LENGTH_LONG).show();
+                if (message != null)
+                    Toast.makeText(MainActivity.this, message.message, Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(MainActivity.this, getString(R.string.backend_unavailable), Toast.LENGTH_SHORT).show();
+                }
             }
         }.execute();
     }
@@ -89,5 +118,15 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            mHelloResource.stopServing();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }
