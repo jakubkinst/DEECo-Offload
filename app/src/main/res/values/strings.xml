@@ -8,5 +8,6 @@
     <string name="select_backend">Select Backend</string>
     <string name="offload_enabled">Offloading enabled</string>
     <string name="backend_unavailable">Backend is not available</string>
+    <string name="get_hi">Get Hi from Backend</string>
 
 </resources>

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.kinst.jakub.offloading.OffloadingManager;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -36,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
     Switch mOffloadingSwitch;
     @InjectView(R.id.backend_settings)
     LinearLayout mBackendSettings;
+
+    private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
 
     @Override
@@ -58,9 +61,20 @@ public class MainActivity extends ActionBarActivity {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBackendSpinner.setAdapter(spinnerArrayAdapter);
         try {
-            mHelloResource = new HelloResourceImpl(HELLO_URI, PORT);
-            mHelloResource.startServing();
+            mOffloadingManager = new OffloadingManager(PORT);
+            mHelloResource = new HelloResourceImpl(HELLO_URI);
+            mOffloadingManager.attachResource(mHelloResource);
             Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            mOffloadingManager.startServing();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,14 +82,42 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.get_hello_button)
     void onGetHelloClicked() {
+
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingSwitch.isChecked() ? mHelloResource.getProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
+        final HelloResource backend = mOffloadingSwitch.isChecked() ? mOffloadingManager.getResourceProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
 
         new AsyncTask<Void, Void, Message>() {
             @Override
             protected Message doInBackground(Void... params) {
                 try {
                     return backend.getHello(Build.MODEL);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Message message) {
+                if (message != null)
+                    Toast.makeText(MainActivity.this, message.message, Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(MainActivity.this, getString(R.string.backend_unavailable), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+    }
+
+    @OnClick(R.id.get_hi_button)
+    void onGetHiClicked() {
+        // Initialize the resource proxy.
+        final HelloResource backend = mOffloadingSwitch.isChecked() ? mOffloadingManager.getResourceProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
+
+        new AsyncTask<Void, Void, Message>() {
+            @Override
+            protected Message doInBackground(Void... params) {
+                try {
+                    return backend.getHi(Build.MODEL);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -123,7 +165,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         try {
-            mHelloResource.stopServing();
+            mOffloadingManager.stopServing();
         } catch (Exception e) {
             e.printStackTrace();
         }

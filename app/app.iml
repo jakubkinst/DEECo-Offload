@@ -87,12 +87,13 @@
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="org.restlet.ext.gson-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="org.restlet-2.3.0" level="project" />
-    <orderEntry type="library" exported="" name="simple-5.1.6" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="simple-5.1.6" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="butterknife-6.0.0" level="project" />
     <orderEntry type="library" exported="" name="org.restlet.ext.simple-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.3" level="project" />
+    <orderEntry type="module" module-name="offloading" exported="" />
   </component>
 </module>
 

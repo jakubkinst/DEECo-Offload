@@ -3,17 +3,24 @@ package cz.kinst.jakub.diploma.deecooffload;
 
 import java.util.Date;
 
-public class HelloResourceImpl extends ResourceImpl implements HelloResource {
+import cz.kinst.jakub.offloading.OffloadingResourceImpl;
+
+public class HelloResourceImpl extends OffloadingResourceImpl implements HelloResource {
     public HelloResourceImpl() {
     }
 
-    public HelloResourceImpl(String uri, int port) throws Exception {
-        super(uri, port);
+    public HelloResourceImpl(String path) {
+        super(path);
     }
 
     @Override
     public Message getHello(String name) {
         return new Message("Hello to " + name + " from " + android.os.Build.MODEL + "!", new Date().getTime());
+    }
+
+    @Override
+    public Message getHi(String name) {
+        return new Message("Hi to " + name + " from " + android.os.Build.MODEL + "!", new Date().getTime());
     }
 
 }
