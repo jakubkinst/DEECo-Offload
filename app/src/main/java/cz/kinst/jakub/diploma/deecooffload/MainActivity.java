@@ -3,6 +3,7 @@ package cz.kinst.jakub.diploma.deecooffload;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -15,6 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import org.restlet.data.MediaType;
+import org.restlet.representation.FileRepresentation;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -117,7 +123,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             protected Message doInBackground(Void... params) {
                 try {
-                    return backend.getHi(Build.MODEL);
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "test.jpg");
+                    return backend.testFile(new FileRepresentation(file, MediaType.IMAGE_JPEG));
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
