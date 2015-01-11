@@ -9,5 +9,6 @@
     <string name="offload_enabled">Offloading enabled</string>
     <string name="backend_unavailable">Backend is not available</string>
     <string name="get_hi">Get Hi from Backend</string>
+    <string name="try_file_upload">Try File Upload</string>
 
 </resources>

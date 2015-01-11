@@ -8,9 +8,9 @@ import org.restlet.representation.Representation;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
 
+import cz.kinst.jakub.offloading.MultipartHolder;
 import cz.kinst.jakub.offloading.OffloadingResourceImpl;
 
 public class HelloResourceImpl extends OffloadingResourceImpl implements HelloResource {
@@ -32,24 +32,21 @@ public class HelloResourceImpl extends OffloadingResourceImpl implements HelloRe
     }
 
     @Override
-    public Message testFile(Representation fileRepresentation) {
-        byte[] file = null;
+    public Message testFile(Representation representation) {
         try {
-            file = getFileContent(fileRepresentation);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            MultipartHolder<Message> multipartHolder = new MultipartHolder<>(representation, Message.class);
+            byte[] file = multipartHolder.getReceivedFiles().get(0).get();
 
-        File outputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "received.jpg");
-        try {
+            File outputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "received.jpg");
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
             bos.write(file);
             bos.flush();
             bos.close();
-        } catch (IOException e) {
+            return new Message("Received file of size" + file.length + " with param " + multipartHolder.getPayload().message + " at " + android.os.Build.MODEL + "!", new Date().getTime());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Message("Received file " + file.length + " at " + android.os.Build.MODEL + "!", new Date().getTime());
+        return null;
     }
 
 }

@@ -49,8 +49,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/get_hi"
-        android:id="@+id/get_hi_button"
+        android:text="@string/try_file_upload"
+        android:id="@+id/get_fileupload_button"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

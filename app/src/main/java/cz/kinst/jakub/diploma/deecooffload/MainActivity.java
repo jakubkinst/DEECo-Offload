@@ -18,13 +18,15 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import org.restlet.data.MediaType;
-import org.restlet.representation.FileRepresentation;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.kinst.jakub.offloading.MultipartHolder;
 import cz.kinst.jakub.offloading.OffloadingManager;
 
 
@@ -114,8 +116,8 @@ public class MainActivity extends ActionBarActivity {
         }.execute();
     }
 
-    @OnClick(R.id.get_hi_button)
-    void onGetHiClicked() {
+    @OnClick(R.id.get_fileupload_button)
+    void onGetFileUploadClicked() {
         // Initialize the resource proxy.
         final HelloResource backend = mOffloadingSwitch.isChecked() ? mOffloadingManager.getResourceProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
 
@@ -123,8 +125,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             protected Message doInBackground(Void... params) {
                 try {
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "test.jpg");
-                    return backend.testFile(new FileRepresentation(file, MediaType.IMAGE_JPEG));
+                    ArrayList<File> files = new ArrayList<File>();
+                    files.add(new File(Environment.getExternalStorageDirectory() + File.separator + "test.jpg"));
+                    Message message = new Message("Sent message", new Date().getTime());
+                    return backend.testFile(new MultipartHolder<Message>(files, MediaType.IMAGE_JPEG, message).getForm());
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;

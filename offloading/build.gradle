@@ -11,6 +11,12 @@ dependencies {
     compile('org.restlet.jse:org.restlet.ext.gson:2.3.0') {
         exclude module: 'org.restlet'
     }
+    compile('org.restlet.jse:org.restlet.ext.fileupload:2.3.0') {
+        exclude module: 'org.restlet'
+    }
+    compile('org.restlet.jse:org.restlet.ext.html:2.3.0') {
+        exclude module: 'org.restlet'
+    }
 }
 
 sourceCompatibility = 1.7
