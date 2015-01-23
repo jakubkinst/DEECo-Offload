@@ -4,7 +4,7 @@ package cz.kinst.jakub.diploma.deecooffload;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import cz.kinst.jakub.offloading.OffloadingResource;
+import cz.kinst.jakub.offloading.resource.OffloadingResource;
 
 public interface HelloResource extends OffloadingResource {
 

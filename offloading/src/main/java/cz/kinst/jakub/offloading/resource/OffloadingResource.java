@@ -1,4 +1,4 @@
-package cz.kinst.jakub.offloading;
+package cz.kinst.jakub.offloading.resource;
 
 /**
  * Created by jakubkinst on 09/01/15.

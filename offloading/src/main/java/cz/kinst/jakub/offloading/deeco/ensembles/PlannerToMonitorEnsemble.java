@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco.ensembles;
+package cz.kinst.jakub.offloading.deeco.ensembles;
 
 
 import cz.cuni.mff.d3s.deeco.annotations.Ensemble;
@@ -8,8 +8,8 @@ import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.deecooffload.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.deecooffload.deeco.model.NfpDataHolder;
+import cz.kinst.jakub.offloading.deeco.model.NFPData;
+import cz.kinst.jakub.offloading.deeco.model.NfpDataHolder;
 
 /**
  * This ensemble takes care of pushing NFPData from Monitors to Planner
@@ -18,7 +18,7 @@ import cz.kinst.jakub.diploma.deecooffload.deeco.model.NfpDataHolder;
  */
 @Ensemble
 @PeriodicScheduling(period = 1000) // check every second TODO: tune this value
-public class PlannerToMonitor {
+public class PlannerToMonitorEnsemble {
     @Membership
     public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp) {
         return true; // all Monitors with all Planners

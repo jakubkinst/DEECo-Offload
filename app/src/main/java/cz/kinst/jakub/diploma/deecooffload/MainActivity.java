@@ -8,12 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -26,50 +22,49 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cz.kinst.jakub.offloading.MultipartHolder;
+import cz.kinst.jakub.diploma.deecooffload.deeco.AndroidLogProvider;
+import cz.kinst.jakub.diploma.deecooffload.deeco.AndroidUDPBroadcast;
 import cz.kinst.jakub.offloading.OffloadingManager;
+import cz.kinst.jakub.offloading.deeco.DEECoManager;
+import cz.kinst.jakub.offloading.logger.Logger;
+import cz.kinst.jakub.offloading.resource.MultipartHolder;
 
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String[] BACKENDS = new String[]{"192.168.0.107", "192.168.0.109"};
     private static final String HELLO_URI = "/hello";
-    private static final int PORT = 8182;
     public static final String PREF_OFFLOAD = "offload";
 
-    @InjectView(R.id.backend_spinner)
-    Spinner mBackendSpinner;
     @InjectView(R.id.get_hello_button)
     Button mGetHelloButton;
     @InjectView(R.id.offloading_switch)
     Switch mOffloadingSwitch;
-    @InjectView(R.id.backend_settings)
-    LinearLayout mBackendSettings;
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
+    private DEECoManager mDeecoManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+
+        // init DEECo
+        Logger.setProvider(new AndroidLogProvider());
+
         mOffloadingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(PREF_OFFLOAD, isChecked).commit();
-                mBackendSettings.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
         mOffloadingSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_OFFLOAD, false));
-        mBackendSettings.setVisibility(mOffloadingSwitch.isChecked() ? View.VISIBLE : View.GONE);
 
-        // setup Spinner for selecting backend
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, BACKENDS); //selected item will look like a spinner set from XML
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mBackendSpinner.setAdapter(spinnerArrayAdapter);
         try {
-            mOffloadingManager = new OffloadingManager(PORT);
+            mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
             mHelloResource = new HelloResourceImpl(HELLO_URI);
             mOffloadingManager.attachResource(mHelloResource);
             Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
@@ -82,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         try {
-            mOffloadingManager.startServing();
+            mOffloadingManager.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.get_fileupload_button)
     void onGetFileUploadClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingSwitch.isChecked() ? mOffloadingManager.getResourceProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
+        final HelloResource backend = mOffloadingManager.getResourceProxy(HelloResource.class, mOffloadingManager.)
 
         new AsyncTask<Void, Void, Message>() {
             @Override
@@ -144,10 +139,6 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         }.execute();
-    }
-
-    private String getSelectedBackend() {
-        return BACKENDS[mBackendSpinner.getSelectedItemPosition()];
     }
 
 
@@ -176,7 +167,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         try {
-            mOffloadingManager.stopServing();
+            mOffloadingManager.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }

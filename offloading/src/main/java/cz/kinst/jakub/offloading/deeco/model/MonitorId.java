@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco.model;
+package cz.kinst.jakub.offloading.deeco.model;
 
 /**
  * Created by jakubkinst on 21/01/15.

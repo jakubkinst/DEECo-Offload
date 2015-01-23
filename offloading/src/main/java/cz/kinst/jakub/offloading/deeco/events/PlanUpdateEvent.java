@@ -1,6 +1,6 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco.events;
+package cz.kinst.jakub.offloading.deeco.events;
 
-import cz.kinst.jakub.diploma.deecooffload.deeco.model.DeploymentPlan;
+import cz.kinst.jakub.offloading.deeco.model.DeploymentPlan;
 
 /**
  * Created by jakubkinst on 21/01/15.

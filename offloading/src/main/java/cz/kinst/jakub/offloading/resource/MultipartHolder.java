@@ -1,4 +1,4 @@
-package cz.kinst.jakub.offloading;
+package cz.kinst.jakub.offloading.resource;
 
 import com.google.gson.Gson;
 

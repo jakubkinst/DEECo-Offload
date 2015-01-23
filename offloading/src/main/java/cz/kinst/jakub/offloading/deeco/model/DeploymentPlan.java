@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco.model;
+package cz.kinst.jakub.offloading.deeco.model;
 
 import java.io.Serializable;
 import java.util.HashMap;

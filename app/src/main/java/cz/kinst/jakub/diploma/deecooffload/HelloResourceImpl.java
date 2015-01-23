@@ -1,6 +1,7 @@
 package cz.kinst.jakub.diploma.deecooffload;
 
 
+import android.os.Build;
 import android.os.Environment;
 
 import org.restlet.representation.Representation;
@@ -9,16 +10,40 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
+import java.util.Map;
 
-import cz.kinst.jakub.offloading.MultipartHolder;
-import cz.kinst.jakub.offloading.OffloadingResourceImpl;
+import cz.kinst.jakub.offloading.deeco.model.NFPData;
+import cz.kinst.jakub.offloading.resource.MultipartHolder;
+import cz.kinst.jakub.offloading.resource.OffloadingResourceImpl;
+import cz.kinst.jakub.offloading.resource.ResourcePerformanceChecker;
 
 public class HelloResourceImpl extends OffloadingResourceImpl implements HelloResource {
     public HelloResourceImpl() {
     }
 
     public HelloResourceImpl(String path) {
-        super(path);
+        super(path, new ResourcePerformanceChecker() {
+            @Override
+            public NFPData checkPerformance(String host) {
+                return new NFPData(Build.MODEL.length());
+            }
+
+            @Override
+            public String findOptimalAlternative(Map<String, NFPData> alternatives) {
+                String bestAlternative = null;
+                float max = Float.MIN_VALUE;
+                for (String key : alternatives.keySet()) {
+                    if (bestAlternative == null)
+                        bestAlternative = key;
+                    NFPData nfpData = alternatives.get(key);
+                    if (nfpData.getPerformance() > max) {
+                        max = nfpData.getPerformance();
+                        bestAlternative = key;
+                    }
+                }
+                return bestAlternative;
+            }
+        });
     }
 
     @Override
