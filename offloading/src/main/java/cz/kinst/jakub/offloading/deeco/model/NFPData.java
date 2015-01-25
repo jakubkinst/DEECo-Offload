@@ -1,16 +1,10 @@
 package cz.kinst.jakub.offloading.deeco.model;
 
+import java.io.Serializable;
+
 /**
  * Created by jakubkinst on 21/01/15.
  */
-public class NFPData {
-    private float performance;
+public abstract class NFPData implements Serializable {
 
-    public NFPData(float performance) {
-        this.performance = performance;
-    }
-
-    public float getPerformance() {
-        return performance;
-    }
 }

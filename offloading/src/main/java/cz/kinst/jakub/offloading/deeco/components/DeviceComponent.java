@@ -1,5 +1,6 @@
 package cz.kinst.jakub.offloading.deeco.components;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,7 +18,7 @@ import cz.kinst.jakub.offloading.deeco.model.MonitorDef;
 import cz.kinst.jakub.offloading.logger.Logger;
 
 @Component
-public class DeviceComponent {
+public class DeviceComponent implements Serializable{
     public String ip;
     public Map<String, Set<MonitorDef>> monitorDefs = new HashMap<>(); // key is the app id
     public Set<String> spawnedMonitors = new HashSet<>();

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Map;
 
 import cz.kinst.jakub.offloading.deeco.model.NFPData;
+import cz.kinst.jakub.offloading.deeco.model.SimpleValueNFPData;
 import cz.kinst.jakub.offloading.resource.MultipartHolder;
 import cz.kinst.jakub.offloading.resource.OffloadingResourceImpl;
 import cz.kinst.jakub.offloading.resource.ResourcePerformanceChecker;
@@ -24,8 +25,8 @@ public class HelloResourceImpl extends OffloadingResourceImpl implements HelloRe
     public HelloResourceImpl(String path) {
         super(path, new ResourcePerformanceChecker() {
             @Override
-            public NFPData checkPerformance(String host) {
-                return new NFPData(Build.MODEL.length());
+            public NFPData checkPerformance() {
+                return new SimpleValueNFPData(Build.MODEL.length());
             }
 
             @Override
@@ -35,7 +36,7 @@ public class HelloResourceImpl extends OffloadingResourceImpl implements HelloRe
                 for (String key : alternatives.keySet()) {
                     if (bestAlternative == null)
                         bestAlternative = key;
-                    NFPData nfpData = alternatives.get(key);
+                    SimpleValueNFPData nfpData = (SimpleValueNFPData) alternatives.get(key);
                     if (nfpData.getPerformance() > max) {
                         max = nfpData.getPerformance();
                         bestAlternative = key;

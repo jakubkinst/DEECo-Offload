@@ -125,11 +125,11 @@ public class OffloadingManager {
         return mUdpBroadcast.getMyIpAddress();
     }
 
-    public NFPData checkPerformance(String resourcePath, String host) {
+    public NFPData checkPerformance(String resourcePath) {
         for (OffloadingResourceImpl resource : mResources) {
             if (resource.getPath().equals(resourcePath)) {
-                Logger.i("Performing checkPerformance on " + resourcePath + " at " + host);
-                NFPData nfpData = resource.checkPerformance(host);
+                Logger.i("Performing checkPerformance on " + resourcePath);
+                NFPData nfpData = resource.checkPerformance();
                 return nfpData;
             }
         }

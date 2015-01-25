@@ -9,7 +9,7 @@ import cz.kinst.jakub.offloading.deeco.model.NFPData;
  */
 //TODO: rename class and methods properly
 public abstract class ResourcePerformanceChecker {
-    public abstract NFPData checkPerformance(String host);
+    public abstract NFPData checkPerformance();
 
     public abstract String findOptimalAlternative(Map<String, NFPData> alternatives);
 }

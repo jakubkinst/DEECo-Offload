@@ -1,12 +1,13 @@
 package cz.kinst.jakub.offloading.deeco.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
  * Created by jakubkinst on 21/01/15.
  */
-public class NfpDataHolder {
+public class NfpDataHolder implements Serializable {
     private HashMap<String, HashMap<String, NFPData>> map = new HashMap<>();
 
     public void put(String appComponentId, String deviceIp, NFPData nfpData) {

@@ -1,5 +1,7 @@
 package cz.kinst.jakub.offloading.deeco.components;
 
+import java.io.Serializable;
+
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
@@ -10,7 +12,7 @@ import cz.kinst.jakub.offloading.OffloadingManager;
 import cz.kinst.jakub.offloading.deeco.model.NFPData;
 
 @Component
-public class MonitorComponent {
+public class MonitorComponent implements Serializable {
     public String appComponentId;
     public String deviceIp;
     public String resourceId;
@@ -23,8 +25,8 @@ public class MonitorComponent {
 
     @Process
     @PeriodicScheduling(period = 1000)
-    public static void measure(@In("deviceIp") String deviceIp, @In("resourceId") String resourceId, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
+    public static void measure(@In("resourceId") String resourceId, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"
-        nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId, deviceIp);
+        nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId);
     }
 }

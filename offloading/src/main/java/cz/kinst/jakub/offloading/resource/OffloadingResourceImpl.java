@@ -26,8 +26,8 @@ public abstract class OffloadingResourceImpl extends ServerResource {
         return mPath;
     }
 
-    public NFPData checkPerformance(String host) {
-        return mResourcePerformanceChecker.checkPerformance(host);
+    public NFPData checkPerformance() {
+        return mResourcePerformanceChecker.checkPerformance();
     }
 
     public String findOptimalAlternative(Map<String, NFPData> alternatives) {
