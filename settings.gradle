@@ -1,1 +1,1 @@
-include ':app', ':offloading'
+include ':app'

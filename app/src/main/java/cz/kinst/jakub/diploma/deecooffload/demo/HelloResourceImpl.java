@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload;
+package cz.kinst.jakub.diploma.deecooffload.demo;
 
 
 import android.os.Build;

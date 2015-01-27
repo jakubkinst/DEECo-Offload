@@ -6,7 +6,6 @@ import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.kinst.jakub.offloading.deeco.components.DeviceComponent;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPRuntimeBuilder;
 import cz.kinst.jakub.offloading.logger.Logger;
@@ -16,6 +15,8 @@ import cz.kinst.jakub.offloading.logger.Logger;
  */
 public class DEECoManager {
 
+    private final UDPRuntimeBuilder mBuilder;
+    private final RuntimeMetadata mModel;
     private UDPBroadcast mUdpBroadcast;
     private RuntimeFramework mDEECoRuntime;
     private boolean mRunning;
@@ -23,21 +24,16 @@ public class DEECoManager {
 
     public DEECoManager(UDPBroadcast udpBroadcast) {
         this.mUdpBroadcast = udpBroadcast;
+
+        mBuilder = new UDPRuntimeBuilder();
+        mModel = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+        mProcessor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, mModel, new CloningKnowledgeManagerFactory());
     }
 
     public void initRuntime() {
         try {
-            UDPRuntimeBuilder builder = new UDPRuntimeBuilder();
-
-            RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-            mProcessor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory());
-
-            // addComponents and ensembles
-            // TODO: move to upper layer if it is possible to do this after builder.build()
-            registerComponent(new DeviceComponent(mUdpBroadcast.getMyIpAddress()));
-
             Logger.i("DEECo Runtime initialized. IP:" + mUdpBroadcast.getMyIpAddress());
-            mDEECoRuntime = builder.build(mUdpBroadcast.getMyIpAddress(), model, mUdpBroadcast);
+            mDEECoRuntime = mBuilder.build(mUdpBroadcast.getMyIpAddress(), mModel, mUdpBroadcast);
         } catch (Exception e) {
             e.printStackTrace();
             Logger.e(e.getMessage());
@@ -47,7 +43,7 @@ public class DEECoManager {
     public void registerComponent(Object component) {
         try {
             mProcessor.process(component);
-            Logger.i("DEECo component " + component.getClass().getName() + "registered.");
+            Logger.i("DEECo component " + component.getClass().getName() + " registered.");
         } catch (AnnotationProcessorException e) {
             e.printStackTrace();
         }
@@ -56,14 +52,15 @@ public class DEECoManager {
     public void registerEnsemble(Class ensemble) {
         try {
             mProcessor.process(ensemble);
-            Logger.i("DEECo ensemble " + ensemble.getName() + "registered.");
+            Logger.i("DEECo ensemble " + ensemble.getName() + " registered.");
         } catch (AnnotationProcessorException e) {
             e.printStackTrace();
         }
     }
 
     public void startRuntime() {
-        mUdpBroadcast.startReceiving();
+        mUdpBroadcast.startReceivingInBackground();
+        mDEECoRuntime.start();
         mRunning = true;
         Logger.i("DEECo runtime started.");
     }

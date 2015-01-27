@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload;
+package cz.kinst.jakub.diploma.deecooffload.demo;
 
 /**
 * Created by jakubkinst on 07/01/15.

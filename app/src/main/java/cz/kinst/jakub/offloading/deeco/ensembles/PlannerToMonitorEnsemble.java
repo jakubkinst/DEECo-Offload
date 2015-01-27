@@ -17,7 +17,7 @@ import cz.kinst.jakub.offloading.deeco.model.NfpDataHolder;
  * Member: Monitor
  */
 @Ensemble
-@PeriodicScheduling(period = 1000) // check every second TODO: tune this value
+@PeriodicScheduling(period = 6000) // check every second TODO: tune this value
 public class PlannerToMonitorEnsemble {
     @Membership
     public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp) {
@@ -26,7 +26,7 @@ public class PlannerToMonitorEnsemble {
 
     @KnowledgeExchange
     public static void knowledgeExchange(@In("member.nfpData") NFPData monitorNfpData,
-                                         @In("member.appComponentId") String monitorAppComponentId,
+                                         @In("member.resourceId") String monitorAppComponentId,
                                          @In("member.deviceIp") String monitorDeviceIp,
                                          @InOut("coord.nfpDataHolder") ParamHolder<NfpDataHolder> plannerDataHolder) {
         plannerDataHolder.value.put(monitorAppComponentId, monitorDeviceIp, monitorNfpData);

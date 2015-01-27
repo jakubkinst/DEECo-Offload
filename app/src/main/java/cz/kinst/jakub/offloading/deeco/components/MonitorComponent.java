@@ -24,7 +24,7 @@ public class MonitorComponent implements Serializable {
     }
 
     @Process
-    @PeriodicScheduling(period = 1000)
+    @PeriodicScheduling(period = 10000)
     public static void measure(@In("resourceId") String resourceId, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"
         nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId);

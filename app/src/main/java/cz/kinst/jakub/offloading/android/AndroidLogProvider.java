@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco;
+package cz.kinst.jakub.offloading.android;
 
 import android.util.Log;
 

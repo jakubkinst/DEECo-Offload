@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload;
+package cz.kinst.jakub.diploma.deecooffload.demo;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.restlet.data.MediaType;
@@ -22,10 +23,12 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cz.kinst.jakub.diploma.deecooffload.deeco.AndroidLogProvider;
-import cz.kinst.jakub.diploma.deecooffload.deeco.AndroidUDPBroadcast;
 import cz.kinst.jakub.offloading.OffloadingManager;
+import cz.kinst.jakub.offloading.OnDeploymentPlanUpdatedListener;
+import cz.kinst.jakub.offloading.android.AndroidLogProvider;
+import cz.kinst.jakub.offloading.android.AndroidUDPBroadcast;
 import cz.kinst.jakub.offloading.deeco.DEECoManager;
+import cz.kinst.jakub.offloading.deeco.model.DeploymentPlan;
 import cz.kinst.jakub.offloading.logger.Logger;
 import cz.kinst.jakub.offloading.resource.MultipartHolder;
 
@@ -40,6 +43,8 @@ public class MainActivity extends ActionBarActivity {
     Button mGetHelloButton;
     @InjectView(R.id.offloading_switch)
     Switch mOffloadingSwitch;
+    @InjectView(R.id.current_backend)
+    TextView mCurrentBackend;
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
@@ -65,8 +70,16 @@ public class MainActivity extends ActionBarActivity {
 
         try {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
+
             mHelloResource = new HelloResourceImpl(HELLO_URI);
-            mOffloadingManager.attachResource(mHelloResource);
+            mOffloadingManager.attachResource(mHelloResource);mOffloadingManager.setDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
+                @Override
+                public void onDeploymentPlanUpdated(DeploymentPlan plan) {
+                    String path = mHelloResource.getPath();
+                    String backend = plan.getPlan(path);
+                    mCurrentBackend.setText(backend);
+                }
+            });
             Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,15 +98,14 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.get_hello_button)
     void onGetHelloClicked() {
-
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingSwitch.isChecked() ? mOffloadingManager.getResourceProxy(HelloResource.class, getSelectedBackend()) : mHelloResource;
-
+        final HelloResource backend = mOffloadingManager.getCurrentResourceProxy(HelloResource.class);
         new AsyncTask<Void, Void, Message>() {
             @Override
             protected Message doInBackground(Void... params) {
                 try {
-                    return backend.getHello(Build.MODEL);
+                    Message message = backend.getHello(Build.MODEL);
+                    return message;
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -108,13 +120,13 @@ public class MainActivity extends ActionBarActivity {
                     Toast.makeText(MainActivity.this, getString(R.string.backend_unavailable), Toast.LENGTH_SHORT).show();
                 }
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @OnClick(R.id.get_fileupload_button)
     void onGetFileUploadClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingManager.getResourceProxy(HelloResource.class, mOffloadingManager.)
+        final HelloResource backend = mOffloadingManager.getCurrentResourceProxy(HelloResource.class);
 
         new AsyncTask<Void, Void, Message>() {
             @Override
@@ -138,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
                     Toast.makeText(MainActivity.this, getString(R.string.backend_unavailable), Toast.LENGTH_SHORT).show();
                 }
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 

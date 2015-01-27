@@ -23,7 +23,7 @@ public class PlannerComponent implements Serializable {
 
     public String appId;
     public Set<MonitorDef> monitorDefs;
-    public NfpDataHolder nfpDataHolder;
+    public NfpDataHolder nfpDataHolder = new NfpDataHolder();
 
     public PlannerComponent(String appId, Set<MonitorDef> monitorDefs) {
         this.appId = appId;
@@ -31,7 +31,7 @@ public class PlannerComponent implements Serializable {
     }
 
     @Process
-    @PeriodicScheduling(period = 1000)
+    @PeriodicScheduling(period = 5000)
     public static void plan(@In("nfpDataHolder") NfpDataHolder nfpDataHolder) {
         Logger.i("Planner: plan");
         DeploymentPlan newPlan = new DeploymentPlan();

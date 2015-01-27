@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "cz.kinst.jakub.diploma.deecooffload"
+        applicationId "cz.kinst.jakub.diploma.deecooffload.demo"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
@@ -19,6 +19,14 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/eclipse.inf'
+        exclude 'META-INF/about.ini'
+        exclude 'about.ini'
+        exclude 'about.properties'
+        exclude 'plugin.properties'
+        exclude 'plugin.xml'
+        exclude 'about.mappings'
+        exclude 'modeling32.png'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
@@ -29,8 +37,27 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':offloading')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.jakewharton:butterknife:6.0.0'
 
+    // OFFLOADING PART
+
+    compile 'de.greenrobot:eventbus:2.4.0'
+
+    // server libraries
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'org.simpleframework:simple:5.1.6'
+    compile 'org.restlet.android:org.restlet:2.3.0'
+    compile('org.restlet.jse:org.restlet.ext.simple:2.3.0') {
+        exclude module: 'org.restlet'
+    }
+    compile('org.restlet.jse:org.restlet.ext.gson:2.3.0') {
+        exclude module: 'org.restlet'
+    }
+    compile('org.restlet.jse:org.restlet.ext.fileupload:2.3.0') {
+        exclude module: 'org.restlet'
+    }
+    compile('org.restlet.jse:org.restlet.ext.html:2.3.0') {
+        exclude module: 'org.restlet'
+    }
 }

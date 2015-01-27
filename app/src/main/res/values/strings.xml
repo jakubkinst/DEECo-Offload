@@ -10,5 +10,6 @@
     <string name="backend_unavailable">Backend is not available</string>
     <string name="get_hi">Get Hi from Backend</string>
     <string name="try_file_upload">Try File Upload</string>
+    <string name="current_backend">Current Hello Backend:</string>
 
 </resources>

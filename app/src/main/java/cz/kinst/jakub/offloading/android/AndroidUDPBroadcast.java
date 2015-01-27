@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.deecooffload.deeco;
+package cz.kinst.jakub.offloading.android;
 
 import android.content.Context;
 import android.net.DhcpInfo;
@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPConfig;
+
 
 /**
  * Created by jakubkinst on 12/11/14.

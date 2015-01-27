@@ -19,7 +19,7 @@ import cz.kinst.jakub.offloading.deeco.model.MonitorDef;
  * Member: Device
  */
 @Ensemble
-@PeriodicScheduling(period = 15000) // check every 15 seconds TODO: tune this value
+@PeriodicScheduling(period = 13000) // check every 13 seconds TODO: tune this value
 public class PlannerToDeviceEnsemble {
     @Membership
     public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.ip") String deviceIp) {

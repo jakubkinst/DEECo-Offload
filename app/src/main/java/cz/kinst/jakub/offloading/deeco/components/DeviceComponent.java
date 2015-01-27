@@ -28,7 +28,7 @@ public class DeviceComponent implements Serializable{
     }
 
     @Process
-    @PeriodicScheduling(period = 5000)
+    @PeriodicScheduling(period = 6000)
     public static void manageMonitors(@In("monitorDefs") Map<String, Set<MonitorDef>> monitorDefs, @InOut("spawnedMonitors") ParamHolder<Set<String>> spawnedMonitors, @In("ip") String ip) {
         //spawn monitors for each one of the monitorDefs
         for (String appId : monitorDefs.keySet()) {
