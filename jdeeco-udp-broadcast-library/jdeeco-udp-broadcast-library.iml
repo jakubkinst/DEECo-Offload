@@ -26,12 +26,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="cloning-1.9.0" level="project" />
-    <orderEntry type="library" exported="" name="cz.cuni.mff.d3s.jdeeco.core-2.0.0" level="project" />
-    <orderEntry type="library" exported="" name="objenesis-2.1" level="project" />
-    <orderEntry type="library" exported="" name="org.eclipse.emf.common-2.9.0-v20130528-0742" level="project" />
-    <orderEntry type="library" exported="" name="org.eclipse.emf.ecore-2.9.0-v20130528-0742" level="project" />
-    <orderEntry type="library" exported="" name="org.eclipse.emf.ecore.xmi-2.9.0-v20130528-0742" level="project" />
+    <orderEntry type="module" module-name="jdeeco-java-library" exported="" />
   </component>
 </module>
 

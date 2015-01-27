@@ -1,0 +1,11 @@
+// This module is used to include set of jar libraries with transitive support.
+// It is enough to set this module as a dependency to the lowest-level module in dependency hierarchy
+// Currently it is referenced from jdeeco-udp-broadcast-library. From there, transitivity takes care of the rest
+
+configurations.create("default")
+artifacts.add("default", file('jars/cz.cuni.mff.d3s.jdeeco.core-2.0.0.jar'))
+artifacts.add("default", file('jars/cloning-1.9.0.jar'))
+artifacts.add("default", file('jars/objenesis-2.1.jar'))
+artifacts.add("default", file('jars/org.eclipse.emf.common-2.9.0-v20130528-0742.jar'))
+artifacts.add("default", file('jars/org.eclipse.emf.ecore.xmi-2.9.0-v20130528-0742.jar'))
+artifacts.add("default", file('jars/org.eclipse.emf.ecore-2.9.0-v20130528-0742.jar'))
