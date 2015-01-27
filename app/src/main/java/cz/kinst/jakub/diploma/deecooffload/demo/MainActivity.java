@@ -27,7 +27,6 @@ import cz.kinst.jakub.offloading.OffloadingManager;
 import cz.kinst.jakub.offloading.OnDeploymentPlanUpdatedListener;
 import cz.kinst.jakub.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.offloading.android.AndroidUDPBroadcast;
-import cz.kinst.jakub.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.offloading.deeco.model.DeploymentPlan;
 import cz.kinst.jakub.offloading.logger.Logger;
 import cz.kinst.jakub.offloading.resource.MultipartHolder;
@@ -48,7 +47,6 @@ public class MainActivity extends ActionBarActivity {
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
-    private DEECoManager mDeecoManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
