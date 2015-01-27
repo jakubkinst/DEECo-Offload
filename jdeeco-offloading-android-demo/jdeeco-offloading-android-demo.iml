@@ -107,6 +107,7 @@
     <orderEntry type="library" exported="" name="joda-time-2.3" level="project" />
     <orderEntry type="library" exported="" name="commons-fileupload-1.3" level="project" />
     <orderEntry type="module" module-name="jdeeco-offloading-java-library" exported="" />
+    <orderEntry type="module" module-name="jdeeco-udp-broadcast-library" exported="" />
     <orderEntry type="module" module-name="jdeeco-offloading-android-library" exported="" />
   </component>
 </module>
