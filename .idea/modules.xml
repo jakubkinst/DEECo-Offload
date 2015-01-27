@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DEECo-Offloading-for-Android.iml" filepath="$PROJECT_DIR$/DEECo-Offloading-for-Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-android-demo/jdeeco-offloading-android-demo.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-android-demo/jdeeco-offloading-android-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-android-library/jdeeco-offloading-android-library.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-android-library/jdeeco-offloading-android-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-java-library/jdeeco-offloading-java-library.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-java-library/jdeeco-offloading-java-library.iml" />
     </modules>
   </component>
 </project>
