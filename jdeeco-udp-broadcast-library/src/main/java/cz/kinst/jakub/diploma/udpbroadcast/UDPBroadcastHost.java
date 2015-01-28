@@ -17,8 +17,8 @@ public class UDPBroadcastHost extends AbstractHost implements NetworkInterface {
     public UDPBroadcastHost(String ipAddress, UDPBroadcast udpBroadcast) {
         super(ipAddress, new DefaultCurrentTimeProvider());
         this.udpBroadcast = udpBroadcast;
-        this.packetReceiver = new PacketReceiver(id, UDPConfig.PACKET_SIZE);
-        this.packetSender = new PacketSender(this, UDPConfig.PACKET_SIZE, false, false);
+        this.packetReceiver = new PacketReceiver(id, UDPBroadcastConfig.PACKET_SIZE);
+        this.packetSender = new PacketSender(this, UDPBroadcastConfig.PACKET_SIZE, false, false);
         this.packetReceiver.setCurrentTimeProvider(this);
         this.udpBroadcast.setOnPacketReceivedListener(new UDPBroadcast.OnUdpPacketReceivedListener() {
             @Override

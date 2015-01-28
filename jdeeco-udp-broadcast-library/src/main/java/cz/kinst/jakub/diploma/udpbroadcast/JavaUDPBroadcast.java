@@ -48,17 +48,18 @@ public class JavaUDPBroadcast extends UDPBroadcast {
 
     @Override
     protected final void logDebug(String message) {
-        System.out.println("DEBUG: " + UDPConfig.TAG + ": " + message);
+        if (UDPBroadcastConfig.DEBUG_MODE)
+            System.out.println("DEBUG: " + UDPBroadcastConfig.TAG + ": " + message);
     }
 
     @Override
     protected final void logError(String message) {
-        System.err.println("ERROR: " + UDPConfig.TAG + ": " + message);
+        System.err.println("ERROR: " + UDPBroadcastConfig.TAG + ": " + message);
     }
 
     @Override
     protected final void logInfo(String message) {
-        System.out.println("INFO: " + UDPConfig.TAG + ": " + message);
+        System.out.println("INFO: " + UDPBroadcastConfig.TAG + ": " + message);
     }
 
     @Override

@@ -55,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-
         // init DEECo
         Logger.setProvider(new AndroidLogProvider());
 

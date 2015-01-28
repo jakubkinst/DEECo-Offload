@@ -66,7 +66,7 @@ public class OffloadingManager {
 
 
         mServerComponent = new Component();
-        mServerComponent.getServers().add(Protocol.HTTP, Config.HTTP_PORT_FOR_RESOURCES);
+        mServerComponent.getServers().add(Protocol.HTTP, OffloadingConfig.HTTP_PORT_FOR_RESOURCES);
         mRouter = new Router(mServerComponent.getContext().createChildContext());
         mServerComponent.getDefaultHost().attach(mRouter);
         // init DEECo infrastructure for cz.kinst.jakub.cz.kinst.jakub.cz.kinst.jakub.diploma.cz.kinst.jakub.diploma.cz.kinst.jakub.diploma.offloading
@@ -141,7 +141,7 @@ public class OffloadingManager {
     }
 
     private static String getUrl(String host, String resourcePath) {
-        return "http://" + host + ":" + Config.HTTP_PORT_FOR_RESOURCES + resourcePath;
+        return "http://" + host + ":" + OffloadingConfig.HTTP_PORT_FOR_RESOURCES + resourcePath;
     }
 
     public String getLocalIpAddress() {

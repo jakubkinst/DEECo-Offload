@@ -12,7 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
-import cz.kinst.jakub.diploma.udpbroadcast.UDPConfig;
+import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig;
 
 
 /**
@@ -59,17 +59,18 @@ public class AndroidUDPBroadcast extends UDPBroadcast {
 
     @Override
     protected final void logDebug(String message) {
-        Log.d(UDPConfig.TAG, message);
+        if (UDPBroadcastConfig.DEBUG_MODE)
+            Log.d(UDPBroadcastConfig.TAG, message);
     }
 
     @Override
     protected final void logError(String message) {
-        Log.e(UDPConfig.TAG, message);
+        Log.e(UDPBroadcastConfig.TAG, message);
     }
 
     @Override
     protected final void logInfo(String message) {
-        Log.i(UDPConfig.TAG, message);
+        Log.i(UDPBroadcastConfig.TAG, message);
     }
 
     @Override

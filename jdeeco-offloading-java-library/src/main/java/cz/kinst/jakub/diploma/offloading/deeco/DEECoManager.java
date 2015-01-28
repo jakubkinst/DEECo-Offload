@@ -3,9 +3,11 @@ package cz.kinst.jakub.diploma.offloading.deeco;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
+import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPRuntimeBuilder;
@@ -23,6 +25,9 @@ public class DEECoManager {
     private AnnotationProcessor mProcessor;
 
     public DEECoManager(UDPBroadcast udpBroadcast) {
+        Log.i("Setting logger level acording to OffloadingConfig"); // this is called to initialize StandardLogger (workaround)
+        java.util.logging.Logger.getLogger("default").setLevel(OffloadingConfig.JDEECO_LOGGING_LEVEL);
+
         this.mUdpBroadcast = udpBroadcast;
 
         mBuilder = new UDPRuntimeBuilder();
@@ -32,7 +37,7 @@ public class DEECoManager {
 
     public void initRuntime() {
         try {
-            Logger.i("DEECo Runtime initialized. IP:" + mUdpBroadcast.getMyIpAddress());
+            Logger.i("DEECo Runtime initialized at " + mUdpBroadcast.getMyIpAddress());
             mDEECoRuntime = mBuilder.build(mUdpBroadcast.getMyIpAddress(), mModel, mUdpBroadcast);
         } catch (Exception e) {
             e.printStackTrace();

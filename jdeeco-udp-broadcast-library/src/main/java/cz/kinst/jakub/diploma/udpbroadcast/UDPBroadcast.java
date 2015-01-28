@@ -21,7 +21,7 @@ public abstract class UDPBroadcast {
         try {
             DatagramSocket socket = new DatagramSocket();
             socket.setBroadcast(true);
-            DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, getBroadcastAddress(), UDPConfig.PORT);
+            DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, getBroadcastAddress(), UDPBroadcastConfig.PORT);
             socket.send(sendPacket);
             logDebug("Broadcast packet sent to: " + getBroadcastAddress().getHostAddress());
         } catch (IOException e) {
@@ -32,14 +32,14 @@ public abstract class UDPBroadcast {
     public final void startReceiving() {
         try {
             //Keep a socket open to listen to all the UDP trafic that is destined for this port
-            DatagramSocket socket = new DatagramSocket(UDPConfig.PORT, InetAddress.getByName("0.0.0.0"));
+            DatagramSocket socket = new DatagramSocket(UDPBroadcastConfig.PORT, InetAddress.getByName("0.0.0.0"));
             socket.setBroadcast(true);
 
             while (true) {
                 logDebug("Ready to receive broadcast packets!");
 
                 //Receive a packet
-                byte[] recvBuf = new byte[UDPConfig.PACKET_SIZE];
+                byte[] recvBuf = new byte[UDPBroadcastConfig.PACKET_SIZE];
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
                 socket.receive(packet);
                 // get actual length of data and trim the byte array accordingly
