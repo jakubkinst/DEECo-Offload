@@ -54,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+//        OffloadingConfig.JDEECO_LOGGING_LEVEL = Level.ALL;
 
         // init DEECo
         Logger.setProvider(new AndroidLogProvider());
@@ -78,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
                     mCurrentBackend.setText(backend);
                 }
             });
-            Toast.makeText(this, "Server Started", Toast.LENGTH_SHORT).show();
+            mOffloadingManager.init();
         } catch (Exception e) {
             e.printStackTrace();
         }

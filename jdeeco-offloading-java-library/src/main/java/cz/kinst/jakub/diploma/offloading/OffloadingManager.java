@@ -79,7 +79,7 @@ public class OffloadingManager {
         mRouter.attach(resource.getPath(), resource.getClass());
     }
 
-    public void start() throws Exception {
+    public void init() {
         // register DEECo components and ensembles
         HashSet<MonitorDef> monitorDefs = new HashSet<>();
         for (OffloadingResourceImpl mResource : mResources) {
@@ -87,7 +87,7 @@ public class OffloadingManager {
             MonitorDef monitorDef = new MonitorDef(resourceId);
             monitorDefs.add(monitorDef);
         }
-        PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs);
+        PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs, getLocalIpAddress());
         DeviceComponent deviceComponent = new DeviceComponent(getLocalIpAddress());
         mDeecoManager.registerComponent(plannerComponent);
         mDeecoManager.registerComponent(deviceComponent);
@@ -95,6 +95,9 @@ public class OffloadingManager {
         mDeecoManager.registerEnsemble(PlannerToMonitorEnsemble.class);
 
         mDeecoManager.initRuntime();
+    }
+
+    public void start() throws Exception {
         mDeecoManager.startRuntime();
         mServerComponent.start();
     }
