@@ -4,13 +4,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +38,6 @@ public class MainActivity extends ActionBarActivity {
 
     @InjectView(R.id.get_hello_button)
     Button mGetHelloButton;
-    @InjectView(R.id.offloading_switch)
-    Switch mOffloadingSwitch;
     @InjectView(R.id.current_backend)
     TextView mCurrentBackend;
 
@@ -58,14 +53,6 @@ public class MainActivity extends ActionBarActivity {
 
         // init DEECo
         Logger.setProvider(new AndroidLogProvider());
-
-        mOffloadingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(PREF_OFFLOAD, isChecked).commit();
-            }
-        });
-        mOffloadingSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_OFFLOAD, false));
 
         try {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");

@@ -37,6 +37,6 @@ public class MonitorComponent implements Serializable {
     public static void measure(@In("resourceId") String resourceId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"
         nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId);
-        Logger.e("-----> MONITOR measure on " + deviceIp);
+        Logger.e("MONITOR measure on " + deviceIp);
     }
 }

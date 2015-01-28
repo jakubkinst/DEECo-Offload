@@ -10,18 +10,8 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <Switch
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/offload_enabled"
-        android:id="@+id/offloading_switch"
-        android:layout_gravity="center_vertical"
-        android:checked="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
@@ -31,7 +21,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/current_backend"
-            android:id="@+id/textView" />
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +30,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="N/A"
             android:id="@+id/current_backend"
-            android:layout_marginLeft="8dp" />
+            android:layout_marginLeft="8dp"
+            android:textSize="40sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/accent" />
     </LinearLayout>
 
     <Button
