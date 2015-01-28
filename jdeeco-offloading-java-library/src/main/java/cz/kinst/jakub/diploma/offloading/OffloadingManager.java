@@ -21,7 +21,6 @@ import cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToDeviceEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToMonitorEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.events.PlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.events.SpawnMonitorComponentEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
@@ -107,8 +106,7 @@ public class OffloadingManager {
         mServerComponent.stop();
     }
 
-    public void onEvent(SpawnMonitorComponentEvent event) {
-        MonitorComponent monitorComponent = event.getMonitorComponent();
+    public void spawnNewMonitor(MonitorComponent monitorComponent) {
         mDeecoManager.registerComponent(monitorComponent);
         //TODO: tell runtime about new component if needed (waiting for confirmation 24/01/2015)
     }
