@@ -64,14 +64,14 @@ public class DEECoManager {
     }
 
     public void startRuntime() {
-        mUdpBroadcast.startReceivingInBackground();
+        mUdpBroadcast.startReceiving();
         mDEECoRuntime.start();
         mRunning = true;
         Logger.i("DEECo runtime started.");
     }
 
     public void stopRuntime() {
-        mUdpBroadcast.stopReceivingInBackground();
+        mUdpBroadcast.stopReceiving();
         mDEECoRuntime.stop();
         mRunning = false;
         Logger.i("DEECo runtime stopped.");

@@ -21,7 +21,6 @@ import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig;
 public class AndroidUDPBroadcast extends UDPBroadcast {
 
     private final Context mContext;
-    private PacketReceiverTask mPacketReceiverTask;
 
     public AndroidUDPBroadcast(Context context) {
         mContext = context;
@@ -73,15 +72,4 @@ public class AndroidUDPBroadcast extends UDPBroadcast {
         Log.i(UDPBroadcastConfig.TAG, message);
     }
 
-    @Override
-    public void startReceivingInBackground() {
-        mPacketReceiverTask = new PacketReceiverTask(this);
-        mPacketReceiverTask.execute();
-    }
-
-    @Override
-    public void stopReceivingInBackground() {
-        if (mPacketReceiverTask != null)
-            mPacketReceiverTask.cancel(true);
-    }
 }

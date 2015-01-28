@@ -61,20 +61,4 @@ public class JavaUDPBroadcast extends UDPBroadcast {
     protected final void logInfo(String message) {
         System.out.println("INFO: " + UDPBroadcastConfig.TAG + ": " + message);
     }
-
-    @Override
-    public void startReceivingInBackground() {
-        receivingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                startReceiving();
-            }
-        });
-        receivingThread.start();
-    }
-
-    @Override
-    public void stopReceivingInBackground() {
-        receivingThread.interrupt();
-    }
 }

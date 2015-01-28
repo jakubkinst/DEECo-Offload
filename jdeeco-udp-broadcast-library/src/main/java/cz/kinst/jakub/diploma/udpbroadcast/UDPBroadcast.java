@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Arrays;
 
 /**
  * Created by jakubkinst on 03/12/14.
  */
 public abstract class UDPBroadcast {
+
+    private boolean mIsReceiving = false;
+    private UDPReceivingThread mReceivingThread;
 
     public interface OnUdpPacketReceivedListener {
         void onUdpPacketReceived(DatagramPacket packet);
@@ -30,47 +32,15 @@ public abstract class UDPBroadcast {
     }
 
     public final void startReceiving() {
-        try {
-            //Keep a socket open to listen to all the UDP trafic that is destined for this port
-            DatagramSocket socket = new DatagramSocket(UDPBroadcastConfig.PORT, InetAddress.getByName("0.0.0.0"));
-            socket.setBroadcast(true);
-
-            while (true) {
-                logDebug("Ready to receive broadcast packets!");
-
-                //Receive a packet
-                byte[] recvBuf = new byte[UDPBroadcastConfig.PACKET_SIZE];
-                DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
-                socket.receive(packet);
-                // get actual length of data and trim the byte array accordingly
-                int length = packet.getLength();
-                byte[] data = Arrays.copyOfRange(packet.getData(), 0, length);
-                packet.setData(data);
-
-                //Packet received
-
-                String sender = packet.getAddress().getHostAddress();
-
-                // if received message is from myself, skip
-                if (sender.equals(getMyIpAddress())) continue;
-
-                logDebug("Packet received from: " + sender + "; Size: " + data.length);
-                //String content = new String(data).trim();
-                //logDebug("Content: " + content);
-                onPacketReceived(packet);
-                if (mOnPacketReceivedListener != null)
-                    mOnPacketReceivedListener.onUdpPacketReceived(packet);
-                else
-                    logError("No listener for incoming UDP packets registered");
-            }
-        } catch (IOException ex) {
-            logError("Oops" + ex.getMessage());
-        }
+        mReceivingThread = new UDPReceivingThread(this);
+        mReceivingThread.start();
     }
 
-    public abstract void startReceivingInBackground();
-
-    public abstract void stopReceivingInBackground();
+    public final void stopReceiving() {
+        mReceivingThread.closeSocket();
+        mReceivingThread.interrupt();
+        mReceivingThread = null;
+    }
 
     protected abstract InetAddress getBroadcastAddress();
 
@@ -90,5 +60,9 @@ public abstract class UDPBroadcast {
 
     public void setOnPacketReceivedListener(OnUdpPacketReceivedListener listener) {
         this.mOnPacketReceivedListener = listener;
+    }
+
+    public OnUdpPacketReceivedListener getOnPacketReceivedListener() {
+        return mOnPacketReceivedListener;
     }
 }

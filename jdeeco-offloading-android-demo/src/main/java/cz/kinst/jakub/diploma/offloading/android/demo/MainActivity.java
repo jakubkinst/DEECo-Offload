@@ -32,9 +32,7 @@ import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
 
 public class MainActivity extends ActionBarActivity {
 
-    public static final String[] BACKENDS = new String[]{"192.168.0.107", "192.168.0.109"};
     private static final String HELLO_URI = "/hello";
-    public static final String PREF_OFFLOAD = "offload";
 
     @InjectView(R.id.get_hello_button)
     Button mGetHelloButton;
@@ -49,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+//        UDPBroadcastConfig.DEBUG_MODE = true;
 //        OffloadingConfig.JDEECO_LOGGING_LEVEL = Level.ALL;
 
         // init DEECo
