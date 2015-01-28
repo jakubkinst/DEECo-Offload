@@ -67,16 +67,8 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
             mOffloadingManager.init();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
             mOffloadingManager.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -163,7 +155,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         try {
             mOffloadingManager.stop();
         } catch (Exception e) {
