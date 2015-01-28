@@ -127,10 +127,14 @@ public class OffloadingManager {
     }
 
     public <T> T getCurrentResourceProxy(Class<T> resourceInterface) {
+        return getResourceProxy(resourceInterface, getCurrentBackend(resourceInterface));
+    }
+
+    public String getCurrentBackend(Class resourceInterface) {
         for (OffloadingResourceImpl res : mResources) {
             if (resourceInterface.isAssignableFrom(res.getClass())) {
                 String plannedHost = mDeploymentPlan.getPlan(res.getPath());
-                return getResourceProxy(resourceInterface, plannedHost);
+                return plannedHost != null ? plannedHost : getLocalIpAddress();
             }
         }
         throw new IllegalArgumentException("No Resource of implementing " + resourceInterface.getName() + " was registered.");

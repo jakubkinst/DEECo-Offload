@@ -71,11 +71,11 @@ public class MainActivity extends ActionBarActivity {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
 
             mHelloResource = new HelloResourceImpl(HELLO_URI);
-            mOffloadingManager.attachResource(mHelloResource);mOffloadingManager.setDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
+            mOffloadingManager.attachResource(mHelloResource);
+            mOffloadingManager.setDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override
                 public void onDeploymentPlanUpdated(DeploymentPlan plan) {
-                    String path = mHelloResource.getPath();
-                    String backend = plan.getPlan(path);
+                    String backend = mOffloadingManager.getCurrentBackend(HelloResource.class);
                     mCurrentBackend.setText(backend);
                 }
             });
