@@ -8,7 +8,7 @@ import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
+import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NfpDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
@@ -22,12 +22,9 @@ import cz.kinst.jakub.diploma.offloading.logger.Logger;
 @PeriodicScheduling(period = 6000) // check every second TODO: tune this value
 public class PlannerToMonitorEnsemble {
     @Membership
-    public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp, @In("member.lastPing") long monitorLastPing) {
+    public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp, @In("member.lastPing") long monitorLastPing, @In("coord.lastPing") long plannerLastPing) {
         // Eliminate disconnected devices' monitors by checking if they are still functional
-        long now = System.currentTimeMillis();
-        long monitorAge = now - monitorLastPing;
-        boolean isMonitorStillAlive = monitorAge <= OffloadingConfig.PING_INTERVAL_MS * 2;
-        return isMonitorStillAlive;
+        return DEECoManager.isComponentStillAlive(monitorLastPing) && DEECoManager.isComponentStillAlive(plannerLastPing);
     }
 
 

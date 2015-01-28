@@ -6,9 +6,12 @@ import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
+import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.BusProvider;
+import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.deeco.events.PlanUpdateEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
@@ -25,11 +28,18 @@ public class PlannerComponent implements Serializable {
     public String appId;
     public Set<MonitorDef> monitorDefs;
     public NfpDataHolder nfpDataHolder = new NfpDataHolder();
+    public Long lastPing;
 
     public PlannerComponent(String appId, Set<MonitorDef> monitorDefs, String deviceIp) {
         this.appId = appId;
         this.monitorDefs = monitorDefs;
         this.deployedBy = deviceIp;
+    }
+
+    @Process
+    @PeriodicScheduling(period = OffloadingConfig.PING_INTERVAL_MS)
+    public static void ping(@InOut("lastPing") ParamHolder<Long> lastPing) {
+        lastPing.value = System.currentTimeMillis();
     }
 
     @Process

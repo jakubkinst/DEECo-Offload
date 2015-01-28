@@ -13,6 +13,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.BusProvider;
+import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.events.SpawnMonitorComponentEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
@@ -22,9 +23,16 @@ public class DeviceComponent implements Serializable{
     public String ip;
     public Map<String, Set<MonitorDef>> monitorDefs = new HashMap<>(); // key is the app id
     public Set<String> spawnedMonitors = new HashSet<>();
+    public Long lastPing;
 
     public DeviceComponent(String ip) {
         this.ip = ip;
+    }
+
+    @Process
+    @PeriodicScheduling(period = OffloadingConfig.PING_INTERVAL_MS)
+    public static void ping(@InOut("lastPing") ParamHolder<Long> lastPing) {
+        lastPing.value = System.currentTimeMillis();
     }
 
     @Process

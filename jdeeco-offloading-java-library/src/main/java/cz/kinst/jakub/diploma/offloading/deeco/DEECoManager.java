@@ -80,4 +80,10 @@ public class DEECoManager {
     public boolean isRunning() {
         return mRunning;
     }
+
+    public static boolean isComponentStillAlive(long componentLastPing) {
+        long now = System.currentTimeMillis();
+        long monitorAge = now - componentLastPing;
+        return monitorAge <= OffloadingConfig.PING_INTERVAL_MS * 2;
+    }
 }
