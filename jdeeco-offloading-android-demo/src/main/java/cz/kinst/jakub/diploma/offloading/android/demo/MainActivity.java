@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,10 @@ public class MainActivity extends ActionBarActivity {
     Button mGetHelloButton;
     @InjectView(R.id.current_backend)
     TextView mCurrentBackend;
+    @InjectView(R.id.performanceSeekBar)
+    SeekBar mPerformanceSeekBar;
+    @InjectView(R.id.performance_text)
+    TextView mPerformanceText;
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
@@ -56,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         try {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
 
-            mHelloResource = new HelloResourceImpl(HELLO_URI);
+            mHelloResource = new HelloResourceImpl(HELLO_URI, this);
             mOffloadingManager.attachResource(mHelloResource);
             mOffloadingManager.setDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override
@@ -71,6 +76,26 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        mPerformanceText.setText((HelloResourceImpl.getPerformance(this) * 10) + "%");
+        mPerformanceSeekBar.setProgress(HelloResourceImpl.getPerformance(this));
+        mPerformanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                HelloResourceImpl.setPerformance(MainActivity.this, progress);
+                mPerformanceText.setText((HelloResourceImpl.getPerformance(MainActivity.this) * 10) + "%");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     @OnClick(R.id.get_hello_button)

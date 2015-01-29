@@ -1,8 +1,9 @@
 package cz.kinst.jakub.diploma.offloading.android.demo;
 
 
-import android.os.Build;
+import android.content.Context;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import org.restlet.representation.Representation;
 
@@ -19,14 +20,16 @@ import cz.kinst.jakub.diploma.offloading.resource.OffloadingResourceImpl;
 import cz.kinst.jakub.diploma.offloading.resource.ResourcePerformanceChecker;
 
 public class HelloResourceImpl extends OffloadingResourceImpl implements HelloResource {
+    private static final String PERFORMANCE_KEY = "performance_hello";
+
     public HelloResourceImpl() {
     }
 
-    public HelloResourceImpl(String path) {
+    public HelloResourceImpl(String path, final Context context) {
         super(path, new ResourcePerformanceChecker() {
             @Override
             public NFPData checkPerformance() {
-                return new SimpleValueNFPData(Build.MODEL.length());
+                return new SimpleValueNFPData(getPerformance(context));
             }
 
             @Override
@@ -73,6 +76,14 @@ public class HelloResourceImpl extends OffloadingResourceImpl implements HelloRe
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int getPerformance(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(PERFORMANCE_KEY, 5);
+    }
+
+    public static void setPerformance(Context context, int performance) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(PERFORMANCE_KEY, performance).commit();
     }
 
 }

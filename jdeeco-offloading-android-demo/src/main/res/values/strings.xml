@@ -11,5 +11,6 @@
     <string name="get_hi">Get Hi from Backend</string>
     <string name="try_file_upload">Try File Upload</string>
     <string name="current_backend">Current Hello Backend:</string>
+    <string name="performance">Performance</string>
 
 </resources>

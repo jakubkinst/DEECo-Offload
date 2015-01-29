@@ -10,6 +10,41 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/performance"
+        android:layout_gravity="left"
+        android:textSize="14sp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/performanceSeekBar"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:max="10"
+            android:progress="5"
+            android:indeterminate="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            tools:text="50%"
+            android:textSize="24sp"
+            android:textColor="@color/accent"
+            android:id="@+id/performance_text"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp" />
+    </LinearLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -22,18 +57,19 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/current_backend"
             android:id="@+id/textView"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="left"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="N/A"
+            tools:text="N/A"
             android:id="@+id/current_backend"
             android:layout_marginLeft="8dp"
             android:textSize="40sp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/accent" />
+            android:textColor="@color/primary"
+            android:layout_gravity="left" />
     </LinearLayout>
 
     <Button
