@@ -1,5 +1,4 @@
 apply plugin: 'java'
-project.docsDir = '/docs'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':jdeeco-java-library')
