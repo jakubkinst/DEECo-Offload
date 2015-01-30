@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/DEECo-Offloading-for-Android.iml" filepath="$PROJECT_DIR$/DEECo-Offloading-for-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdeeco-java-library/jdeeco-java-library.iml" filepath="$PROJECT_DIR$/jdeeco-java-library/jdeeco-java-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-android-demo/jdeeco-offloading-android-demo.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-android-demo/jdeeco-offloading-android-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-android-demo-offloadableocr/jdeeco-offloading-android-demo-offloadableocr.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-android-demo-offloadableocr/jdeeco-offloading-android-demo-offloadableocr.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-android-library/jdeeco-offloading-android-library.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-android-library/jdeeco-offloading-android-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdeeco-offloading-java-library/jdeeco-offloading-java-library.iml" filepath="$PROJECT_DIR$/jdeeco-offloading-java-library/jdeeco-offloading-java-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdeeco-udp-broadcast-library/jdeeco-udp-broadcast-library.iml" filepath="$PROJECT_DIR$/jdeeco-udp-broadcast-library/jdeeco-udp-broadcast-library.iml" />
