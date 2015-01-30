@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.udpbroadcast;
+package cz.kinst.jakub.diploma.udpbroadcast.jdeecoextension;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +25,14 @@ import cz.cuni.mff.d3s.deeco.network.KnowledgeMetaData;
 import cz.cuni.mff.d3s.deeco.network.NICType;
 import cz.cuni.mff.d3s.deeco.scheduler.Scheduler;
 
+/**
+ * {@link cz.cuni.mff.d3s.deeco.network.KnowledgeDataManager} without rebroadcasting feature. Otherwise it's almost the same implementation as
+ * {@link cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager}
+ *
+ * ---------------------------
+ * Created by Jakub Kinst 2014
+ * E-mail: jakub@kinst.cz
+ */
 public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager {
 
 	/**
@@ -188,7 +196,6 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 	}
 
 	protected KnowledgeData filterLocalKnowledgeForKnownEnsembles(KnowledgeData kd) {
-		// FIXME: make this generic
 		// now we hardcode our demo (we filter the Leader knowledge to only
 		// publish id, team, and position.
 		if (kd.getMetaData().componentId.startsWith("L")) {

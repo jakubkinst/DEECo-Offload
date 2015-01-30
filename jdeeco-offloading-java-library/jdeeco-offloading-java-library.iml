@@ -39,7 +39,6 @@
     <orderEntry type="library" exported="" name="joda-time-2.3" level="project" />
     <orderEntry type="library" exported="" name="commons-fileupload-1.3" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.2" level="project" />
-    <orderEntry type="library" name="cz.cuni.mff.d3s.jdeeco.core-2.0.0" level="project" />
   </component>
 </module>
 

@@ -59,17 +59,17 @@ public class AndroidUDPBroadcast extends UDPBroadcast {
     @Override
     protected final void logDebug(String message) {
         if (UDPBroadcastConfig.DEBUG_MODE)
-            Log.d(UDPBroadcastConfig.TAG, message);
+            Log.d(UDPBroadcastConfig.LOG_TAG, message);
     }
 
     @Override
     protected final void logError(String message) {
-        Log.e(UDPBroadcastConfig.TAG, message);
+        Log.e(UDPBroadcastConfig.LOG_TAG, message);
     }
 
     @Override
     protected final void logInfo(String message) {
-        Log.i(UDPBroadcastConfig.TAG, message);
+        Log.i(UDPBroadcastConfig.LOG_TAG, message);
     }
 
 }

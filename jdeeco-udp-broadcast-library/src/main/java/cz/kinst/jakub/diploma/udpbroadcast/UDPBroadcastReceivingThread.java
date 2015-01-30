@@ -7,17 +7,30 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
- * Created by jakubkinst on 28/01/15.
+ * Thread which should be spawned to be receiving UDP broadcast packets from the network in the background
+ * so it's not blocking main (UI) thread. It has a reference to {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} instance to inform it about new packets
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
-public class UDPReceivingThread extends Thread {
+public class UDPBroadcastReceivingThread extends Thread {
     private final UDPBroadcast mUdpBroadcast;
     private DatagramSocket mSocket;
 
-    public UDPReceivingThread(UDPBroadcast udpBroadcast) {
+    /**
+     * Creates a new instance of this thread
+     *
+     * @param udpBroadcast reference to {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} implementation
+     */
+    public UDPBroadcastReceivingThread(UDPBroadcast udpBroadcast) {
         mUdpBroadcast = udpBroadcast;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         try {
@@ -49,17 +62,26 @@ public class UDPReceivingThread extends Thread {
                 //String content = new String(data).trim();
                 //logDebug("Content: " + content);
                 mUdpBroadcast.onPacketReceived(packet);
-                if (mUdpBroadcast.getOnPacketReceivedListener() != null)
-                    mUdpBroadcast.getOnPacketReceivedListener().onUdpPacketReceived(packet);
-                else
-                    mUdpBroadcast.logError("No listener for incoming UDP packets registered");
             }
         } catch (IOException ex) {
             mUdpBroadcast.logError("Oops: " + ex.getMessage());
         }
     }
 
-    public void closeSocket() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void interrupt() {
+        // make sure to close the socket to avoid Exception inside the thread implementation
+        closeSocket();
+        super.interrupt();
+    }
+
+    /**
+     * Closes UDP socket. Called before interrupting the thread!
+     */
+    private void closeSocket() {
         mSocket.disconnect();
         mSocket.close();
     }

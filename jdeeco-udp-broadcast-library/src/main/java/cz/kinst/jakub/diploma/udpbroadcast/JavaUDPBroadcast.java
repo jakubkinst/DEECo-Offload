@@ -7,10 +7,21 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+/**
+ * Implementation of {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} for Java SE platform
+ * <p/>
+ * This contains some platform-specific implementation of important methods such as fetching
+ * current IP address, and resolving UDP broadcast IP address.
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2014
+ * E-mail: jakub@kinst.cz
+ */
 public class JavaUDPBroadcast extends UDPBroadcast {
 
-    private Thread receivingThread;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final InetAddress getBroadcastAddress() {
         try {
@@ -35,6 +46,9 @@ public class JavaUDPBroadcast extends UDPBroadcast {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final String getMyIpAddress() {
         try {
@@ -45,20 +59,28 @@ public class JavaUDPBroadcast extends UDPBroadcast {
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logDebug(String message) {
         if (UDPBroadcastConfig.DEBUG_MODE)
-            System.out.println("DEBUG: " + UDPBroadcastConfig.TAG + ": " + message);
+            System.out.println("DEBUG: " + UDPBroadcastConfig.LOG_TAG + ": " + message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logError(String message) {
-        System.err.println("ERROR: " + UDPBroadcastConfig.TAG + ": " + message);
+        System.err.println("ERROR: " + UDPBroadcastConfig.LOG_TAG + ": " + message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logInfo(String message) {
-        System.out.println("INFO: " + UDPBroadcastConfig.TAG + ": " + message);
+        System.out.println("INFO: " + UDPBroadcastConfig.LOG_TAG + ": " + message);
     }
 }

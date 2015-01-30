@@ -10,14 +10,14 @@ import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
-import cz.kinst.jakub.diploma.udpbroadcast.UDPRuntimeBuilder;
+import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastRuntimeBuilder;
 
 /**
  * Created by jakubkinst on 23/01/15.
  */
 public class DEECoManager {
 
-    private final UDPRuntimeBuilder mBuilder;
+    private final UDPBroadcastRuntimeBuilder mBuilder;
     private final RuntimeMetadata mModel;
     private UDPBroadcast mUdpBroadcast;
     private RuntimeFramework mDEECoRuntime;
@@ -30,7 +30,7 @@ public class DEECoManager {
 
         this.mUdpBroadcast = udpBroadcast;
 
-        mBuilder = new UDPRuntimeBuilder();
+        mBuilder = new UDPBroadcastRuntimeBuilder();
         mModel = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
         mProcessor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, mModel, new CloningKnowledgeManagerFactory());
     }
