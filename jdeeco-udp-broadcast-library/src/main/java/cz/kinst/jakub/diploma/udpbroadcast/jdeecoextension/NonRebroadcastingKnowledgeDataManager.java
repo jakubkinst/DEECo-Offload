@@ -196,18 +196,19 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 	}
 
 	protected KnowledgeData filterLocalKnowledgeForKnownEnsembles(KnowledgeData kd) {
-		// now we hardcode our demo (we filter the Leader knowledge to only
-		// publish id, team, and position.
-		if (kd.getMetaData().componentId.startsWith("L")) {
-			ValueSet values = kd.getKnowledge();
-			ValueSet newValues = new ValueSet();
-			for (KnowledgePath kp : values.getKnowledgePaths()) {
-				newValues.setValue(kp, values.getValue(kp));
-			}
-			return new KnowledgeData(newValues, kd.getMetaData());
-		} else {
-			return kd;
-		}
+//		// now we hardcode our demo (we filter the Leader knowledge to only
+//		// publish id, team, and position.
+//		if (kd.getMetaData().componentId.startsWith("L")) {
+//			ValueSet values = kd.getKnowledge();
+//			ValueSet newValues = new ValueSet();
+//			for (KnowledgePath kp : values.getKnowledgePaths()) {
+//				newValues.setValue(kp, values.getValue(kp));
+//			}
+//			return new KnowledgeData(newValues, kd.getMetaData());
+//		} else {
+//			return kd;
+//		}
+        return kd;
 	}
 
 	protected ChangeSet toChangeSet(ValueSet valueSet) {
