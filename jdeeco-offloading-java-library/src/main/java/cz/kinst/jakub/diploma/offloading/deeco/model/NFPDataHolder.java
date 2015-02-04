@@ -11,7 +11,7 @@ import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 /**
  * Created by jakubkinst on 21/01/15.
  */
-public class NFPDataHolderX implements Serializable {
+public class NFPDataHolder implements Serializable {
     private HashMap<String, HashMap<String, NFPData>> nfpData = new HashMap<>();
 
     public void put(String backendId, String deviceIp, NFPData nfpData) {

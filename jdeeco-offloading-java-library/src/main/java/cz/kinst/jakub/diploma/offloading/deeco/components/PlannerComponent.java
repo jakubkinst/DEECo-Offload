@@ -15,7 +15,7 @@ import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolderX;
+import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 
@@ -25,7 +25,7 @@ public class PlannerComponent implements Serializable {
     public String deployedBy;
     public String appId;
     public Set<BackendMonitorDef> monitorDefs;
-    public NFPDataHolderX nfpDataHolder = new NFPDataHolderX();
+    public NFPDataHolder nfpDataHolder = new NFPDataHolder();
     public Long lastPing;
     public BackendDeploymentPlan backendDeploymentPlan;
 
@@ -43,7 +43,7 @@ public class PlannerComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 5000)
-    public static void plan(@In("nfpDataHolder") NFPDataHolderX nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
+    public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
         Logger.i("Planner: plan");
         BackendDeploymentPlan newPlan = new BackendDeploymentPlan();
         for (String appComponentId : nfpDataHolder.getBackendIds()) {
