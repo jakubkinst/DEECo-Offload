@@ -28,7 +28,7 @@ public class NfpDataHolder implements Serializable {
 
     /**
      * Returns filtered NFPData for devices implementing appComponentId,
-     * but only those, that are not older than OffloadingConfig.MONITOR_PLANNER_EXCHANGE_INTERVAL_MS
+     * but only those, that are not older than OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS
      *
      * @param appComponentId
      * @return
@@ -37,7 +37,7 @@ public class NfpDataHolder implements Serializable {
         HashMap<String, NFPData> data = new HashMap<>();
         for (Map.Entry<String, NFPDataWithLastActiveTime> entry : getByAppComponentId(appComponentId).entrySet()) {
             long now = new Date().getTime();
-            if (now - entry.getValue().getLastActiveTime() < (2 * OffloadingConfig.MONITOR_PLANNER_EXCHANGE_INTERVAL_MS)) {
+            if (now - entry.getValue().getLastActiveTime() < (2 * OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS)) {
                 data.put(entry.getKey(), entry.getValue().getNfpData());
             }
         }

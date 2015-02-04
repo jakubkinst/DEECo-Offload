@@ -10,6 +10,7 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
+import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NfpDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
@@ -17,15 +18,15 @@ import cz.kinst.jakub.diploma.offloading.logger.Logger;
 /**
  * This ensemble takes care of pushing NFPData from Monitors to Planner
  * Coordinator: Planner
- * Member: Monitor
+ * Member: BackendMonitor
  */
 @Ensemble
-@PeriodicScheduling(period = OffloadingConfig.MONITOR_PLANNER_EXCHANGE_INTERVAL_MS) // check every second TODO: tune this value
-public class PlannerToMonitorEnsemble {
+@PeriodicScheduling(period = OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS)
+public class NFPDataCollectingEnsemble {
     @Membership
-    public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp, @In("member.lastPing") long monitorLastPing, @In("coord.lastPing") long plannerLastPing) {
+    public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.monitorType") int monitorType, @In("member.lastPing") long monitorLastPing, @In("coord.lastPing") long plannerLastPing) {
         // Eliminate disconnected devices' monitors by checking if they are still functional
-        return DEECoManager.isComponentStillAlive(monitorLastPing) && DEECoManager.isComponentStillAlive(plannerLastPing);
+        return DEECoManager.areComponentsStillAlive(monitorLastPing, plannerLastPing) && monitorType == MonitorType.BACKEND;
     }
 
 

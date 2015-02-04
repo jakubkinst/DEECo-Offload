@@ -10,10 +10,8 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.BusProvider;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.events.PlanUpdateEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
@@ -29,6 +27,7 @@ public class PlannerComponent implements Serializable {
     public Set<MonitorDef> monitorDefs;
     public NfpDataHolder nfpDataHolder = new NfpDataHolder();
     public Long lastPing;
+    public DeploymentPlan deploymentPlan;
 
     public PlannerComponent(String appId, Set<MonitorDef> monitorDefs, String deviceIp) {
         this.appId = appId;
@@ -44,7 +43,7 @@ public class PlannerComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 5000)
-    public static void plan(@In("nfpDataHolder") NfpDataHolder nfpDataHolder) {
+    public static void plan(@In("nfpDataHolder") NfpDataHolder nfpDataHolder, @InOut("deploymentPlan") ParamHolder<DeploymentPlan> deploymentPlan) {
         Logger.i("Planner: plan");
         DeploymentPlan newPlan = new DeploymentPlan();
         for (String appComponentId : nfpDataHolder.getAppComponentIds()) {
@@ -54,7 +53,7 @@ public class PlannerComponent implements Serializable {
             newPlan.plan(appComponentId, selectedDeviceIp);
 
         }
-        BusProvider.get().post(new PlanUpdateEvent(newPlan)); //TODO: maybe broadcast only after change
+        deploymentPlan.value = newPlan;
     }
 }
 

@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import cz.kinst.jakub.diploma.deecooffload.demo.R;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
+import cz.kinst.jakub.diploma.offloading.UIAppComponent;
 import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
 import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
@@ -46,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
+    private UIAppComponent mUIAppComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,15 @@ public class MainActivity extends ActionBarActivity {
 
             mHelloResource = new HelloResourceImpl(HELLO_URI, this);
             mOffloadingManager.attachResource(mHelloResource);
-            mOffloadingManager.setDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
+            mUIAppComponent = new UIAppComponent(mOffloadingManager);
+            mUIAppComponent.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override
                 public void onDeploymentPlanUpdated(DeploymentPlan plan) {
-                    String backend = mOffloadingManager.getCurrentBackend(HelloResource.class);
-                    mCurrentBackend.setText(backend);
+                    String backendAddress = mUIAppComponent.getActiveBackendAddress(HelloResource.class);
+                    mCurrentBackend.setText(backendAddress);
                 }
             });
+
             mOffloadingManager.init();
             mOffloadingManager.start();
 
@@ -101,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.get_hello_button)
     void onGetHelloClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingManager.getCurrentResourceProxy(HelloResource.class);
+        final HelloResource backend = mUIAppComponent.getActiveBackendProxy(HelloResource.class);
         new AsyncTask<Void, Void, Message>() {
             @Override
             protected Message doInBackground(Void... params) {
@@ -128,7 +132,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.get_fileupload_button)
     void onGetFileUploadClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mOffloadingManager.getCurrentResourceProxy(HelloResource.class);
+        final HelloResource backend = mUIAppComponent.getActiveBackendProxy(HelloResource.class);
 
         new AsyncTask<Void, Void, Message>() {
             @Override

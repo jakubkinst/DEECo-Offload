@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
+import cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent;
-import cz.kinst.jakub.diploma.offloading.deeco.components.MonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent;
+import cz.kinst.jakub.diploma.offloading.deeco.components.UIMonitorComponent;
+import cz.kinst.jakub.diploma.offloading.deeco.ensembles.ActiveBackendMonitorToUiEnsemble;
+import cz.kinst.jakub.diploma.offloading.deeco.ensembles.BackendStateDistributingEnsemble;
+import cz.kinst.jakub.diploma.offloading.deeco.ensembles.NFPDataCollectingEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToDeviceEnsemble;
-import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToMonitorEnsemble;
-import cz.kinst.jakub.diploma.offloading.deeco.events.PlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
@@ -40,8 +41,6 @@ public class OffloadingManager {
     private final UDPBroadcast mUdpBroadcast;
     private final String mAppId;
     private List<OffloadingResourceImpl> mResources = new ArrayList<>();
-    private DeploymentPlan mDeploymentPlan;
-    private OnDeploymentPlanUpdatedListener mDeploymentPlanUpdatedListener;
 
     public static OffloadingManager getInstance() {
         return sInstance;
@@ -53,7 +52,6 @@ public class OffloadingManager {
     }
 
     private OffloadingManager(UDPBroadcast udpBroadcast, String appId) {
-        BusProvider.get().register(this);
         // init local server for serving resources
         Engine.getInstance().getRegisteredClients().clear();
         Engine.getInstance().getRegisteredClients().add(new HttpClientHelper(null));
@@ -88,10 +86,14 @@ public class OffloadingManager {
         }
         PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs, getLocalIpAddress());
         DeviceComponent deviceComponent = new DeviceComponent(getLocalIpAddress());
+        UIMonitorComponent uiMonitorComponent = new UIMonitorComponent();
         mDeecoManager.registerComponent(plannerComponent);
         mDeecoManager.registerComponent(deviceComponent);
+        mDeecoManager.registerComponent(uiMonitorComponent);
         mDeecoManager.registerEnsemble(PlannerToDeviceEnsemble.class);
-        mDeecoManager.registerEnsemble(PlannerToMonitorEnsemble.class);
+        mDeecoManager.registerEnsemble(NFPDataCollectingEnsemble.class);
+        mDeecoManager.registerEnsemble(BackendStateDistributingEnsemble.class);
+        mDeecoManager.registerEnsemble(ActiveBackendMonitorToUiEnsemble.class);
 
         mDeecoManager.initRuntime();
     }
@@ -106,15 +108,9 @@ public class OffloadingManager {
         mServerComponent.stop();
     }
 
-    public void spawnNewMonitor(MonitorComponent monitorComponent) {
-        mDeecoManager.registerComponent(monitorComponent);
+    public void spawnNewMonitor(BackendMonitorComponent backendMonitorComponent) {
+        mDeecoManager.registerComponent(backendMonitorComponent);
         //TODO: tell runtime about new component if needed (waiting for confirmation 24/01/2015)
-    }
-
-    public void onEventMainThread(PlanUpdateEvent event) {
-        mDeploymentPlan = event.getPlan();
-        if (mDeploymentPlanUpdatedListener != null)
-            mDeploymentPlanUpdatedListener.onDeploymentPlanUpdated(event.getPlan());
     }
 
     public <T> T getResourceProxy(Class<T> resourceInterface, String host) {
@@ -127,15 +123,10 @@ public class OffloadingManager {
         throw new IllegalArgumentException("No Resource of implementing " + resourceInterface.getName() + " was registered.");
     }
 
-    public <T> T getCurrentResourceProxy(Class<T> resourceInterface) {
-        return getResourceProxy(resourceInterface, getCurrentBackend(resourceInterface));
-    }
-
-    public String getCurrentBackend(Class resourceInterface) {
+    public String getResourcePath(Class resourceInterface) {
         for (OffloadingResourceImpl res : mResources) {
             if (resourceInterface.isAssignableFrom(res.getClass())) {
-                String plannedHost = mDeploymentPlan.getPlan(res.getPath());
-                return plannedHost != null ? plannedHost : getLocalIpAddress();
+                return res.getPath();
             }
         }
         throw new IllegalArgumentException("No Resource of implementing " + resourceInterface.getName() + " was registered.");
@@ -171,7 +162,4 @@ public class OffloadingManager {
         throw new IllegalArgumentException("No Resource on path " + resourcePath + " was registered.");
     }
 
-    public void setDeploymentPlanUpdatedListener(OnDeploymentPlanUpdatedListener mDeploymentPlanUpdatedListener) {
-        this.mDeploymentPlanUpdatedListener = mDeploymentPlanUpdatedListener;
-    }
 }

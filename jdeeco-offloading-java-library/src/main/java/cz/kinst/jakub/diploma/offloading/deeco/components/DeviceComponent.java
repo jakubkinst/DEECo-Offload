@@ -43,8 +43,8 @@ public class DeviceComponent implements Serializable {
             for (MonitorDef monitorDef : appMonitorDefs) {
                 if (!spawnedMonitors.value.contains(monitorDef.getResourceId())) {
                     Logger.i("New MonitorDef found. Going to spawn new Monitor component");
-                    cz.kinst.jakub.diploma.offloading.deeco.components.MonitorComponent monitorComponent = new cz.kinst.jakub.diploma.offloading.deeco.components.MonitorComponent(monitorDef.getResourceId(), ip);
-                    OffloadingManager.getInstance().spawnNewMonitor(monitorComponent);
+                    BackendMonitorComponent backendMonitorComponent = new BackendMonitorComponent(monitorDef.getResourceId(), ip);
+                    OffloadingManager.getInstance().spawnNewMonitor(backendMonitorComponent);
                     spawnedMonitors.value.add(monitorDef.getResourceId());
                 }
                 //TODO: handle situation when monitorDefs are deleted

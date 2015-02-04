@@ -24,7 +24,7 @@ import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
 public class PlannerToDeviceEnsemble {
     @Membership
     public static boolean membership(@In("coord.appId") String plannerAppId, @In("coord.lastPing") long plannerLastPing, @In("member.lastPing") long deviceLastPing, @In("member.ip") String deviceIp) {
-        return DEECoManager.isComponentStillAlive(deviceLastPing) && DEECoManager.isComponentStillAlive(plannerLastPing);
+        return DEECoManager.areComponentsStillAlive(deviceLastPing) && DEECoManager.areComponentsStillAlive(plannerLastPing);
     }
 
     @KnowledgeExchange
