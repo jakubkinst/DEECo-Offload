@@ -90,9 +90,16 @@ public class MainActivity extends ActionBarActivity implements ImageChooserListe
                 if (image != null) {
                     preview.setImageURI(Uri.parse(new File(image
                             .getFileThumbnail()).toString()));
+
+                    Toast.makeText(MainActivity.this, recognizeText(new File(image.getFilePathOriginal())), Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private String recognizeText(File image) {
+        OCR ocr = new OCR();
+        return ocr.recognizeText(image);
     }
 
     @Override
