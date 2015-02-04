@@ -12,7 +12,7 @@ import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
+import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolderX;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 /**
@@ -35,7 +35,7 @@ public class NFPDataCollectingEnsemble {
                                          @In("member.backendId") String monitorAppComponentId,
                                          @In("member.deviceIp") String monitorDeviceIp,
                                          @In("coord.deployedBy") String plannerDeployedBy,
-                                         @InOut("coord.nfpDataHolder") ParamHolder<NFPDataHolder> plannerDataHolder) {
+                                         @InOut("coord.nfpDataHolder") ParamHolder<NFPDataHolderX> plannerDataHolder) {
         if (monitorNfpData != null) {
             plannerDataHolder.value.put(monitorAppComponentId, monitorDeviceIp, monitorNfpData);
             Logger.d("--> Monitor at " + monitorDeviceIp + " pushing NFPData to Planner at " + plannerDeployedBy);
