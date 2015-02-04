@@ -1,18 +1,18 @@
 package cz.kinst.jakub.diploma.offloading.deeco.events;
 
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 
 /**
  * Created by jakubkinst on 21/01/15.
  */
 public class DeploymentPlanUpdateEvent {
-    private final DeploymentPlan plan;
+    private final BackendDeploymentPlan plan;
 
-    public DeploymentPlanUpdateEvent(DeploymentPlan plan) {
+    public DeploymentPlanUpdateEvent(BackendDeploymentPlan plan) {
         this.plan = plan;
     }
 
-    public DeploymentPlan getPlan() {
+    public BackendDeploymentPlan getPlan() {
         return plan;
     }
 }

@@ -19,14 +19,13 @@ import cz.kinst.jakub.diploma.offloading.logger.Logger;
 public class BackendMonitorComponent implements Serializable {
     public int monitorType = MonitorType.BACKEND;
     public int monitorState = BackendMonitorState.NOT_ACTIVE;
-    public String appComponentId;
     public String deviceIp;
-    public String resourceId;
+    public String backendId;
     public NFPData nfpData;
     public Long lastPing;
 
-    public BackendMonitorComponent(String resourceId, String deviceIp) {
-        this.resourceId = resourceId;
+    public BackendMonitorComponent(String backendId, String deviceIp) {
+        this.backendId = backendId;
         this.deviceIp = deviceIp;
     }
 
@@ -38,9 +37,9 @@ public class BackendMonitorComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 10000)
-    public static void measure(@In("resourceId") String resourceId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
+    public static void measure(@In("backendId") String backendId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"
-        nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId);
+        nfpData.value = OffloadingManager.getInstance().checkBackendPerformance(backendId);
         Logger.i("MONITOR measure on " + deviceIp);
     }
 }

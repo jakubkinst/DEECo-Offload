@@ -14,13 +14,13 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 @Component
 public class DeviceComponent implements Serializable {
     public String ip;
-    public Map<String, Set<MonitorDef>> monitorDefs = new HashMap<>(); // key is the app id
+    public Map<String, Set<BackendMonitorDef>> monitorDefs = new HashMap<>(); // key is the app id
     public Set<String> spawnedMonitors = new HashSet<>();
     public Long lastPing;
 
@@ -36,16 +36,16 @@ public class DeviceComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 6000)
-    public static void manageMonitors(@In("monitorDefs") Map<String, Set<MonitorDef>> monitorDefs, @InOut("spawnedMonitors") ParamHolder<Set<String>> spawnedMonitors, @In("ip") String ip) {
+    public static void manageMonitors(@In("monitorDefs") Map<String, Set<BackendMonitorDef>> monitorDefs, @InOut("spawnedMonitors") ParamHolder<Set<String>> spawnedMonitors, @In("ip") String ip) {
         //spawn monitors for each one of the monitorDefs
         for (String appId : monitorDefs.keySet()) {
-            Set<MonitorDef> appMonitorDefs = monitorDefs.get(appId);
-            for (MonitorDef monitorDef : appMonitorDefs) {
-                if (!spawnedMonitors.value.contains(monitorDef.getResourceId())) {
+            Set<BackendMonitorDef> appMonitorDefs = monitorDefs.get(appId);
+            for (BackendMonitorDef monitorDef : appMonitorDefs) {
+                if (!spawnedMonitors.value.contains(monitorDef.getBackendId())) {
                     Logger.i("New MonitorDef found. Going to spawn new Monitor component");
-                    BackendMonitorComponent backendMonitorComponent = new BackendMonitorComponent(monitorDef.getResourceId(), ip);
+                    BackendMonitorComponent backendMonitorComponent = new BackendMonitorComponent(monitorDef.getBackendId(), ip);
                     OffloadingManager.getInstance().spawnNewMonitor(backendMonitorComponent);
-                    spawnedMonitors.value.add(monitorDef.getResourceId());
+                    spawnedMonitors.value.add(monitorDef.getBackendId());
                 }
                 //TODO: handle situation when monitorDefs are deleted
             }

@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * Created by jakubkinst on 21/01/15.
  */
-public class DeploymentPlan implements Serializable {
+public class BackendDeploymentPlan implements Serializable {
     private Map<String, String> plan = new HashMap<>(); //key: appComponentId, value: deviceIp
 
-    public void plan(String appComponentId, String deviceIp) {
-        plan.put(appComponentId, deviceIp);
+    public void plan(String backendId, String deviceIp) {
+        plan.put(backendId, deviceIp);
     }
 
-    public String getPlan(String appComponentId) {
-        return plan.get(appComponentId);
+    public String getPlan(String backendId) {
+        return plan.get(backendId);
     }
 }

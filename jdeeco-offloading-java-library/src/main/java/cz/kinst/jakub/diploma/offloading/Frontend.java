@@ -1,17 +1,17 @@
 package cz.kinst.jakub.diploma.offloading;
 
 import cz.kinst.jakub.diploma.offloading.deeco.events.DeploymentPlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 
 /**
  * Created by jakubkinst on 04/02/15.
  */
-public class UIAppComponent {
+public class Frontend {
     private final OffloadingManager mOffloadingManager;
     private OnDeploymentPlanUpdatedListener mOnDeploymentPlanUpdatedListener;
-    private DeploymentPlan mDeploymentPlan = new DeploymentPlan();
+    private BackendDeploymentPlan mBackendDeploymentPlan = new BackendDeploymentPlan();
 
-    public UIAppComponent(OffloadingManager offloadingManager) {
+    public Frontend(OffloadingManager offloadingManager) {
         mOffloadingManager = offloadingManager;
         BusProvider.get().register(this);
     }
@@ -23,15 +23,15 @@ public class UIAppComponent {
     public final void onEventMainThread(DeploymentPlanUpdateEvent event) {
         if (mOnDeploymentPlanUpdatedListener != null)
             mOnDeploymentPlanUpdatedListener.onDeploymentPlanUpdated(event.getPlan());
-        mDeploymentPlan = event.getPlan();
+        mBackendDeploymentPlan = event.getPlan();
     }
 
-    public DeploymentPlan getDeploymentPlan() {
-        return mDeploymentPlan;
+    public BackendDeploymentPlan getDeploymentPlan() {
+        return mBackendDeploymentPlan;
     }
 
     public String getActiveBackendAddress(Class backendInterface) {
-        String path = mOffloadingManager.getResourcePath(backendInterface);
+        String path = mOffloadingManager.getBackendId(backendInterface);
         String planned = getDeploymentPlan().getPlan(path);
         if (planned != null)
             return planned;
@@ -41,6 +41,6 @@ public class UIAppComponent {
     }
 
     public <T> T getActiveBackendProxy(Class<T> backendInterface) {
-        return mOffloadingManager.getResourceProxy(backendInterface, getActiveBackendAddress(backendInterface));
+        return mOffloadingManager.getBackendProxy(backendInterface, getActiveBackendAddress(backendInterface));
     }
 }

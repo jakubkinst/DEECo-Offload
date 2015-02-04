@@ -11,13 +11,13 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.BusProvider;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.events.DeploymentPlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 
 @Component
-public class UIMonitorComponent implements Serializable {
-    public int monitorType = MonitorType.UI;
-    public DeploymentPlan deploymentPlan = new DeploymentPlan();
+public class FrontendMonitorComponent implements Serializable {
+    public int monitorType = MonitorType.FRONTEND;
+    public BackendDeploymentPlan backendDeploymentPlan = new BackendDeploymentPlan();
     public Long lastPing;
 
     @Process
@@ -28,7 +28,7 @@ public class UIMonitorComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 1000)
-    public static void updateUi(@In("deploymentPlan") DeploymentPlan activeBackends) {
-        BusProvider.get().post(new DeploymentPlanUpdateEvent(activeBackends));
+    public static void updateUi(@In("backendDeploymentPlan") BackendDeploymentPlan deploymentPlan) {
+        BusProvider.get().post(new DeploymentPlanUpdateEvent(deploymentPlan));
     }
 }

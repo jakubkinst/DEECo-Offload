@@ -12,10 +12,10 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NfpDataHolder;
+import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 
@@ -24,12 +24,12 @@ public class PlannerComponent implements Serializable {
 
     public String deployedBy;
     public String appId;
-    public Set<MonitorDef> monitorDefs;
-    public NfpDataHolder nfpDataHolder = new NfpDataHolder();
+    public Set<BackendMonitorDef> monitorDefs;
+    public NFPDataHolder nfpDataHolder = new NFPDataHolder();
     public Long lastPing;
-    public DeploymentPlan deploymentPlan;
+    public BackendDeploymentPlan backendDeploymentPlan;
 
-    public PlannerComponent(String appId, Set<MonitorDef> monitorDefs, String deviceIp) {
+    public PlannerComponent(String appId, Set<BackendMonitorDef> monitorDefs, String deviceIp) {
         this.appId = appId;
         this.monitorDefs = monitorDefs;
         this.deployedBy = deviceIp;
@@ -43,11 +43,11 @@ public class PlannerComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 5000)
-    public static void plan(@In("nfpDataHolder") NfpDataHolder nfpDataHolder, @InOut("deploymentPlan") ParamHolder<DeploymentPlan> deploymentPlan) {
+    public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
         Logger.i("Planner: plan");
-        DeploymentPlan newPlan = new DeploymentPlan();
-        for (String appComponentId : nfpDataHolder.getAppComponentIds()) {
-            HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByAppComponentId(appComponentId);
+        BackendDeploymentPlan newPlan = new BackendDeploymentPlan();
+        for (String appComponentId : nfpDataHolder.getBackendIds()) {
+            HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByBackendId(appComponentId);
             String selectedDeviceIp = OffloadingManager.getInstance().findOptimalAlternative(appComponentId, alternatives);
             Logger.i("Found best alternative at " + selectedDeviceIp);
             newPlan.plan(appComponentId, selectedDeviceIp);

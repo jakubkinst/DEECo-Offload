@@ -9,17 +9,17 @@ import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 /**
  * Created by jakubkinst on 07/01/15.
  */
-public abstract class OffloadingResourceImpl extends ServerResource {
+public abstract class OffloadableBackendImpl extends ServerResource {
 
-    ResourcePerformanceChecker mResourcePerformanceChecker;
+    BackendPerformanceProvider mBackendPerformanceProvider;
     private String mPath;
 
-    public OffloadingResourceImpl() {
+    public OffloadableBackendImpl() {
     }
 
-    public OffloadingResourceImpl(String path, ResourcePerformanceChecker resourcePerformanceChecker) {
+    public OffloadableBackendImpl(String path, BackendPerformanceProvider backendPerformanceProvider) {
         mPath = path;
-        mResourcePerformanceChecker = resourcePerformanceChecker;
+        mBackendPerformanceProvider = backendPerformanceProvider;
     }
 
     public String getPath() {
@@ -27,11 +27,11 @@ public abstract class OffloadingResourceImpl extends ServerResource {
     }
 
     public NFPData checkPerformance() {
-        return mResourcePerformanceChecker.checkPerformance();
+        return mBackendPerformanceProvider.checkPerformance();
     }
 
     public String findOptimalAlternative(Map<String, NFPData> alternatives) {
-        return mResourcePerformanceChecker.findOptimalAlternative(alternatives);
+        return mBackendPerformanceProvider.findOptimalAlternative(alternatives);
     }
 
 }

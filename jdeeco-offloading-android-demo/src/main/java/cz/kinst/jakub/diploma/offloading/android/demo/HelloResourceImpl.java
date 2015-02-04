@@ -15,18 +15,18 @@ import java.util.Map;
 
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.deeco.model.SimpleValueNFPData;
+import cz.kinst.jakub.diploma.offloading.resource.BackendPerformanceProvider;
 import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
-import cz.kinst.jakub.diploma.offloading.resource.OffloadingResourceImpl;
-import cz.kinst.jakub.diploma.offloading.resource.ResourcePerformanceChecker;
+import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
 
-public class HelloResourceImpl extends OffloadingResourceImpl implements HelloResource {
+public class HelloResourceImpl extends OffloadableBackendImpl implements HelloResource {
     private static final String PERFORMANCE_KEY = "performance_hello";
 
     public HelloResourceImpl() {
     }
 
     public HelloResourceImpl(String path, final Context context) {
-        super(path, new ResourcePerformanceChecker() {
+        super(path, new BackendPerformanceProvider() {
             @Override
             public NFPData checkPerformance() {
                 return new SimpleValueNFPData(getPerformance(context));

@@ -12,12 +12,12 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 
 /**
  * This ensemble is responsible for pushing MonitorDefs from Planner to Device
- * Coordinator: Planner
- * Member: Device
+ * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
+ * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent}
  */
 @Ensemble
 @PeriodicScheduling(period = 1500) // check every 13 seconds TODO: tune this value
@@ -28,8 +28,8 @@ public class PlannerToDeviceEnsemble {
     }
 
     @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("member.monitorDefs") ParamHolder<Map<String, Set<MonitorDef>>> deviceMonitorDefs,
-                                         @In("coord.monitorDefs") Set<MonitorDef> plannerMonitorDefs,
+    public static void knowledgeExchange(@InOut("member.monitorDefs") ParamHolder<Map<String, Set<BackendMonitorDef>>> deviceMonitorDefs,
+                                         @In("coord.monitorDefs") Set<BackendMonitorDef> plannerMonitorDefs,
                                          @In("coord.appId") String plannerAppId) {
         deviceMonitorDefs.value.put(plannerAppId, plannerMonitorDefs);
     }

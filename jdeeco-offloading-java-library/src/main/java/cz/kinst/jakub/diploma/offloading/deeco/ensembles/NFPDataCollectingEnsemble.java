@@ -12,13 +12,13 @@ import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NfpDataHolder;
+import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 /**
  * This ensemble takes care of pushing NFPData from Monitors to Planner
- * Coordinator: Planner
- * Member: BackendMonitor
+ * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
+ * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent}
  */
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS)
@@ -32,11 +32,13 @@ public class NFPDataCollectingEnsemble {
 
     @KnowledgeExchange
     public static void knowledgeExchange(@In("member.nfpData") NFPData monitorNfpData,
-                                         @In("member.resourceId") String monitorAppComponentId,
+                                         @In("member.backendId") String monitorAppComponentId,
                                          @In("member.deviceIp") String monitorDeviceIp,
                                          @In("coord.deployedBy") String plannerDeployedBy,
-                                         @InOut("coord.nfpDataHolder") ParamHolder<NfpDataHolder> plannerDataHolder) {
-        plannerDataHolder.value.put(monitorAppComponentId, monitorDeviceIp, monitorNfpData);
-        Logger.d("--> Monitor at " + monitorDeviceIp + " pushing NFPData to Planner at " + plannerDeployedBy);
+                                         @InOut("coord.nfpDataHolder") ParamHolder<NFPDataHolder> plannerDataHolder) {
+        if (monitorNfpData != null) {
+            plannerDataHolder.value.put(monitorAppComponentId, monitorDeviceIp, monitorNfpData);
+            Logger.d("--> Monitor at " + monitorDeviceIp + " pushing NFPData to Planner at " + plannerDeployedBy);
+        }
     }
 }

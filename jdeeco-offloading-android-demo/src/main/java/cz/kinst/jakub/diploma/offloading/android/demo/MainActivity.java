@@ -22,12 +22,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import cz.kinst.jakub.diploma.deecooffload.demo.R;
+import cz.kinst.jakub.diploma.offloading.Frontend;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
-import cz.kinst.jakub.diploma.offloading.UIAppComponent;
 import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
 
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 
     private OffloadingManager mOffloadingManager;
     private HelloResourceImpl mHelloResource;
-    private UIAppComponent mUIAppComponent;
+    private Frontend mUIAppComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +64,11 @@ public class MainActivity extends ActionBarActivity {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
 
             mHelloResource = new HelloResourceImpl(HELLO_URI, this);
-            mOffloadingManager.attachResource(mHelloResource);
-            mUIAppComponent = new UIAppComponent(mOffloadingManager);
+            mOffloadingManager.attachBackend(mHelloResource);
+            mUIAppComponent = new Frontend(mOffloadingManager);
             mUIAppComponent.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override
-                public void onDeploymentPlanUpdated(DeploymentPlan plan) {
+                public void onDeploymentPlanUpdated(BackendDeploymentPlan plan) {
                     String backendAddress = mUIAppComponent.getActiveBackendAddress(HelloResource.class);
                     mCurrentBackend.setText(backendAddress);
                 }

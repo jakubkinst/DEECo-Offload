@@ -10,14 +10,14 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorState;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
-import cz.kinst.jakub.diploma.offloading.deeco.model.DeploymentPlan;
 
 /**
  * This ensemble takes care of informing BackendMonitors about their state (running / not running)
- * Coordinator: Planner
- * Member: BackendMonitor
+ * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
+ * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent}
  */
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.STATE_DISTRIBUTING_INTERVAL_MS)
@@ -31,10 +31,10 @@ public class BackendStateDistributingEnsemble {
 
     @KnowledgeExchange
     public static void knowledgeExchange(@InOut("member.monitorState") ParamHolder<Integer> monitorState,
-                                         @In("member.resourceId") String monitorAppComponentId,
+                                         @In("member.backendId") String monitorAppComponentId,
                                          @In("member.deviceIp") String monitorDeviceIp,
-                                         @In("coord.deploymentPlan") DeploymentPlan plannerDeploymentPlan) {
-        String activeIp = plannerDeploymentPlan.getPlan(monitorAppComponentId);
+                                         @In("coord.backendDeploymentPlan") BackendDeploymentPlan plannerBackendDeploymentPlan) {
+        String activeIp = plannerBackendDeploymentPlan.getPlan(monitorAppComponentId);
         boolean isThisMonitorActive = monitorDeviceIp.equals(activeIp);
         monitorState.value = isThisMonitorActive ? BackendMonitorState.ACTIVE : BackendMonitorState.NOT_ACTIVE;
     }

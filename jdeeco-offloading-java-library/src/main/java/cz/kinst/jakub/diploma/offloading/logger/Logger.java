@@ -11,19 +11,19 @@ public class Logger {
     }
 
     public static void d(String message) {
-        if (sLogger==null)
+        if (sLogger == null)
             throw new NoLogProviderRegisteredException();
         sLogger.d(message);
     }
 
     public static void i(String message) {
-        if (sLogger==null)
+        if (sLogger == null)
             throw new NoLogProviderRegisteredException();
         sLogger.i(message);
     }
 
     public static void e(String message) {
-        if (sLogger==null)
+        if (sLogger == null)
             throw new NoLogProviderRegisteredException();
         sLogger.e(message);
     }

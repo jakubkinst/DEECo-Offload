@@ -17,16 +17,16 @@ import java.util.Map;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent;
+import cz.kinst.jakub.diploma.offloading.deeco.components.FrontendMonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent;
-import cz.kinst.jakub.diploma.offloading.deeco.components.UIMonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.ActiveBackendMonitorToUiEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.BackendStateDistributingEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.NFPDataCollectingEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToDeviceEnsemble;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorDef;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
-import cz.kinst.jakub.diploma.offloading.resource.OffloadingResourceImpl;
+import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 
 /**
@@ -40,7 +40,7 @@ public class OffloadingManager {
     private final DEECoManager mDeecoManager;
     private final UDPBroadcast mUdpBroadcast;
     private final String mAppId;
-    private List<OffloadingResourceImpl> mResources = new ArrayList<>();
+    private List<OffloadableBackendImpl> mBackends = new ArrayList<>();
 
     public static OffloadingManager getInstance() {
         return sInstance;
@@ -52,7 +52,7 @@ public class OffloadingManager {
     }
 
     private OffloadingManager(UDPBroadcast udpBroadcast, String appId) {
-        // init local server for serving resources
+        // init local server for serving backends
         Engine.getInstance().getRegisteredClients().clear();
         Engine.getInstance().getRegisteredClients().add(new HttpClientHelper(null));
         Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
@@ -63,33 +63,33 @@ public class OffloadingManager {
 
 
         mServerComponent = new Component();
-        mServerComponent.getServers().add(Protocol.HTTP, OffloadingConfig.HTTP_PORT_FOR_RESOURCES);
+        mServerComponent.getServers().add(Protocol.HTTP, OffloadingConfig.HTTP_PORT_FOR_BACKENDS);
         mRouter = new Router(mServerComponent.getContext().createChildContext());
         mServerComponent.getDefaultHost().attach(mRouter);
-        // init DEECo infrastructure for cz.kinst.jakub.cz.kinst.jakub.cz.kinst.jakub.diploma.cz.kinst.jakub.diploma.cz.kinst.jakub.diploma.offloading
+        // init DEECo infrastructure for offloading
         mUdpBroadcast = udpBroadcast;
         mDeecoManager = new DEECoManager(mUdpBroadcast);
     }
 
-    public void attachResource(OffloadingResourceImpl resource) {
-        mResources.add(resource);
-        mRouter.attach(resource.getPath(), resource.getClass());
+    public void attachBackend(OffloadableBackendImpl backend) {
+        mBackends.add(backend);
+        mRouter.attach(backend.getPath(), backend.getClass());
     }
 
     public void init() {
         // register DEECo components and ensembles
-        HashSet<MonitorDef> monitorDefs = new HashSet<>();
-        for (OffloadingResourceImpl mResource : mResources) {
-            String resourceId = mResource.getPath();
-            MonitorDef monitorDef = new MonitorDef(resourceId);
+        HashSet<BackendMonitorDef> monitorDefs = new HashSet<>();
+        for (OffloadableBackendImpl backend : mBackends) {
+            String backendId = backend.getPath();
+            BackendMonitorDef monitorDef = new BackendMonitorDef(backendId);
             monitorDefs.add(monitorDef);
         }
         PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs, getLocalIpAddress());
         DeviceComponent deviceComponent = new DeviceComponent(getLocalIpAddress());
-        UIMonitorComponent uiMonitorComponent = new UIMonitorComponent();
+        FrontendMonitorComponent frontendMonitorComponent = new FrontendMonitorComponent();
         mDeecoManager.registerComponent(plannerComponent);
         mDeecoManager.registerComponent(deviceComponent);
-        mDeecoManager.registerComponent(uiMonitorComponent);
+        mDeecoManager.registerComponent(frontendMonitorComponent);
         mDeecoManager.registerEnsemble(PlannerToDeviceEnsemble.class);
         mDeecoManager.registerEnsemble(NFPDataCollectingEnsemble.class);
         mDeecoManager.registerEnsemble(BackendStateDistributingEnsemble.class);
@@ -110,56 +110,55 @@ public class OffloadingManager {
 
     public void spawnNewMonitor(BackendMonitorComponent backendMonitorComponent) {
         mDeecoManager.registerComponent(backendMonitorComponent);
-        //TODO: tell runtime about new component if needed (waiting for confirmation 24/01/2015)
     }
 
-    public <T> T getResourceProxy(Class<T> resourceInterface, String host) {
-        for (OffloadingResourceImpl res : mResources) {
-            if (resourceInterface.isAssignableFrom(res.getClass())) {
+    public <T> T getBackendProxy(Class<T> backendInterface, String host) {
+        for (OffloadableBackendImpl res : mBackends) {
+            if (backendInterface.isAssignableFrom(res.getClass())) {
                 ClientResource cr = new ClientResource(getUrl(host, res.getPath()));
-                return cr.wrap(resourceInterface);
+                return cr.wrap(backendInterface);
             }
         }
-        throw new IllegalArgumentException("No Resource of implementing " + resourceInterface.getName() + " was registered.");
+        throw new IllegalArgumentException("No Backend implementing " + backendInterface.getName() + " was registered.");
     }
 
-    public String getResourcePath(Class resourceInterface) {
-        for (OffloadingResourceImpl res : mResources) {
-            if (resourceInterface.isAssignableFrom(res.getClass())) {
+    public String getBackendId(Class backendInterface) {
+        for (OffloadableBackendImpl res : mBackends) {
+            if (backendInterface.isAssignableFrom(res.getClass())) {
                 return res.getPath();
             }
         }
-        throw new IllegalArgumentException("No Resource of implementing " + resourceInterface.getName() + " was registered.");
+        throw new IllegalArgumentException("No Backend implementing " + backendInterface.getName() + " was registered.");
     }
 
-    private static String getUrl(String host, String resourcePath) {
-        return "http://" + host + ":" + OffloadingConfig.HTTP_PORT_FOR_RESOURCES + resourcePath;
+    private static String getUrl(String host, String backendId) {
+        return "http://" + host + ":" + OffloadingConfig.HTTP_PORT_FOR_BACKENDS + backendId;
     }
 
     public String getLocalIpAddress() {
         return mUdpBroadcast.getMyIpAddress();
     }
 
-    public NFPData checkPerformance(String resourcePath) {
-        for (OffloadingResourceImpl resource : mResources) {
-            if (resource.getPath().equals(resourcePath)) {
-                Logger.i("Performing checkPerformance on " + resourcePath);
-                NFPData nfpData = resource.checkPerformance();
+    public NFPData checkBackendPerformance(String backendId) {
+        for (OffloadableBackendImpl backend : mBackends) {
+            if (backend.getPath().equals(backendId)) {
+                Logger.i("Performing checkBackendPerformance on " + backendId);
+                NFPData nfpData = backend.checkPerformance();
                 return nfpData;
             }
         }
-        throw new IllegalArgumentException("No Resource on path " + resourcePath + " was registered.");
+        throw new IllegalArgumentException("No Backend on path " + backendId + " was registered.");
     }
 
-    public String findOptimalAlternative(String resourcePath, Map<String, NFPData> alternatives) {
-        for (OffloadingResourceImpl resource : mResources) {
-            if (resource.getPath().equals(resourcePath)) {
-                Logger.i("Performing findOptimalAlternative on " + resourcePath);
-                String optimum = resource.findOptimalAlternative(alternatives);
+    public String findOptimalAlternative(String backendPath, Map<String, NFPData> alternatives) {
+        for (OffloadableBackendImpl backend : mBackends) {
+            if (backend.getPath().equals(backendPath)) {
+                Logger.i("Performing findOptimalAlternative on " + backendPath);
+                String optimum = backend.findOptimalAlternative(alternatives);
                 return optimum;
             }
         }
-        throw new IllegalArgumentException("No Resource on path " + resourcePath + " was registered.");
+        throw new IllegalArgumentException("No Backend on path " + backendPath + " was registered.");
     }
 
 }
