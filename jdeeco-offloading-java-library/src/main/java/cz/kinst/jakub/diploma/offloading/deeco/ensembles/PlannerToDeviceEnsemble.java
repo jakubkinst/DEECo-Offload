@@ -20,7 +20,7 @@ import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
  * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent}
  */
 @Ensemble
-@PeriodicScheduling(period = 1500) // check every 13 seconds TODO: tune this value
+@PeriodicScheduling(period = 1500)
 public class PlannerToDeviceEnsemble {
     @Membership
     public static boolean membership(@In("coord.appId") String plannerAppId, @In("coord.lastPing") long plannerLastPing, @In("member.lastPing") long deviceLastPing, @In("member.ip") String deviceIp) {
