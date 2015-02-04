@@ -11,40 +11,41 @@ import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 /**
  * Created by jakubkinst on 21/01/15.
  */
-public class NfpDataHolder implements Serializable {
-    private HashMap<String, HashMap<String, NFPDataWithLastActiveTime>> nfpData = new HashMap<>();
+public class NFPDataHolder implements Serializable {
+    private HashMap<String, HashMap<String, NFPData>> nfpData = new HashMap<>();
 
-    public void put(String appComponentId, String deviceIp, NFPData nfpData) {
-        HashMap<String, NFPDataWithLastActiveTime> appComponentData = getByAppComponentId(appComponentId);
-        if (appComponentData == null)
-            appComponentData = new HashMap<>();
-        appComponentData.put(deviceIp, new NFPDataWithLastActiveTime(nfpData, new Date().getTime()));
-        this.nfpData.put(appComponentId, appComponentData);
+    public void put(String backendId, String deviceIp, NFPData nfpData) {
+        HashMap<String, NFPData> backendData = getByBackendId(backendId);
+        if (backendData == null)
+            backendData = new HashMap<>();
+        nfpData.setTimestamp(System.currentTimeMillis());
+        backendData.put(deviceIp, nfpData);
+        this.nfpData.put(backendId, backendData);
     }
 
-    public HashMap<String, NFPDataWithLastActiveTime> getByAppComponentId(String appComponentId) {
-        return nfpData.get(appComponentId);
+    public HashMap<String, NFPData> getByBackendId(String backendId) {
+        return nfpData.get(backendId);
     }
 
     /**
-     * Returns filtered NFPData for devices implementing appComponentId,
-     * but only those, that are not older than OffloadingConfig.MONITOR_PLANNER_EXCHANGE_INTERVAL_MS
+     * Returns filtered NFPData for devices implementing backendId,
+     * but only those, that are not older than OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS
      *
-     * @param appComponentId
+     * @param backendId
      * @return
      */
-    public HashMap<String, NFPData> getActiveByAppComponentId(String appComponentId) {
+    public HashMap<String, NFPData> getActiveByBackendId(String backendId) {
         HashMap<String, NFPData> data = new HashMap<>();
-        for (Map.Entry<String, NFPDataWithLastActiveTime> entry : getByAppComponentId(appComponentId).entrySet()) {
+        for (Map.Entry<String, NFPData> entry : getByBackendId(backendId).entrySet()) {
             long now = new Date().getTime();
-            if (now - entry.getValue().getLastActiveTime() < (2 * OffloadingConfig.MONITOR_PLANNER_EXCHANGE_INTERVAL_MS)) {
-                data.put(entry.getKey(), entry.getValue().getNfpData());
+            if (now - entry.getValue().getTimestamp() < (2 * OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS)) {
+                data.put(entry.getKey(), entry.getValue());
             }
         }
         return data;
     }
 
-    public Set<String> getAppComponentIds() {
+    public Set<String> getBackendIds() {
         return nfpData.keySet();
     }
 }

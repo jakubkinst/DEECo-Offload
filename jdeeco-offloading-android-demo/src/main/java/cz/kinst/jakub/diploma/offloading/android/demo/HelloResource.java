@@ -4,9 +4,9 @@ package cz.kinst.jakub.diploma.offloading.android.demo;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import cz.kinst.jakub.diploma.offloading.resource.OffloadingResource;
+import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackend;
 
-public interface HelloResource extends OffloadingResource {
+public interface HelloResource extends OffloadableBackend {
 
     @Post("?hello")
     public Message getHello(String name);

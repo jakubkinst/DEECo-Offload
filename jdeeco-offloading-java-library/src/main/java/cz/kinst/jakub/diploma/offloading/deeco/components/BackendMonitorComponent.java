@@ -10,19 +10,22 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorState;
+import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 @Component
-public class MonitorComponent implements Serializable {
-    public String appComponentId;
+public class BackendMonitorComponent implements Serializable {
+    public int monitorType = MonitorType.BACKEND;
+    public int monitorState = BackendMonitorState.NOT_ACTIVE;
     public String deviceIp;
-    public String resourceId;
+    public String backendId;
     public NFPData nfpData;
     public Long lastPing;
 
-    public MonitorComponent(String resourceId, String deviceIp) {
-        this.resourceId = resourceId;
+    public BackendMonitorComponent(String backendId, String deviceIp) {
+        this.backendId = backendId;
         this.deviceIp = deviceIp;
     }
 
@@ -34,9 +37,9 @@ public class MonitorComponent implements Serializable {
 
     @Process
     @PeriodicScheduling(period = 10000)
-    public static void measure(@In("resourceId") String resourceId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
+    public static void measure(@In("backendId") String backendId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"
-        nfpData.value = OffloadingManager.getInstance().checkPerformance(resourceId);
-        Logger.e("MONITOR measure on " + deviceIp);
+        nfpData.value = OffloadingManager.getInstance().checkBackendPerformance(backendId);
+        Logger.i("MONITOR measure on " + deviceIp);
     }
 }
