@@ -6,7 +6,7 @@ import org.restlet.resource.Post;
 
 import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackend;
 
-public interface HelloResource extends OffloadableBackend {
+public interface HelloBackend extends OffloadableBackend {
 
     @Post("?hello")
     public Message getHello(String name);

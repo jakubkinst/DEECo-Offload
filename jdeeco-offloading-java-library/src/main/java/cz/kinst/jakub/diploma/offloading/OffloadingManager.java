@@ -19,13 +19,16 @@ import cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponen
 import cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.FrontendMonitorComponent;
 import cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent;
-import cz.kinst.jakub.diploma.offloading.deeco.ensembles.ActiveBackendMonitorToUiEnsemble;
+import cz.kinst.jakub.diploma.offloading.deeco.components.StateDataMonitorComponent;
+import cz.kinst.jakub.diploma.offloading.deeco.ensembles.ActiveBackendMonitorToFrontendEnsemble;
+import cz.kinst.jakub.diploma.offloading.deeco.ensembles.ActiveBackendMonitorToStateDataEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.BackendStateDistributingEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.NFPDataCollectingEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.ensembles.PlannerToDeviceEnsemble;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackend;
 import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 
@@ -41,6 +44,7 @@ public class OffloadingManager {
     private final UDPBroadcast mUdpBroadcast;
     private final String mAppId;
     private List<OffloadableBackendImpl> mBackends = new ArrayList<>();
+    private List<BackendStateData> mBackendStateDataCollection = new ArrayList<>();
 
     public static OffloadingManager getInstance() {
         return sInstance;
@@ -71,9 +75,11 @@ public class OffloadingManager {
         mDeecoManager = new DEECoManager(mUdpBroadcast);
     }
 
-    public void attachBackend(OffloadableBackendImpl backend) {
+    public void attachBackend(OffloadableBackendImpl backend, Class<? extends OffloadableBackend> backendInterface) {
         mBackends.add(backend);
         mRouter.attach(backend.getPath(), backend.getClass());
+        BackendStateData backendStateData = new BackendStateData(backend.getPath(), backendInterface, this);
+        mBackendStateDataCollection.add(backendStateData);
     }
 
     public void init() {
@@ -90,10 +96,14 @@ public class OffloadingManager {
         mDeecoManager.registerComponent(plannerComponent);
         mDeecoManager.registerComponent(deviceComponent);
         mDeecoManager.registerComponent(frontendMonitorComponent);
+        for (BackendStateData backendStateData : mBackendStateDataCollection) {
+            mDeecoManager.registerComponent(new StateDataMonitorComponent(backendStateData.getBackendId()));
+        }
         mDeecoManager.registerEnsemble(PlannerToDeviceEnsemble.class);
         mDeecoManager.registerEnsemble(NFPDataCollectingEnsemble.class);
         mDeecoManager.registerEnsemble(BackendStateDistributingEnsemble.class);
-        mDeecoManager.registerEnsemble(ActiveBackendMonitorToUiEnsemble.class);
+        mDeecoManager.registerEnsemble(ActiveBackendMonitorToFrontendEnsemble.class);
+        mDeecoManager.registerEnsemble(ActiveBackendMonitorToStateDataEnsemble.class);
 
         mDeecoManager.initRuntime();
     }
@@ -161,4 +171,15 @@ public class OffloadingManager {
         throw new IllegalArgumentException("No Backend on path " + backendPath + " was registered.");
     }
 
+    public BackendStateData getBackendStateData(String backendId) {
+        for (BackendStateData backendStateData : mBackendStateDataCollection) {
+            if (backendStateData.getBackendId().equals(backendId))
+                return backendStateData;
+        }
+        throw new IllegalArgumentException("No BackendStateData of id " + backendId + " was registered.");
+    }
+
+    public void moveBackendStateData(String backendId, String oldBackendAddress, String newBackendAddress) {
+        getBackendStateData(backendId).moveData(oldBackendAddress, newBackendAddress);
+    }
 }

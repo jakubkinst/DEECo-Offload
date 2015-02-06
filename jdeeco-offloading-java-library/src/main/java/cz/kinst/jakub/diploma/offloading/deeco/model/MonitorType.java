@@ -6,5 +6,5 @@ package cz.kinst.jakub.diploma.offloading.deeco.model;
 public class MonitorType {
     public static final int BACKEND = 0;
     public static final int FRONTEND = 1;
-
+    public static final int STATE_DATA = 2;
 }

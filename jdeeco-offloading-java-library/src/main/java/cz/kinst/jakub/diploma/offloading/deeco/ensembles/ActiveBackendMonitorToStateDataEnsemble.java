@@ -10,36 +10,37 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorState;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 
 /**
  * This ensemble takes care of informing UIMonitor about active backends
- * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.FrontendMonitorComponent}
+ * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.StateDataMonitorComponent}
  * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent}
  */
 @Ensemble
-@PeriodicScheduling(period = OffloadingConfig.UI_MONITOR_UPDATE_INTERVAL_MS)
-public class ActiveBackendMonitorToUiEnsemble {
+@PeriodicScheduling(period = OffloadingConfig.STATE_DATA_MONITOR_UPDATE_INTERVAL_MS)
+public class ActiveBackendMonitorToStateDataEnsemble {
     @Membership
-    public static boolean membership(@In("coord.monitorType") int uiMonitorType,
+    public static boolean membership(@In("coord.monitorType") int stateDataMonitorType,
+                                     @In("coord.backendId") String stateDataBackendId,
                                      @In("member.monitorType") int backendMonitorType,
                                      @In("member.monitorState") int backendMonitorState,
+                                     @In("member.backendId") String backendBackendId,
                                      @In("member.lastPing") long backendMonitorLastPing,
-                                     @In("coord.lastPing") long uiMonitorLastPing) {
+                                     @In("coord.lastPing") long stateDataMonitorLastPing) {
         // connect only active backend monitors with ui monitor
-        return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, uiMonitorLastPing)
-                && uiMonitorType == MonitorType.FRONTEND
+        return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, stateDataMonitorLastPing)
+                && stateDataMonitorType == MonitorType.STATE_DATA
                 && backendMonitorType == MonitorType.BACKEND
-                && backendMonitorState == BackendMonitorState.ACTIVE;
+                && backendMonitorState == BackendMonitorState.ACTIVE
+                && backendBackendId.equals(stateDataBackendId);
     }
 
     @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("coord.backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> uiDeploymentPlan,
-                                         @In("member.backendId") String backendAppComponentId,
+    public static void knowledgeExchange(@InOut("coord.currentBackendAddress") ParamHolder<String> stateDataCurrentBackendAddress,
                                          @In("member.deviceIp") String backendDeviceIp) {
-        uiDeploymentPlan.value.plan(backendAppComponentId, backendDeviceIp);
+        stateDataCurrentBackendAddress.value = backendDeviceIp;
     }
 
 }

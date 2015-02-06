@@ -27,6 +27,7 @@ import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
 import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
+import cz.kinst.jakub.diploma.offloading.android.MovingProgressDialogListener;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
@@ -46,8 +47,8 @@ public class MainActivity extends ActionBarActivity {
     TextView mPerformanceText;
 
     private OffloadingManager mOffloadingManager;
-    private HelloResourceImpl mHelloResource;
-    private Frontend mUIAppComponent;
+    private HelloBackendImpl mHelloResource;
+    private Frontend mFrontend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +64,22 @@ public class MainActivity extends ActionBarActivity {
         try {
             mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
 
-            mHelloResource = new HelloResourceImpl(HELLO_URI, this);
-            mOffloadingManager.attachBackend(mHelloResource);
-            mUIAppComponent = new Frontend(mOffloadingManager);
-            mUIAppComponent.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
+            mHelloResource = new HelloBackendImpl(HELLO_URI, this);
+            mOffloadingManager.attachBackend(mHelloResource, HelloBackend.class);
+            mFrontend = new Frontend(mOffloadingManager);
+            mFrontend.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override
                 public void onDeploymentPlanUpdated(BackendDeploymentPlan plan) {
-                    String backendAddress = mUIAppComponent.getActiveBackendAddress(HelloResource.class);
-                    mCurrentBackend.setText(backendAddress);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String backendAddress = mFrontend.getActiveBackendAddress(HelloBackend.class);
+                            mCurrentBackend.setText(backendAddress);
+                        }
+                    });
                 }
             });
+            mFrontend.setOnBackendMoveListener(new MovingProgressDialogListener(this));
 
             mOffloadingManager.init();
             mOffloadingManager.start();
@@ -80,13 +87,13 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mPerformanceText.setText((HelloResourceImpl.getPerformance(this) * 10) + "%");
-        mPerformanceSeekBar.setProgress(HelloResourceImpl.getPerformance(this));
+        mPerformanceText.setText((HelloBackendImpl.getPerformance(this) * 10) + "%");
+        mPerformanceSeekBar.setProgress(HelloBackendImpl.getPerformance(this));
         mPerformanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                HelloResourceImpl.setPerformance(MainActivity.this, progress);
-                mPerformanceText.setText((HelloResourceImpl.getPerformance(MainActivity.this) * 10) + "%");
+                HelloBackendImpl.setPerformance(MainActivity.this, progress);
+                mPerformanceText.setText((HelloBackendImpl.getPerformance(MainActivity.this) * 10) + "%");
             }
 
             @Override
@@ -105,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.get_hello_button)
     void onGetHelloClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mUIAppComponent.getActiveBackendProxy(HelloResource.class);
+        final HelloBackend backend = mFrontend.getActiveBackendProxy(HelloBackend.class);
         new AsyncTask<Void, Void, Message>() {
             @Override
             protected Message doInBackground(Void... params) {
@@ -132,7 +139,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.get_fileupload_button)
     void onGetFileUploadClicked() {
         // Initialize the resource proxy.
-        final HelloResource backend = mUIAppComponent.getActiveBackendProxy(HelloResource.class);
+        final HelloBackend backend = mFrontend.getActiveBackendProxy(HelloBackend.class);
 
         new AsyncTask<Void, Void, Message>() {
             @Override

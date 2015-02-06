@@ -19,13 +19,13 @@ import cz.kinst.jakub.diploma.offloading.resource.BackendPerformanceProvider;
 import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
 import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
 
-public class HelloResourceImpl extends OffloadableBackendImpl implements HelloResource {
+public class HelloBackendImpl extends OffloadableBackendImpl implements HelloBackend {
     private static final String PERFORMANCE_KEY = "performance_hello";
 
-    public HelloResourceImpl() {
+    public HelloBackendImpl() {
     }
 
-    public HelloResourceImpl(String path, final Context context) {
+    public HelloBackendImpl(String path, final Context context) {
         super(path, new BackendPerformanceProvider() {
             @Override
             public NFPData checkPerformance() {
@@ -52,7 +52,9 @@ public class HelloResourceImpl extends OffloadableBackendImpl implements HelloRe
 
     @Override
     public Message getHello(String name) {
-        return new Message("Hello to " + name + " from " + android.os.Build.MODEL + "!", new Date().getTime());
+        int count = getStateData().getInt("hello_counter", 0) + 1;
+        getStateData().putInt("hello_counter", count);
+        return new Message("Hello no. " + count + " to " + name + " from " + android.os.Build.MODEL + "!", new Date().getTime());
     }
 
     @Override
@@ -62,6 +64,7 @@ public class HelloResourceImpl extends OffloadableBackendImpl implements HelloRe
 
     @Override
     public Message testFile(Representation representation) {
+        getContext().getAttributes().put("testVal", "XXX");
         try {
             MultipartHolder<Message> multipartHolder = new MultipartHolder<>(representation, Message.class);
             byte[] file = multipartHolder.getReceivedFiles().get(0).get();

@@ -3,8 +3,11 @@ package cz.kinst.jakub.diploma.offloading.resource;
 import org.restlet.resource.ServerResource;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
+import cz.kinst.jakub.diploma.offloading.StateBundle;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.logger.Logger;
 
 /**
  * Created by jakubkinst on 07/01/15.
@@ -32,6 +35,18 @@ public abstract class OffloadableBackendImpl extends ServerResource {
 
     public String findOptimalAlternative(Map<String, NFPData> alternatives) {
         return mBackendPerformanceProvider.findOptimalAlternative(alternatives);
+    }
+
+
+    public void setStateData(StateBundle stateData) {
+        getContext().setAttributes(stateData.getMap());
+        Logger.d("Received state data from " + getClientInfo().getAddress());
+    }
+
+    public StateBundle getStateData() {
+        ConcurrentMap<String, Object> attributes = getContext().getAttributes();
+        StateBundle bundle = new StateBundle(attributes);
+        return bundle;
     }
 
 }

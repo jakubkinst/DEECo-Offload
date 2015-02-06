@@ -10,16 +10,19 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.BusProvider;
 import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
-import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.events.DeploymentPlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.deeco.events.ShouldPullBackendStateDataEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
 
 @Component
-public class FrontendMonitorComponent implements Serializable {
-    public int monitorType = MonitorType.FRONTEND;
-    public BackendDeploymentPlan backendDeploymentPlan = new BackendDeploymentPlan(OffloadingManager.getInstance().getLocalIpAddress());
+public class StateDataMonitorComponent implements Serializable {
+    public int monitorType = MonitorType.STATE_DATA;
+    public String backendId;
+    public String currentBackendAddress;
     public Long lastPing;
+
+    public StateDataMonitorComponent(String backendId) {
+        this.backendId = backendId;
+    }
 
     @Process
     @PeriodicScheduling(period = OffloadingConfig.PING_INTERVAL_MS)
@@ -28,8 +31,9 @@ public class FrontendMonitorComponent implements Serializable {
     }
 
     @Process
-    @PeriodicScheduling(period = 1000)
-    public static void updateUi(@In("backendDeploymentPlan") BackendDeploymentPlan deploymentPlan) {
-        BusProvider.get().post(new DeploymentPlanUpdateEvent(deploymentPlan));
+    @PeriodicScheduling(period = 12000)
+    public static void doPeriodicPull(@In("backendId") String backendId, @In("currentBackendAddress") String currentBackendAddress) {
+        if (currentBackendAddress != null)
+            BusProvider.get().post(new ShouldPullBackendStateDataEvent(backendId, currentBackendAddress));
     }
 }

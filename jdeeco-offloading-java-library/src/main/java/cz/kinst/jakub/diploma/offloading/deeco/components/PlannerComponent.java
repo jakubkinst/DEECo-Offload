@@ -45,7 +45,7 @@ public class PlannerComponent implements Serializable {
     @PeriodicScheduling(period = 5000)
     public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
         Logger.i("Planner: plan");
-        BackendDeploymentPlan newPlan = new BackendDeploymentPlan();
+        BackendDeploymentPlan newPlan = new BackendDeploymentPlan(OffloadingManager.getInstance().getLocalIpAddress());
         for (String appComponentId : nfpDataHolder.getBackendIds()) {
             HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByBackendId(appComponentId);
             String selectedDeviceIp = OffloadingManager.getInstance().findOptimalAlternative(appComponentId, alternatives);
