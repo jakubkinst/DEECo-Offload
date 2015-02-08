@@ -36,6 +36,12 @@ public class BackendMonitorComponent implements Serializable {
     }
 
     @Process
+    @PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)
+    public static void updateDeviceIp(@InOut("deviceIp") ParamHolder<String> deviceIp) {
+        deviceIp.value = OffloadingManager.getInstance().getLocalIpAddress();
+    }
+
+    @Process
     @PeriodicScheduling(period = 10000)
     public static void measure(@In("backendId") String backendId, @In("deviceIp") String deviceIp, @InOut("nfpData") ParamHolder<NFPData> nfpData) {
         //measure and produce NFPData based on "simulation"

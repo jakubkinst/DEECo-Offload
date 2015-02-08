@@ -3,7 +3,6 @@ package cz.kinst.jakub.diploma.offloading.resource;
 import org.restlet.resource.ServerResource;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import cz.kinst.jakub.diploma.offloading.StateBundle;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
@@ -39,13 +38,16 @@ public abstract class OffloadableBackendImpl extends ServerResource {
 
 
     public void setStateData(StateBundle stateData) {
-        getContext().setAttributes(stateData.getMap());
+        getContext().getAttributes().put(getClientInfo().getAddress(), stateData);
         Logger.d("Received state data from " + getClientInfo().getAddress());
     }
 
     public StateBundle getStateData() {
-        ConcurrentMap<String, Object> attributes = getContext().getAttributes();
-        StateBundle bundle = new StateBundle(attributes);
+        StateBundle bundle = (StateBundle) getContext().getAttributes().get(getClientInfo().getAddress());
+        if (bundle == null) {
+            bundle = new StateBundle();
+            setStateData(bundle);
+        }
         return bundle;
     }
 

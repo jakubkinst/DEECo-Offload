@@ -10,8 +10,7 @@ import java.util.Map;
 public class StateBundle implements Serializable {
     private Map<String, Object> mMap = new HashMap<>();
 
-    public StateBundle(Map<String, Object> map) {
-        mMap = map;
+    public StateBundle() {
     }
 
     public void putInt(String key, int value) {

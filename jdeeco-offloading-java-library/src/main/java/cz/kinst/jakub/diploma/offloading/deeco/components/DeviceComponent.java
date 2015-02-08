@@ -35,6 +35,12 @@ public class DeviceComponent implements Serializable {
     }
 
     @Process
+    @PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)
+    public static void updateDeviceIp(@InOut("ip") ParamHolder<String> deviceIp) {
+        deviceIp.value = OffloadingManager.getInstance().getLocalIpAddress();
+    }
+
+    @Process
     @PeriodicScheduling(period = 6000)
     public static void manageMonitors(@In("monitorDefs") Map<String, Set<BackendMonitorDef>> monitorDefs, @InOut("spawnedMonitors") ParamHolder<Set<String>> spawnedMonitors, @In("ip") String ip) {
         //spawn monitors for each one of the monitorDefs

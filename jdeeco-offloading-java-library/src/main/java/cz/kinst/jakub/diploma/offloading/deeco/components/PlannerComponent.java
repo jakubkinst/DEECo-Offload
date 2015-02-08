@@ -41,6 +41,13 @@ public class PlannerComponent implements Serializable {
         lastPing.value = System.currentTimeMillis();
     }
 
+
+    @Process
+    @PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)
+    public static void updateDeviceIp(@InOut("deployedBy") ParamHolder<String> deviceIp) {
+        deviceIp.value = OffloadingManager.getInstance().getLocalIpAddress();
+    }
+
     @Process
     @PeriodicScheduling(period = 5000)
     public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
