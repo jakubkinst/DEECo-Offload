@@ -1,6 +1,8 @@
 package cz.kinst.jakub.diploma.offloading;
 
+import org.restlet.Client;
 import org.restlet.Component;
+import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.engine.Engine;
 import org.restlet.engine.connector.HttpClientHelper;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent;
@@ -126,6 +129,11 @@ public class OffloadingManager {
         for (OffloadableBackendImpl res : mBackends) {
             if (backendInterface.isAssignableFrom(res.getClass())) {
                 ClientResource cr = new ClientResource(getUrl(host, res.getPath()));
+                Context context = new Context();
+                context.getParameters().add("socketConnectTimeoutMs", "3000");
+                Client client = new Client(context, Protocol.HTTP);
+                cr.setNext(client);
+//                cr.setRetryOnError(false);
                 return cr.wrap(backendInterface);
             }
         }
