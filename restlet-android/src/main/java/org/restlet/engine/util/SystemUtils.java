@@ -35,10 +35,8 @@ public class SystemUtils {
      * Indicates if both fields are equal. For this to be true, they must either
      * be both null or return true to the {@link Object#equals(Object)} method.
      *
-     * @param source
-     *            The source field.
-     * @param target
-     *            The target field.
+     * @param source The source field.
+     * @param target The target field.
      * @return True if both fields are equals.
      */
     public static boolean equals(Object source, Object target) {
@@ -50,12 +48,25 @@ public class SystemUtils {
      * the version number of the Java Runtime Environment (e.g. "1" for
      * "1.3.0").
      *
-     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
-     *      Java versioning</a>
+     * MODIFIED TO WORK ON ANDROID by Jakub Kinst
+     *
      * @return The major version number of the Java Runtime Environment.
+     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
+     * Java versioning</a>
      */
     public static int getJavaMajorVersion() {
-        return 1;
+        if (System.getProperty("java.vendor").contains("Android"))
+            return 1;
+        int result;
+        final String javaVersion = System.getProperty("java.version");
+        try {
+            result = Integer.parseInt(javaVersion.substring(0,
+                    javaVersion.indexOf(".")));
+        } catch (Exception e) {
+            result = 0;
+        }
+
+        return result;
     }
 
     /**
@@ -63,22 +74,34 @@ public class SystemUtils {
      * the version number of the Java Runtime Environment (e.g. "3" for
      * "1.3.0").
      *
-     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
-     *      Java versioning</a>
+     * MODIFIED TO WORK ON ANDROID by Jakub Kinst
+     *
      * @return The minor version number of the Java Runtime Environment.
+     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
+     * Java versioning</a>
      */
     public static int getJavaMinorVersion() {
-        return 7;
+        if (System.getProperty("java.vendor").contains("Android"))
+            return 7;
+        int result;
+        final String javaVersion = System.getProperty("java.version");
+        try {
+            result = Integer.parseInt(javaVersion.split("\\.")[1]);
+        } catch (Exception e) {
+            result = 0;
+        }
+
+        return result;
     }
 
     /**
      * Parses the "java.version" system property and returns the update release
      * number of the Java Runtime Environment (e.g. "10" for "1.3.0_10").
      *
-     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
-     *      Java versioning</a>
      * @return The release number of the Java Runtime Environment or 0 if it
-     *         does not exist.
+     * does not exist.
+     * @see <a href="http://java.sun.com/j2se/versioning_naming.html">Official
+     * Java versioning</a>
      */
     public static int getJavaUpdateVersion() {
         int result;
@@ -97,9 +120,7 @@ public class SystemUtils {
      * Computes the hash code of a set of objects. Follows the algorithm
      * specified in List.hasCode().
      *
-     * @param objects
-     *            the objects to compute the hashCode
-     *
+     * @param objects the objects to compute the hashCode
      * @return The hash code of a set of objects.
      */
     public static int hashCode(Object... objects) {
