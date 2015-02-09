@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/jdeeco-offloading-android-library" />
             <option value="$PROJECT_DIR$/jdeeco-offloading-java-library" />
             <option value="$PROJECT_DIR$/jdeeco-udp-broadcast-library" />
+            <option value="$PROJECT_DIR$/restlet-android" />
           </set>
         </option>
       </GradleProjectSettings>

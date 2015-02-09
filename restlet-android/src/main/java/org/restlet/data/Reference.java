@@ -1611,9 +1611,9 @@ public class Reference {
                             // Build relative path
                             for (int j = 0; j < segments; j++)
                                 if (j > 0)
-                                    sb.append("/..");
+                                    sb.append("/src/main");
                                 else
-                                    sb.append("..");
+                                    sb.append("src/main");
 
                             relativePath = sb.toString();
 
@@ -1637,7 +1637,7 @@ public class Reference {
                                 // base path
                                 relativePath = localPath.substring(i);
                             } else {
-                                relativePath = ".."
+                                relativePath = "src/main"
                                         + localPath.substring(lastSlashIndex);
                             }
                         }
@@ -2217,7 +2217,7 @@ public class Reference {
                 input.delete(0, 3);
                 removeLastSegment(output);
             } else if ((input.length() == 3)
-                    && input.substring(0, 3).equals("/..")) {
+                    && input.substring(0, 3).equals("/src/main")) {
                 input.delete(1, 3);
                 removeLastSegment(output);
             }
@@ -2227,7 +2227,7 @@ public class Reference {
             else if ((input.length() == 1) && input.substring(0, 1).equals(".")) {
                 input.delete(0, 1);
             } else if ((input.length() == 2)
-                    && input.substring(0, 2).equals("..")) {
+                    && input.substring(0, 2).equals("src/main")) {
                 input.delete(0, 2);
             }
 
