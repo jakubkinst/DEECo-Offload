@@ -10,10 +10,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/jdeeco-java-library" />
             <option value="$PROJECT_DIR$/jdeeco-offloading-android-demo" />
+            <option value="$PROJECT_DIR$/jdeeco-offloading-android-demo-offloadableocr" />
             <option value="$PROJECT_DIR$/jdeeco-offloading-android-library" />
             <option value="$PROJECT_DIR$/jdeeco-offloading-java-library" />
             <option value="$PROJECT_DIR$/jdeeco-udp-broadcast-library" />
             <option value="$PROJECT_DIR$/restlet-android" />
+            <option value="$PROJECT_DIR$/tess-two" />
           </set>
         </option>
       </GradleProjectSettings>
