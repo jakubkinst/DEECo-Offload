@@ -10,6 +10,7 @@ import cz.kinst.jakub.diploma.offloading.OnBackendMoveListener;
  * Created by jakubkinst on 06/02/15.
  */
 public class MovingProgressDialogListener implements OnBackendMoveListener {
+    private static final long PROGRESS_DIALOG_TIMEOUT_MS = 15000;
     private ProgressDialog mProgressDialog;
     private Context mContext;
 
@@ -28,6 +29,13 @@ public class MovingProgressDialogListener implements OnBackendMoveListener {
                 mProgressDialog.show();
             }
         });
+        mainHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing())
+                    mProgressDialog.dismiss();
+            }
+        }, PROGRESS_DIALOG_TIMEOUT_MS);
     }
 
     @Override
