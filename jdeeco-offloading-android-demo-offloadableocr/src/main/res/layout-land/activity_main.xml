@@ -17,11 +17,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:text="@string/pick_from_gallery"
-        android:layout_gravity="bottom|left"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/settings"
         android:padding="8dp"
-        style="@style/HUDButton" />
+        style="@style/HUDButton"
+        android:layout_gravity="right|top" />
 
     <ImageButton
         android:src="@drawable/ic_image_camera"
@@ -31,7 +31,8 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/take_picture"
         android:padding="4dp"
-        style="@style/HUDButton" />
+        style="@style/HUDButton"
+        android:layout_gravity="center_vertical|right" />
 
     <ImageButton
         android:src="@drawable/ic_image_gallery"
@@ -54,5 +55,5 @@
         android:textSize="12sp"
         android:textColor="@color/white"
         android:id="@+id/current_ip"
-        android:layout_gravity="right|top" />
+        android:layout_gravity="left|top" />
 </FrameLayout>

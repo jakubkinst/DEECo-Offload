@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="image_size"
+        android:title="@string/settings_image_size"
+        android:summary="@string/settings_image_size_summary"
+        android:inputType="number"
+        android:numeric="integer"
+        android:icon="@drawable/ic_settings_image_size"
+        android:defaultValue="2500"></EditTextPreference>
+</PreferenceScreen>

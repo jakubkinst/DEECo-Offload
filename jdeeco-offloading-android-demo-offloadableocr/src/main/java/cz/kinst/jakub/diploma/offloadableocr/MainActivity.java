@@ -1,148 +1,119 @@
 package cz.kinst.jakub.diploma.offloadableocr;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.kbeanie.imagechooser.api.ChooserType;
-import com.kbeanie.imagechooser.api.ChosenImage;
-import com.kbeanie.imagechooser.api.ImageChooserListener;
-import com.kbeanie.imagechooser.api.ImageChooserManager;
+import android.util.Log;
+import android.widget.FrameLayout;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class MainActivity extends ActionBarActivity implements ImageChooserListener {
+public class MainActivity extends ActionBarActivity {
+    private static final int REQUEST_SELECT_PHOTO = 100;
+    @InjectView(R.id.camera_preview_container)
+    FrameLayout mCameraPreviewContainer;
 
-    private static final String IMAGE_FOLDER = "myfolder";
-    private ImageChooserManager imageChooserManager;
-    private int chooserType;
-    private String filePath;
-
-    @InjectView(R.id.preview)
-    ImageView preview;
+    private CameraPreview mCameraPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         ButterKnife.inject(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCameraPreview = new CameraPreview(this);
+        mCameraPreviewContainer.addView(mCameraPreview);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mCameraPreviewContainer.removeAllViews();
+        mCameraPreview.release();
+    }
+
+    @OnClick(R.id.settings)
+    void openSettings() {
+        SettingsActivity.start(this);
     }
 
     @OnClick(R.id.pick_from_gallery)
     void chooseImage() {
-        chooserType = ChooserType.REQUEST_PICK_PICTURE;
-        imageChooserManager = new ImageChooserManager(this,
-                ChooserType.REQUEST_PICK_PICTURE, IMAGE_FOLDER, true);
-        imageChooserManager.setImageChooserListener(this);
-        try {
-            filePath = imageChooserManager.choose();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_SELECT_PHOTO);
     }
 
     @OnClick(R.id.take_picture)
     void takePicture() {
-        chooserType = ChooserType.REQUEST_CAPTURE_PICTURE;
-        imageChooserManager = new ImageChooserManager(this,
-                ChooserType.REQUEST_CAPTURE_PICTURE, IMAGE_FOLDER, true);
-        imageChooserManager.setImageChooserListener(this);
-        try {
-            filePath = imageChooserManager.choose();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK
-                && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
-            if (imageChooserManager == null) {
-                reinitializeImageChooser();
-            }
-            imageChooserManager.submit(requestCode, data);
-        } else {
-        }
-    }
-
-    @Override
-    public void onImageChosen(final ChosenImage image) {
-        runOnUiThread(new Runnable() {
-
+        mCameraPreview.takePicture(new Camera.PictureCallback() {
             @Override
-            public void run() {
-                if (image != null) {
-                    preview.setImageURI(Uri.parse(new File(image
-                            .getFileThumbnail()).toString()));
-
-                    Toast.makeText(MainActivity.this, recognizeText(new File(image.getFilePathOriginal())), Toast.LENGTH_LONG).show();
+            public void onPictureTaken(byte[] data, Camera camera) {
+                try {
+                    File file = FileUtils.getNewImageFile();
+                    FileUtils.writeByteArrayToFile(data, file);
+                    onImageSelected(file);
+                } catch (IOException e) {
+                    Log.e(Config.TAG, "Error: " + e.getMessage());
+                    return;
                 }
+
             }
         });
     }
 
-    private String recognizeText(File image) {
-        OCR ocr = new OCR();
-        return ocr.recognizeText(image);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch (requestCode) {
+            case REQUEST_SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        File file = FileUtils.getNewImageFile();
+                        FileUtils.writeInputStreamToFile(getContentResolver().openInputStream(selectedImage), file);
+                        onImageSelected(file);
+                    } catch (IOException e) {
+                        Log.e(Config.TAG, "Error: " + e.getMessage());
+                    }
+                }
+        }
     }
 
-    @Override
-    public void onError(final String reason) {
-        runOnUiThread(new Runnable() {
+    private void onImageSelected(final File file) {
+        final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.please_wait), getString(R.string.ocr_in_progress), true);
+        new AsyncTask<Void, Void, OCRResult>() {
+            @Override
+            protected OCRResult doInBackground(Void... params) {
+                long start = System.currentTimeMillis();
+                OCR ocr = new OCR();
+                String text = ocr.recognizeText(file);
+                long duration = System.currentTimeMillis() - start;
+                return new OCRResult(text, "0.0.0.0", duration);
+            }
 
             @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, reason,
-                        Toast.LENGTH_LONG).show();
+            protected void onPostExecute(OCRResult ocrResult) {
+                progressDialog.dismiss();
+                ResultActivity.start(MainActivity.this, ocrResult);
             }
-        });
+        }.execute();
     }
 
-    // Should be called if for some reason the ImageChooserManager is null (Due
-    // to destroying of activity for low memory situations)
-    private void reinitializeImageChooser() {
-        imageChooserManager = new ImageChooserManager(this, chooserType,
-                IMAGE_FOLDER, true);
-        imageChooserManager.setImageChooserListener(this);
-        imageChooserManager.reinitialize(filePath);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

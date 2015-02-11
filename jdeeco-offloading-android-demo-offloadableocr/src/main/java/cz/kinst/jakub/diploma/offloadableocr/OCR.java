@@ -18,10 +18,10 @@ import java.io.IOException;
 public class OCR {
 
     private static final String LOG_TAG = "OCR";
-    private static final String DATA_PATH = Environment.getExternalStorageDirectory()+"/tesseract";
+    private static final String DATA_PATH = Environment.getExternalStorageDirectory() + "/tesseract";
     private static final String LANG = "eng";
 
-    public String recognizeText(File image){
+    public String recognizeText(File image) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), options);
