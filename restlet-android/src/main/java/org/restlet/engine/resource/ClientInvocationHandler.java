@@ -159,15 +159,16 @@ public class ClientInvocationHandler<T> implements InvocationHandler {
                 boolean isSynchronous = true;
 
                 if ((args != null) && args.length > 0) {
-                    // Checks if the user has defined its own callback.
+                    // Checks if the user has defined its own
+                    // callback.
                     for (int i = 0; i < args.length; i++) {
                         Object o = args[i];
 
                         if (o == null) {
                             requestEntity = null;
                         } else if (Result.class.isAssignableFrom(o.getClass())) {
-                            // Asynchronous mode where a callback object is to
-                            // be called.
+                            // Asynchronous mode where a callback
+                            // object is to be called.
                             isSynchronous = false;
 
                             // Get the kind of result expected.
@@ -243,14 +244,13 @@ public class ClientInvocationHandler<T> implements InvocationHandler {
                 request.setEntity(requestEntity);
 
                 // Updates the client preferences if they weren't changed
-                if ((request.getClientInfo().getAcceptedCharacterSets()
-                        .isEmpty())
+                if ((request.getClientInfo().getAcceptedCharacterSets().size() == 0)
                         && (request.getClientInfo().getAcceptedEncodings()
-                                .isEmpty())
+                                .size() == 0)
                         && (request.getClientInfo().getAcceptedLanguages()
-                                .isEmpty())
+                                .size() == 0)
                         && (request.getClientInfo().getAcceptedMediaTypes()
-                                .isEmpty())) {
+                                .size() == 0)) {
                     List<Variant> responseVariants = annotationInfo
                             .getResponseVariants(getClientResource()
                                     .getMetadataService(), getClientResource()
@@ -306,18 +306,14 @@ public class ClientInvocationHandler<T> implements InvocationHandler {
                             if (t != null) {
                                 throw t;
                             }
-                            // TODO cf issues 1004 and 1018.
-                            // this code has been commented as the automatic
-                            // deserialization is problematic. We may rethink a
-                            // way to recover the status info.
-                            // } else if (response.isEntityAvailable()) {
-                            // StatusInfo si = getClientResource().toObject(
-                            // response.getEntity(), StatusInfo.class);
-                            //
-                            // if (si != null) {
-                            // response.setStatus(new Status(si.getCode(), si
-                            // .getReasonPhrase(), si.getDescription()));
-                            // }
+                        } else if (response.isEntityAvailable()) {
+                            StatusInfo si = getClientResource().toObject(
+                                    response.getEntity(), StatusInfo.class);
+
+                            if (si != null) {
+                                response.setStatus(new Status(si.getCode(), si
+                                        .getReasonPhrase(), si.getDescription()));
+                            }
                         }
 
                         getClientResource().doError(response.getStatus());

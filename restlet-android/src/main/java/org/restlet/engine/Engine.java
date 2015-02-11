@@ -111,7 +111,7 @@ public class Engine {
     public static final String MINOR_NUMBER = "3";
 
     /** Release number. */
-    public static final String RELEASE_NUMBER = ".1";
+    public static final String RELEASE_NUMBER = ".0";
 
     /** The org.restlet log level . */
     private static volatile Level restletLogLevel;

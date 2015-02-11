@@ -24,6 +24,20 @@
 
 package org.restlet.engine.connector;
 
+import org.restlet.Request;
+import org.restlet.Response;
+import org.restlet.Uniform;
+import org.restlet.data.Header;
+import org.restlet.data.Protocol;
+import org.restlet.data.Status;
+import org.restlet.engine.Edition;
+import org.restlet.engine.adapter.ClientCall;
+import org.restlet.engine.header.HeaderConstants;
+import org.restlet.engine.util.AndroidUtils;
+import org.restlet.engine.util.SystemUtils;
+import org.restlet.representation.Representation;
+import org.restlet.util.Series;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,19 +49,6 @@ import java.net.URL;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.logging.Level;
-
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.Uniform;
-import org.restlet.data.Header;
-import org.restlet.data.Protocol;
-import org.restlet.data.Status;
-import org.restlet.engine.Edition;
-import org.restlet.engine.adapter.ClientCall;
-import org.restlet.engine.header.HeaderConstants;
-import org.restlet.engine.util.SystemUtils;
-import org.restlet.representation.Representation;
-import org.restlet.util.Series;
 
 /**
  * HTTP client connector call based on JDK's java.net.HttpURLConnection class.
@@ -90,7 +91,7 @@ public class HttpUrlConnectionCall extends ClientCall {
             // releases
             int majorVersionNumber = SystemUtils.getJavaMajorVersion();
             int minorVersionNumber = SystemUtils.getJavaMinorVersion();
-            if ((majorVersionNumber > 1)
+            if (AndroidUtils.isRunningOnAndroid() || (majorVersionNumber > 1)
                     || ((majorVersionNumber == 1) && (minorVersionNumber >= 5))) {
                 this.connection.setConnectTimeout(getHelper()
                         .getSocketConnectTimeoutMs());
