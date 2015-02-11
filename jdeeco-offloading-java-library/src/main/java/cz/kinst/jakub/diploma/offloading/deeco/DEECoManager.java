@@ -85,7 +85,7 @@ public class DEECoManager {
         long now = System.currentTimeMillis();
         for (long lastPing : componentLastPings) {
             long monitorAge = now - lastPing;
-            if (monitorAge > OffloadingConfig.PING_INTERVAL_MS * 3)
+            if (monitorAge > OffloadingConfig.PING_INTERVAL_MS * 6)
                 return false;
         }
         return true;
