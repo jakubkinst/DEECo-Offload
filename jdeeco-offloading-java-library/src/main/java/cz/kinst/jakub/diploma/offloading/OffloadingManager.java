@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
 import cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent;
@@ -39,6 +38,9 @@ import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
  * Created by jakubkinst on 09/01/15.
  */
 public class OffloadingManager {
+    public static final int TYPE_WITH_FRONTEND = 0;
+    public static final int TYPE_ONLY_BACKEND = 1;
+    
     private static OffloadingManager sInstance;
 
     private final Component mServerComponent;
@@ -85,7 +87,7 @@ public class OffloadingManager {
         mBackendStateDataCollection.add(backendStateData);
     }
 
-    public void init() {
+    public void init(int type) {
         // register DEECo components and ensembles
         HashSet<BackendMonitorDef> monitorDefs = new HashSet<>();
         for (OffloadableBackendImpl backend : mBackends) {
@@ -93,15 +95,18 @@ public class OffloadingManager {
             BackendMonitorDef monitorDef = new BackendMonitorDef(backendId);
             monitorDefs.add(monitorDef);
         }
-        PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs, getLocalIpAddress());
-        DeviceComponent deviceComponent = new DeviceComponent(getLocalIpAddress());
-        FrontendMonitorComponent frontendMonitorComponent = new FrontendMonitorComponent();
-        mDeecoManager.registerComponent(plannerComponent);
-        mDeecoManager.registerComponent(deviceComponent);
-        mDeecoManager.registerComponent(frontendMonitorComponent);
-        for (BackendStateData backendStateData : mBackendStateDataCollection) {
-            mDeecoManager.registerComponent(new StateDataMonitorComponent(backendStateData.getBackendId()));
+        if (type == TYPE_WITH_FRONTEND) {
+            PlannerComponent plannerComponent = new PlannerComponent(mAppId, monitorDefs, getLocalIpAddress());
+            FrontendMonitorComponent frontendMonitorComponent = new FrontendMonitorComponent();
+            mDeecoManager.registerComponent(plannerComponent);
+            mDeecoManager.registerComponent(frontendMonitorComponent);
+            for (BackendStateData backendStateData : mBackendStateDataCollection) {
+                mDeecoManager.registerComponent(new StateDataMonitorComponent(backendStateData.getBackendId()));
+            }
         }
+        DeviceComponent deviceComponent = new DeviceComponent(getLocalIpAddress());
+        mDeecoManager.registerComponent(deviceComponent);
+        
         mDeecoManager.registerEnsemble(PlannerToDeviceEnsemble.class);
         mDeecoManager.registerEnsemble(NFPDataCollectingEnsemble.class);
         mDeecoManager.registerEnsemble(BackendStateDistributingEnsemble.class);

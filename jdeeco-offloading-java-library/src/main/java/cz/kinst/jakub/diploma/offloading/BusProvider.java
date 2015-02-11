@@ -1,6 +1,7 @@
 package cz.kinst.jakub.diploma.offloading;
 
-import de.greenrobot.event.EventBus;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  * Created by jakubkinst on 21/01/15.

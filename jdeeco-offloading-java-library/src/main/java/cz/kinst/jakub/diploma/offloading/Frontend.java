@@ -1,5 +1,7 @@
 package cz.kinst.jakub.diploma.offloading;
 
+import com.google.common.eventbus.Subscribe;
+
 import cz.kinst.jakub.diploma.offloading.deeco.events.DeploymentPlanUpdateEvent;
 import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
@@ -27,6 +29,7 @@ public class Frontend {
         this.mOnBackendMoveListener = listener;
     }
 
+    @Subscribe
     public final void onEvent(DeploymentPlanUpdateEvent event) {
         boolean dirty = false;
         BackendDeploymentPlan newPlan = event.getPlan();

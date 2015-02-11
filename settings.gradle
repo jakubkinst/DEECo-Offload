@@ -1,1 +1,1 @@
-include ':jdeeco-offloading-android-demo', ':jdeeco-offloading-java-library', ':jdeeco-offloading-android-library', ':jdeeco-udp-broadcast-library', ':jdeeco-java-library', ':restlet-android', ':tess-two', ':jdeeco-offloading-android-demo-offloadableocr'
+include ':jdeeco-offloading-android-demo', ':jdeeco-offloading-java-library', ':jdeeco-offloading-android-library', ':jdeeco-udp-broadcast-library', ':jdeeco-java-library', ':restlet-android', ':tess-two', ':jdeeco-offloading-android-demo-offloadableocr', ':jdeeco-offloading-android-demo-java-backend'

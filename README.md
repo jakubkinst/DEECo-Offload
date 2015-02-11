@@ -9,6 +9,7 @@ The build system is Gradle (Created in Android Studio/IntelliJ Idea)
 - **restlet-android** - [Restlet](restlet.com) library with slight modification to run properly on Android platform
 - **jdeeco-udp-broadcast-library** - JDEECo extension providing knowledge cloning over UDP broadcast
 - **jdeeco-offloading-java-library** - Offloading framework developed on top of JDEECo and Restlet
-- **jdeeco-offloading-android-library** - Extension of jdeeco-offloading-java-library with Android-specific implementation
+- **jdeeco-offloading-android-library** - Extension of *jdeeco-offloading-java-library* with Android-specific implementation
 - **jdeeco-offloading-android-demo** - Demo Android application using offloading capabilities (Simple app for testing purposes)
 - **jdeeco-offloading-android-demo-offloadableocr** - Demo Android application with simple OCR functionality taking advantage of offloading (Work in progress)
+- **jdeeco-offloading-android-demo-java-backend** - Java command-line application with running backend for *jdeeco-offloading-android-demo*

@@ -1,5 +1,6 @@
 package cz.kinst.jakub.diploma.offloading;
 
+import com.google.common.eventbus.Subscribe;
 import com.google.gson.Gson;
 
 import cz.kinst.jakub.diploma.offloading.deeco.events.ShouldPullBackendStateDataEvent;
@@ -22,7 +23,8 @@ public class BackendStateData {
         mOffloadingManager = offloadingManager;
         BusProvider.get().register(this);
     }
-
+    
+    @Subscribe
     public void onEvent(ShouldPullBackendStateDataEvent event) {
         if (event.getBackendId().equals(mBackendId) && !isMoving()) {
             String pullFrom = event.getBackendAddress();

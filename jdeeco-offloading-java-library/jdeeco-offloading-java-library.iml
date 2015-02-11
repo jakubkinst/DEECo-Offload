@@ -29,7 +29,7 @@
     <orderEntry type="module" module-name="jdeeco-udp-broadcast-library" exported="" />
     <orderEntry type="module" module-name="jdeeco-java-library" exported="" />
     <orderEntry type="module" module-name="restlet-android" exported="" />
-    <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
+    <orderEntry type="library" exported="" name="guava-18.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="simple-5.1.6" level="project" />
     <orderEntry type="library" exported="" name="org.restlet.ext.simple-2.3.0" level="project" />

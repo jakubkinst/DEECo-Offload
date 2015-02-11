@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity {
             });
             mFrontend.setOnBackendMoveListener(new MovingProgressDialogListener(this));
 
-            mOffloadingManager.init();
+            mOffloadingManager.init(OffloadingManager.TYPE_WITH_FRONTEND);
             mOffloadingManager.start();
 
         } catch (Exception e) {
