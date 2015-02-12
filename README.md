@@ -11,5 +11,20 @@ The build system is Gradle (Created in Android Studio/IntelliJ Idea)
 - **jdeeco-offloading-java-library** - Offloading framework developed on top of JDEECo and Restlet
 - **jdeeco-offloading-android-library** - Extension of *jdeeco-offloading-java-library* with Android-specific implementation
 - **jdeeco-offloading-android-demo** - Demo Android application using offloading capabilities (Simple app for testing purposes)
-- **jdeeco-offloading-android-demo-offloadableocr** - Demo Android application with simple OCR functionality taking advantage of offloading (Work in progress)
 - **jdeeco-offloading-android-demo-java-backend** - Java command-line application with running backend for *jdeeco-offloading-android-demo*
+- **tess-two** - Android library module providing OCR via Android NDK (just a build of [tess-two](https://github.com/rmtheis/tess-two))
+- **jdeeco-offloading-android-demo-offloadableocr** - Demo Android application with simple OCR functionality taking advantage of offloading (Work in progress)
+- **jdeeco-offloading-android-demo-offloadableocr-java-backend** - Java command-line application with running backend for *jdeeco-offloading-android-demo-offloadableocr*
+
+### Installing Tesseract on desktop to run OCR backend 
+#### Mac OS X
+1. Install [Homebrew for Mac OS](http://brew.sh/)
+2. Run `brew install ghostscript`
+3. Run `brew install tesseract`
+4. You are good to go!
+
+#### Windows
+Use packed dll files in `dlls` folder
+
+#### Linux
+Install `ghostcript` and `tesseract` through `apt-get`
