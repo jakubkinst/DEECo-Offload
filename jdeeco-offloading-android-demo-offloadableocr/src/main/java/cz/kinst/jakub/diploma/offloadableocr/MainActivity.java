@@ -10,21 +10,43 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import org.restlet.data.MediaType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRBackend;
+import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRBackendImpl;
+import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRParams;
+import cz.kinst.jakub.diploma.offloading.Frontend;
+import cz.kinst.jakub.diploma.offloading.OffloadingManager;
+import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
+import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
+import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
+import cz.kinst.jakub.diploma.offloading.android.MovingProgressDialogListener;
+import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
 
 
 public class MainActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PHOTO = 100;
+    private static final String OCR_URI = "/ocr";
     @InjectView(R.id.camera_preview_container)
     FrameLayout mCameraPreviewContainer;
+    @InjectView(R.id.current_ip)
+    TextView mCurrentIp;
 
     private CameraPreview mCameraPreview;
+    private OffloadingManager mOffloadingManager;
+    private OCRBackendImpl mOCRBackend;
+    private Frontend mFrontend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +54,37 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         ButterKnife.inject(this);
+
+        //init DEECo
+        Logger.setProvider(new AndroidLogProvider());
+
+        try {
+            mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
+
+            mOCRBackend = new OCRBackendImpl(OCR_URI, this);
+            mOffloadingManager.attachBackend(mOCRBackend, OCRBackend.class);
+            mFrontend = new Frontend(mOffloadingManager);
+            mFrontend.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
+                @Override
+                public void onDeploymentPlanUpdated(BackendDeploymentPlan plan) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String backendAddress = mFrontend.getActiveBackendAddress(OCRBackend.class);
+                            mCurrentIp.setText(backendAddress);
+                        }
+                    });
+                }
+            });
+            mFrontend.setOnBackendMoveListener(new MovingProgressDialogListener(this));
+
+            mOffloadingManager.init(OffloadingManager.TYPE_WITH_FRONTEND);
+            mOffloadingManager.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -97,15 +150,26 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onImageSelected(final File file) {
+        // Initialize the resource proxy.
+        final OCRBackend backend = mFrontend.getActiveBackendProxy(OCRBackend.class);
+
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.please_wait), getString(R.string.ocr_in_progress), true);
+
         new AsyncTask<Void, Void, OCRResult>() {
             @Override
             protected OCRResult doInBackground(Void... params) {
-                long start = System.currentTimeMillis();
-                OCR ocr = new OCR();
-                String text = ocr.recognizeText(file);
-                long duration = System.currentTimeMillis() - start;
-                return new OCRResult(text, "0.0.0.0", duration);
+                try {
+                    long start = System.currentTimeMillis();
+                    ArrayList<File> files = new ArrayList<File>();
+                    files.add(file);
+                    OCRResult result = backend.recognize(new MultipartHolder<OCRParams>(files, MediaType.IMAGE_JPEG, new OCRParams()).getForm());
+                    long duration = System.currentTimeMillis() - start;
+                    result.setDuration(duration);
+                    return result;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
 
             @Override
@@ -113,7 +177,17 @@ public class MainActivity extends ActionBarActivity {
                 progressDialog.dismiss();
                 ResultActivity.start(MainActivity.this, ocrResult);
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            mOffloadingManager.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 
 }

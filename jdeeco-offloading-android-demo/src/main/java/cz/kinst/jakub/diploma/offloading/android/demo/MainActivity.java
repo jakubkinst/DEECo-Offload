@@ -87,6 +87,7 @@ public class MainActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         mPerformanceText.setText((HelloBackendImpl.getPerformance(this) * 10) + "%");
         mPerformanceSeekBar.setProgress(HelloBackendImpl.getPerformance(this));
         mPerformanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -18,6 +18,10 @@ public class OCRResult implements Serializable {
         timestamp = System.currentTimeMillis();
     }
 
+    public OCRResult(String recognizedText, String deviceIp) {
+        this(recognizedText, deviceIp, -1);
+    }
+
     public String getRecognizedText() {
         return recognizedText;
     }
@@ -28,6 +32,10 @@ public class OCRResult implements Serializable {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     public String getDeviceIp() {
