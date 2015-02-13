@@ -1,22 +1,31 @@
 package cz.kinst.jakub.diploma.offloadableocr.java;
 
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
+import cz.kinst.jakub.diploma.offloadableocr.java.offloading.OCRBackend;
+import cz.kinst.jakub.diploma.offloadableocr.java.offloading.OCRBackendImpl;
+import cz.kinst.jakub.diploma.offloading.OffloadingManager;
+import cz.kinst.jakub.diploma.offloading.logger.JavaLogProvider;
+import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.udpbroadcast.JavaUDPBroadcast;
 
-import java.io.File;
+public class Main {
+    private static final String OCR_URI = "/ocr";
+    private static OffloadingManager mOffloadingManager;
 
-public class Main
-{
     public static void main(String[] args) {
-        File imageFile = new File("samples/eurotext.jpg");
-        Tesseract instance = Tesseract.getInstance(); // JNA Interface Mapping
-        // Tesseract1 instance = new Tesseract1(); // JNA Direct Mapping
+        //init DEECo
+        Logger.setProvider(new JavaLogProvider());
 
         try {
-            String result = instance.doOCR(imageFile);
-            System.out.println(result);
-        } catch (TesseractException e) {
-            System.err.println(e.getMessage());
+            mOffloadingManager = OffloadingManager.create(new JavaUDPBroadcast(), "ocr");
+
+            OCRBackendImpl ocrBackend = new OCRBackendImpl(OCR_URI);
+            mOffloadingManager.attachBackend(ocrBackend, OCRBackend.class);
+
+            mOffloadingManager.init(OffloadingManager.TYPE_ONLY_BACKEND);
+            mOffloadingManager.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

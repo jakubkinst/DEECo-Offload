@@ -26,6 +26,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="jdeeco-java-library" exported="" />
+    <orderEntry type="module" module-name="jdeeco-offloading-java-library" exported="" />
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
     <orderEntry type="library" exported="" name="ghost4j-0.5.1" level="project" />
     <orderEntry type="library" exported="" name="jai_imageio" level="project" />

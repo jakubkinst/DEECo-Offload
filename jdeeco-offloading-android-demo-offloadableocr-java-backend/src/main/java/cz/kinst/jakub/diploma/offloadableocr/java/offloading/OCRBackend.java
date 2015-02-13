@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloadableocr.offloading;
+package cz.kinst.jakub.diploma.offloadableocr.java.offloading;
 
 
 import org.restlet.representation.Representation;

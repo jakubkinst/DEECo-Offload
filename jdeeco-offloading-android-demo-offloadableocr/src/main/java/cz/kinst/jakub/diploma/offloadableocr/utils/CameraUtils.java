@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloadableocr;
+package cz.kinst.jakub.diploma.offloadableocr.utils;
 
 import android.content.Context;
 import android.hardware.Camera;

@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloadableocr;
+package cz.kinst.jakub.diploma.offloadableocr.offloading;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,10 +16,20 @@ import java.io.IOException;
  * Created by jakubkinst on 04/02/15.
  */
 public class OCR {
-
     private static final String LOG_TAG = "OCR";
     private static final String DATA_PATH = Environment.getExternalStorageDirectory() + "/tesseract";
     private static final String LANG = "eng";
+    private final TessBaseAPI mBaseApi;
+
+    public static OCR getInstance(){
+        return new OCR();
+    }
+
+    private OCR() {
+        mBaseApi = new TessBaseAPI();
+        mBaseApi.setDebug(true);
+        mBaseApi.init(DATA_PATH, LANG);
+    }
 
     public String recognizeText(File image) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -70,12 +80,9 @@ public class OCR {
 
         Log.v(LOG_TAG, "Before baseApi");
 
-        TessBaseAPI baseApi = new TessBaseAPI();
-        baseApi.setDebug(true);
-        baseApi.init(DATA_PATH, LANG);
-        baseApi.setImage(bitmap);
-        String recognizedText = baseApi.getUTF8Text();
-        baseApi.end();
+
+        mBaseApi.setImage(bitmap);
+        String recognizedText = mBaseApi.getUTF8Text();
 
         Log.v(LOG_TAG, "OCR Result: " + recognizedText);
 

@@ -24,6 +24,9 @@ import butterknife.OnClick;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRBackend;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRBackendImpl;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRParams;
+import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
+import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
+import cz.kinst.jakub.diploma.offloadableocr.utils.FileUtils;
 import cz.kinst.jakub.diploma.offloading.Frontend;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
@@ -45,7 +48,6 @@ public class MainActivity extends ActionBarActivity {
 
     private CameraPreview mCameraPreview;
     private OffloadingManager mOffloadingManager;
-    private OCRBackendImpl mOCRBackend;
     private Frontend mFrontend;
 
     @Override
@@ -59,10 +61,10 @@ public class MainActivity extends ActionBarActivity {
         Logger.setProvider(new AndroidLogProvider());
 
         try {
-            mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
+            mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "ocr");
 
-            mOCRBackend = new OCRBackendImpl(OCR_URI, this);
-            mOffloadingManager.attachBackend(mOCRBackend, OCRBackend.class);
+            OCRBackendImpl ocrBackend = new OCRBackendImpl(OCR_URI, this);
+            mOffloadingManager.attachBackend(ocrBackend, OCRBackend.class);
             mFrontend = new Frontend(mOffloadingManager);
             mFrontend.setOnDeploymentPlanUpdatedListener(new OnDeploymentPlanUpdatedListener() {
                 @Override

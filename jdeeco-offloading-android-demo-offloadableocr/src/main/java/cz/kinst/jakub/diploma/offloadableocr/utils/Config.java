@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloadableocr;
+package cz.kinst.jakub.diploma.offloadableocr.utils;
 
 /**
  * Created by jakubkinst on 11/02/15.

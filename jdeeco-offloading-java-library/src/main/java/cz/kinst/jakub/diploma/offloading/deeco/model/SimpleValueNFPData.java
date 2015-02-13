@@ -13,4 +13,9 @@ public class SimpleValueNFPData extends NFPData {
     public float getPerformance() {
         return performance;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getPerformance());
+    }
 }

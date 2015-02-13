@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloadableocr;
+package cz.kinst.jakub.diploma.offloadableocr.offloading;
 
 import java.io.Serializable;
 

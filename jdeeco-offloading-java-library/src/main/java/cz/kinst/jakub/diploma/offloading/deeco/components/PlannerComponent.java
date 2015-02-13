@@ -56,7 +56,7 @@ public class PlannerComponent implements Serializable {
         for (String appComponentId : nfpDataHolder.getBackendIds()) {
             HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByBackendId(appComponentId);
             String selectedDeviceIp = OffloadingManager.getInstance().findOptimalAlternative(appComponentId, alternatives);
-            Logger.i("Found best alternative at " + selectedDeviceIp);
+            Logger.i("Found best alternative at " + selectedDeviceIp + ": " + alternatives.get(selectedDeviceIp).toString());
             newPlan.plan(appComponentId, selectedDeviceIp);
 
         }

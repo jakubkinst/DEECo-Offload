@@ -9,6 +9,9 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
+import cz.kinst.jakub.diploma.offloadableocr.utils.CameraUtils;
+import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
+
 @SuppressWarnings("deprecation")
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     public static final int CAMERA_ID = 0;

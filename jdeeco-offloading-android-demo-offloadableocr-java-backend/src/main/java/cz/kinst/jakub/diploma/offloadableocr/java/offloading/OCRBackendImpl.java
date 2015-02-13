@@ -1,8 +1,5 @@
-package cz.kinst.jakub.diploma.offloadableocr.offloading;
+package cz.kinst.jakub.diploma.offloadableocr.java.offloading;
 
-
-import android.content.Context;
-import android.os.Environment;
 
 import org.restlet.representation.Representation;
 
@@ -24,11 +21,11 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
     public OCRBackendImpl() {
     }
 
-    public OCRBackendImpl(String path, final Context context) {
+    public OCRBackendImpl(String path) {
         super(path, new BackendPerformanceProvider() {
             @Override
             public NFPData checkPerformance() {
-                float measuredTime = measureSampleRecognition(context);
+                float measuredTime = measureSampleRecognition();
                 Logger.d("Measured time: " + measuredTime);
                 return new SimpleValueNFPData(measuredTime);
             }
@@ -58,7 +55,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
             MultipartHolder<OCRParams> multipartHolder = new MultipartHolder<>(representation, OCRParams.class);
             byte[] file = multipartHolder.getReceivedFiles().get(0).get();
 
-            File outputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "received.jpg");
+            File outputFile = new File("ocr-images/received_" + System.currentTimeMillis() + ".jpg");
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
             bos.write(file);
             bos.flush();
@@ -73,11 +70,12 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
     }
 
 
-    public static float measureSampleRecognition(Context context) {
-        long before = System.currentTimeMillis();
-        File sample = new File(Environment.getExternalStorageDirectory() + "/tesseract/samples/small.jpg");
-        OCR.getInstance().recognizeText(sample);
-        return System.currentTimeMillis() - before;
+    public static synchronized float measureSampleRecognition() {
+//        long before = System.currentTimeMillis();
+//        File sample = new File("samples/test.png");
+//        OCR.getInstance().recognizeText(sample);
+//        return System.currentTimeMillis() - before;
+        return 0;
     }
 
 }

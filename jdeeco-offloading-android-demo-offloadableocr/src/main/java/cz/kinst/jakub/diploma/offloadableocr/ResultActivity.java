@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
 
 
 public class ResultActivity extends ActionBarActivity {
