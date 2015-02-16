@@ -57,6 +57,10 @@ public class MainActivity extends ActionBarActivity {
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         ButterKnife.inject(this);
 
+        if (!FileUtils.areAssetsCopied() || FirstRunManager.isFirstRun(this)){
+            new CopyAssetsTask(this).execute();
+        }
+        
         //init DEECo
         Logger.setProvider(new AndroidLogProvider());
 
@@ -111,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.pick_from_gallery)
     void chooseImage() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
+        photoPickerIntent.setType("image/jpeg");
         startActivityForResult(photoPickerIntent, REQUEST_SELECT_PHOTO);
     }
 

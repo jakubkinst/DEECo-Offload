@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/ocr_result_device_ip"
                 tools:text="192.168.0.2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_height="wrap_content" />
 
@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/ocr_result_duration"
                 tools:text="3200 ms"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_height="wrap_content" />
 
@@ -52,9 +52,10 @@
             <TextView
                 android:id="@+id/ocr_result_text"
                 tools:text="Result kjfasja kjnadsf a  ja sdf a nf  \nasasdfasfsdaf dsafsdafsddsfdsf a ad af a"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </ScrollView>
 

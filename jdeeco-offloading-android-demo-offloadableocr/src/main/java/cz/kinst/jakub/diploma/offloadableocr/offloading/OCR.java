@@ -12,16 +12,18 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import java.io.File;
 import java.io.IOException;
 
+import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
+
 /**
  * Created by jakubkinst on 04/02/15.
  */
 public class OCR {
     private static final String LOG_TAG = "OCR";
-    private static final String DATA_PATH = Environment.getExternalStorageDirectory() + "/tesseract";
+    private static final String DATA_PATH = Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER;
     private static final String LANG = "eng";
     private final TessBaseAPI mBaseApi;
 
-    public static OCR getInstance(){
+    public static OCR getInstance() {
         return new OCR();
     }
 

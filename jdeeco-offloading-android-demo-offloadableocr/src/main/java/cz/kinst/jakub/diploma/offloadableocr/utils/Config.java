@@ -5,4 +5,5 @@ package cz.kinst.jakub.diploma.offloadableocr.utils;
  */
 public class Config {
     public static final String TAG = "OffloadableOCR";
+    public static final String APP_FOLDER = "offloadableocr";
 }

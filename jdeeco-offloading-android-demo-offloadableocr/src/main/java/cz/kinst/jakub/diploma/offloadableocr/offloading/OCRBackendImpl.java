@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
+import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
 import cz.kinst.jakub.diploma.offloading.deeco.model.SimpleValueNFPData;
@@ -75,7 +76,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
 
     public static float measureSampleRecognition(Context context) {
         long before = System.currentTimeMillis();
-        File sample = new File(Environment.getExternalStorageDirectory() + "/tesseract/samples/small.jpg");
+        File sample = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER + "/samples/test.png");
         OCR.getInstance().recognizeText(sample);
         return System.currentTimeMillis() - before;
     }
