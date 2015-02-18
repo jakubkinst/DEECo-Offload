@@ -29,7 +29,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
         super(path, new BackendPerformanceProvider() {
             @Override
             public NFPData checkPerformance() {
-                float measuredTime = measureSampleRecognition(context);
+                float measuredTime = measureSampleRecognition();
                 Logger.d("Measured time: " + measuredTime);
                 return new SimpleValueNFPData(measuredTime);
             }
@@ -74,7 +74,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
     }
 
 
-    public static float measureSampleRecognition(Context context) {
+    public static float measureSampleRecognition() {
         long before = System.currentTimeMillis();
         File sample = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER + "/samples/test.png");
         OCR.getInstance().recognizeText(sample);

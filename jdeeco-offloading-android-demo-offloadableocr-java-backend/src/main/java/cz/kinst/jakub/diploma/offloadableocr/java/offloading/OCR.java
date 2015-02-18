@@ -10,15 +10,7 @@ import java.io.File;
  */
 public class OCR {
 
-
-    public static OCR getInstance() {
-        return new OCR();
-    }
-
-    private OCR() {
-    }
-
-    public String recognizeText(File image) {
+    public static synchronized String recognizeText(File image) {
         try {
             Tesseract tesseract = Tesseract.getInstance();
             String result = tesseract.doOCR(image);
