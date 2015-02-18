@@ -60,10 +60,13 @@ public class Frontend {
     }
 
     public String getActiveBackendAddress(Class backendInterface) {
-        String path = mOffloadingManager.getBackendId(backendInterface);
-        String planned = getDeploymentPlan().getPlan(path);
-        return planned;
+        String backendId = mOffloadingManager.getBackendId(backendInterface);
+        return getActiveBackendAddress(backendId);
+    }
 
+    public String getActiveBackendAddress(String backendId) {
+        String planned = getDeploymentPlan().getPlan(backendId);
+        return planned;
     }
 
     public <T> T getActiveBackendProxy(Class<T> backendInterface) {

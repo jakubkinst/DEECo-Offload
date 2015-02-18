@@ -6,7 +6,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -40,7 +39,7 @@ import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
 
 public class MainActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PHOTO = 100;
-    private static final String OCR_URI = "/ocr";
+    public static final String OCR_URI = "/ocr";
     @InjectView(R.id.camera_preview_container)
     FrameLayout mCameraPreviewContainer;
     @InjectView(R.id.current_ip)
@@ -48,19 +47,18 @@ public class MainActivity extends ActionBarActivity {
 
     private CameraPreview mCameraPreview;
     private OffloadingManager mOffloadingManager;
-    private Frontend mFrontend;
+    private static Frontend mFrontend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         ButterKnife.inject(this);
 
-        if (!FileUtils.areAssetsCopied() || FirstRunManager.isFirstRun(this)){
+        if (!FileUtils.areAssetsCopied() || FirstRunManager.isFirstRun(this)) {
             new CopyAssetsTask(this).execute();
         }
-        
+
         //init DEECo
         Logger.setProvider(new AndroidLogProvider());
 
@@ -190,10 +188,15 @@ public class MainActivity extends ActionBarActivity {
     protected void onDestroy() {
         try {
             mOffloadingManager.stop();
+            mFrontend = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    public static Frontend getFrontend() {
+        return mFrontend;
     }
 
 }

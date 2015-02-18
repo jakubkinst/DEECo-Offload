@@ -7,7 +7,7 @@
         <item name="android:scaleType">fitCenter</item>
     </style>
 
-    <style name="ResultHeader">
+    <style name="Header">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:textAllCaps">true</item>

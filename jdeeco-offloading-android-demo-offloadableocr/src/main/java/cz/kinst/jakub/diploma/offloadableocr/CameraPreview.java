@@ -76,7 +76,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
         }
         for (Camera.Size size : params.getSupportedPictureSizes()) {
-            if (size.width < Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("image_size", "2500"))) {
+            if (size.width < Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("image_size", SettingsActivity.DEFAULT_IMAGE_SIZE))) {
                 params.setPictureSize(size.width, size.height);
                 Log.i(Config.TAG, "Resolution selected: " + size.width + "x" + size.height + "px");
                 break;

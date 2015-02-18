@@ -21,7 +21,7 @@
                 android:text="@string/recognized_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ResultHeader" />
+                style="@style/Header" />
 
             <TextView
                 android:id="@+id/ocr_result_device_ip"
@@ -34,7 +34,7 @@
                 android:text="@string/recognition_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ResultHeader" />
+                style="@style/Header" />
 
             <TextView
                 android:id="@+id/ocr_result_duration"
@@ -47,7 +47,7 @@
                 android:text="@string/recognized_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ResultHeader" />
+                style="@style/Header" />
 
             <TextView
                 android:id="@+id/ocr_result_text"

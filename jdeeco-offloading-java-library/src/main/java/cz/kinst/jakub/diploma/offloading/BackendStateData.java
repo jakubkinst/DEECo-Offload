@@ -13,7 +13,7 @@ import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackend;
 public class BackendStateData {
     private final String mBackendId;
     private Class<? extends OffloadableBackend> mBackendInterface;
-    private StateBundle mData;
+    private StateBundle mData = new StateBundle();
     private final OffloadingManager mOffloadingManager;
     private boolean mMovingInProgress = false;
 

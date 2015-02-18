@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class StateBundle implements Serializable {
@@ -55,5 +56,9 @@ public class StateBundle implements Serializable {
 
     public Map<String, Object> getMap() {
         return mMap;
+    }
+
+    public Set<String> getKeys() {
+        return mMap.keySet();
     }
 }

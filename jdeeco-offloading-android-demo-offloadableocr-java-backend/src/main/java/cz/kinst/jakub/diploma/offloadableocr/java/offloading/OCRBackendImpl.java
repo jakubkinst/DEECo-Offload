@@ -60,7 +60,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
             bos.write(file);
             bos.flush();
             bos.close();
-            String recognizedText = OCR.recognizeText(outputFile);
+            String recognizedText = OCR.recognizeText(outputFile, getStateData());
 
             return new OCRResult(recognizedText, OffloadingManager.getInstance().getLocalIpAddress());
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
     public static synchronized float measureSampleRecognition() {
         long before = System.currentTimeMillis();
         File sample = new File("samples/test.png");
-        OCR.recognizeText(sample);
+        OCR.recognizeText(sample, null);
         return System.currentTimeMillis() - before;
 //        return 0;
     }

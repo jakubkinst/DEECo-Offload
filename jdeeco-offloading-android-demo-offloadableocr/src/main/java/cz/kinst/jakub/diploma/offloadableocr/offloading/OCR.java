@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
+import cz.kinst.jakub.diploma.offloading.StateBundle;
 
 /**
  * Created by jakubkinst on 04/02/15.
@@ -33,7 +34,7 @@ public class OCR {
         mBaseApi.init(DATA_PATH, LANG);
     }
 
-    public String recognizeText(File image) {
+    public String recognizeText(File image, StateBundle settings) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), options);
@@ -82,6 +83,11 @@ public class OCR {
 
         Log.v(LOG_TAG, "Before baseApi");
 
+        if (settings != null) {
+            for (String key : settings.getKeys()) {
+                mBaseApi.setVariable(key, settings.getString(key, ""));
+            }
+        }
 
         mBaseApi.setImage(bitmap);
         String recognizedText = mBaseApi.getUTF8Text();
