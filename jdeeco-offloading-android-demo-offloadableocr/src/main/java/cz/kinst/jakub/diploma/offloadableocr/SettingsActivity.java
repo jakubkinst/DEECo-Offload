@@ -63,6 +63,8 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
     private void saveSettings() {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("image_size", imageSize.getText().toString()).commit();
+
         StateBundle settings = OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).getData();
         settings.putString("tessedit_char_whitelist", ocrWhitelist.getText().toString());
         settings.putString("tessedit_char_blacklist", ocrBlacklist.getText().toString());
