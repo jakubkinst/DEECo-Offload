@@ -16,12 +16,12 @@ public class Main {
         Logger.setProvider(new JavaLogProvider());
 
         try {
-            mOffloadingManager = OffloadingManager.create(new JavaUDPBroadcast(), "ocr");
+            mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "ocr");
 
             OCRBackendImpl ocrBackend = new OCRBackendImpl(OCR_URI);
             mOffloadingManager.attachBackend(ocrBackend, OCRBackend.class);
 
-            mOffloadingManager.init(OffloadingManager.TYPE_ONLY_BACKEND);
+            mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
             mOffloadingManager.start();
 
         } catch (Exception e) {

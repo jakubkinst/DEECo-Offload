@@ -10,15 +10,23 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.model.BackendMonitorDef;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.NFPDataHolder;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
-
+/**
+ * Planner component responsible for gathering {@link NFPData} for backends
+ * from monitors and determining current {@link cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan}
+ * Planner is also responsible for pushing {@link cz.kinst.jakub.diploma.offloading.model.BackendMonitorDef} to {@link cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent}
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 @Component
 public class PlannerComponent implements Serializable {
 
@@ -40,7 +48,6 @@ public class PlannerComponent implements Serializable {
     public static void ping(@InOut("lastPing") ParamHolder<Long> lastPing) {
         lastPing.value = System.currentTimeMillis();
     }
-
 
     @Process
     @PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)

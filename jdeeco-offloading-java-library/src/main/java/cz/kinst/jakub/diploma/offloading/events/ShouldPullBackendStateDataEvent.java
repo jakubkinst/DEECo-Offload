@@ -1,7 +1,9 @@
-package cz.kinst.jakub.diploma.offloading.deeco.events;
+package cz.kinst.jakub.diploma.offloading.events;
 
 /**
- * Created by jakubkinst on 06/02/15.
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class ShouldPullBackendStateDataEvent {
     private String backendId;

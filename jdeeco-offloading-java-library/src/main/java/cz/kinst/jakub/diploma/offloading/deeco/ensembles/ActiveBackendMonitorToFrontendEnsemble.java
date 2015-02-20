@@ -8,19 +8,23 @@ import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorState;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.model.BackendMonitorState;
+import cz.kinst.jakub.diploma.offloading.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
 /**
  * This ensemble takes care of informing UIMonitor about active backends
  * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.FrontendMonitorComponent}
  * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent}
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 @Ensemble
-@PeriodicScheduling(period = OffloadingConfig.UI_MONITOR_UPDATE_INTERVAL_MS)
+@PeriodicScheduling(period = OffloadingConfig.FRONTEND_MONITOR_UPDATE_INTERVAL_MS)
 public class ActiveBackendMonitorToFrontendEnsemble {
     @Membership
     public static boolean membership(@In("coord.monitorType") int frontendMonitorType,

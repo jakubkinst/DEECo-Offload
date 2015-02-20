@@ -4,7 +4,7 @@ package cz.kinst.jakub.diploma.offloading.android.demo.java;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
-import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackend;
+import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackend;
 
 public interface HelloBackend extends OffloadableBackend {
 

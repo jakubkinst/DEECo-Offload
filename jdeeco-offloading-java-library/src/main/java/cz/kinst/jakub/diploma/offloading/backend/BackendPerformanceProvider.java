@@ -1,11 +1,13 @@
-package cz.kinst.jakub.diploma.offloading.resource;
+package cz.kinst.jakub.diploma.offloading.backend;
 
 import java.util.Map;
 
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
 
 /**
- * Created by jakubkinst on 23/01/15.
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public abstract class BackendPerformanceProvider {
     public abstract NFPData checkPerformance();

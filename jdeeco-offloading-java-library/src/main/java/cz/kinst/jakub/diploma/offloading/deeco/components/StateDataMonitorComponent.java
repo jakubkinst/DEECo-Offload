@@ -8,11 +8,18 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.BusProvider;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
-import cz.kinst.jakub.diploma.offloading.deeco.events.ShouldPullBackendStateDataEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.events.ShouldPullBackendStateDataEvent;
+import cz.kinst.jakub.diploma.offloading.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.utils.BusProvider;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
+/**
+ * State Data Monitor Component responsible for periodic pulling of state data from current backend
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 @Component
 public class StateDataMonitorComponent implements Serializable {
     public int monitorType = MonitorType.STATE_DATA;

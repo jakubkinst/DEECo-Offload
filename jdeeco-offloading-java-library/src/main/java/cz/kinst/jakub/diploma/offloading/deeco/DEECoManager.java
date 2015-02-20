@@ -7,23 +7,54 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastRuntimeBuilder;
 
 /**
- * Created by jakubkinst on 23/01/15.
+ * Management class used to work with DEECo runtime (init/start/stop). It creates UDP broadcast-enabled
+ * JDEECo runtime
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class DEECoManager {
 
+    /**
+     * JDEECo runtime builder instance
+     */
     private final UDPBroadcastRuntimeBuilder mBuilder;
+
+    /**
+     * JDEECo model instance
+     */
     private final RuntimeMetadata mModel;
+
+    /**
+     * {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} platform-specific instance
+     */
     private UDPBroadcast mUdpBroadcast;
+
+    /**
+     * JDEECo runtime instance
+     */
     private RuntimeFramework mDEECoRuntime;
+
+    /**
+     * JDEECo instance running flag
+     */
     private boolean mRunning;
+
+    /**
+     * Annotation processor used to process components and ensembles
+     */
     private AnnotationProcessor mProcessor;
 
+    /**
+     * @param udpBroadcast platform-specific {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} implementation
+     */
     public DEECoManager(UDPBroadcast udpBroadcast) {
         Log.i("Setting logger level acording to OffloadingConfig"); // this is called to initialize StandardLogger (workaround)
         java.util.logging.Logger.getLogger("default").setLevel(OffloadingConfig.JDEECO_LOGGING_LEVEL);
@@ -35,6 +66,9 @@ public class DEECoManager {
         mProcessor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, mModel, new CloningKnowledgeManagerFactory());
     }
 
+    /**
+     * Initialize JDEECo runtime
+     */
     public void initRuntime() {
         try {
             Logger.i("DEECo Runtime initialized at " + mUdpBroadcast.getMyIpAddress());
@@ -45,6 +79,11 @@ public class DEECoManager {
         }
     }
 
+    /**
+     * Register new JDEECo component
+     *
+     * @param component instance of component (must be annotated with {@link cz.cuni.mff.d3s.deeco.annotations.Component} annotation)
+     */
     public void registerComponent(Object component) {
         try {
             mProcessor.process(component);
@@ -54,6 +93,11 @@ public class DEECoManager {
         }
     }
 
+    /**
+     * Register new ensemble
+     *
+     * @param ensemble Ensemble class (must be annotated with {@link cz.cuni.mff.d3s.deeco.annotations.Ensemble} annotation)
+     */
     public void registerEnsemble(Class ensemble) {
         try {
             mProcessor.process(ensemble);
@@ -63,6 +107,9 @@ public class DEECoManager {
         }
     }
 
+    /**
+     * Start JDEECo runtime
+     */
     public void startRuntime() {
         mUdpBroadcast.startReceiving();
         mDEECoRuntime.start();
@@ -70,6 +117,9 @@ public class DEECoManager {
         Logger.i("DEECo runtime started.");
     }
 
+    /**
+     * Stop JDEECo runtime
+     */
     public void stopRuntime() {
         mUdpBroadcast.stopReceiving();
         mDEECoRuntime.stop();
@@ -77,10 +127,22 @@ public class DEECoManager {
         Logger.i("DEECo runtime stopped.");
     }
 
+    /**
+     * Check if JDEECo runtime is running
+     *
+     * @return true if running
+     */
     public boolean isRunning() {
         return mRunning;
     }
 
+    /**
+     * Static method which checks last pings provided in parameters for their age and determines
+     * if all of them are still alive (not older than a threshold)
+     *
+     * @param componentLastPings last ping timestamps
+     * @return true if none of the timestamp is older than threshold
+     */
     public static boolean areComponentsStillAlive(long... componentLastPings) {
         long now = System.currentTimeMillis();
         for (long lastPing : componentLastPings) {

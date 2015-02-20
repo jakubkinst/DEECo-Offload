@@ -5,7 +5,7 @@ import net.sourceforge.tess4j.TesseractException;
 
 import java.io.File;
 
-import cz.kinst.jakub.diploma.offloading.StateBundle;
+import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
  * Created by jakubkinst on 04/02/15.

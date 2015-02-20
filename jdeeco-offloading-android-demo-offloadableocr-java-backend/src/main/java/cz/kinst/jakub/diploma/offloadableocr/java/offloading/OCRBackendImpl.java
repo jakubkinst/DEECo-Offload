@@ -9,12 +9,12 @@ import java.io.FileOutputStream;
 import java.util.Map;
 
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.SimpleValueNFPData;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.SingleValueNFPData;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
-import cz.kinst.jakub.diploma.offloading.resource.BackendPerformanceProvider;
-import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
-import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
+import cz.kinst.jakub.diploma.offloading.backend.BackendPerformanceProvider;
+import cz.kinst.jakub.diploma.offloading.backend.MultipartHolder;
+import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackendImpl;
 
 public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend {
 
@@ -27,7 +27,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
             public NFPData checkPerformance() {
                 float measuredTime = measureSampleRecognition();
                 Logger.d("Measured time: " + measuredTime);
-                return new SimpleValueNFPData(measuredTime);
+                return new SingleValueNFPData(measuredTime);
             }
 
             @Override
@@ -37,7 +37,7 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
                 for (String key : alternatives.keySet()) {
                     if (bestAlternative == null)
                         bestAlternative = key;
-                    SimpleValueNFPData nfpData = (SimpleValueNFPData) alternatives.get(key);
+                    SingleValueNFPData nfpData = (SingleValueNFPData) alternatives.get(key);
                     Logger.d("Alternative at " + key + ": " + nfpData.getPerformance());
                     if (nfpData.getPerformance() < min) {
                         min = nfpData.getPerformance();

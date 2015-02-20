@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
-import cz.kinst.jakub.diploma.offloading.StateBundle;
+import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
  * Created by jakubkinst on 04/02/15.

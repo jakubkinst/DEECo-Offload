@@ -8,13 +8,21 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.BusProvider;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.events.DeploymentPlanUpdateEvent;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.events.DeploymentPlanUpdateEvent;
+import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.utils.BusProvider;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
+/**
+ * Frontend monitor component is gathers deployment plan from active backend monitors
+ * and periodically pushes it to the UI of the application
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 @Component
 public class FrontendMonitorComponent implements Serializable {
     public int monitorType = MonitorType.FRONTEND;

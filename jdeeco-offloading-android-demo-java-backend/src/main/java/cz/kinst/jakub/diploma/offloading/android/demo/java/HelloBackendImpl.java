@@ -9,11 +9,11 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Map;
 
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.SimpleValueNFPData;
-import cz.kinst.jakub.diploma.offloading.resource.BackendPerformanceProvider;
-import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
-import cz.kinst.jakub.diploma.offloading.resource.OffloadableBackendImpl;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.SingleValueNFPData;
+import cz.kinst.jakub.diploma.offloading.backend.BackendPerformanceProvider;
+import cz.kinst.jakub.diploma.offloading.backend.MultipartHolder;
+import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackendImpl;
 
 public class HelloBackendImpl extends OffloadableBackendImpl implements HelloBackend {
 
@@ -24,7 +24,7 @@ public class HelloBackendImpl extends OffloadableBackendImpl implements HelloBac
         super(path, new BackendPerformanceProvider() {
             @Override
             public NFPData checkPerformance() {
-                return new SimpleValueNFPData(10);
+                return new SingleValueNFPData(10);
             }
 
             @Override
@@ -34,7 +34,7 @@ public class HelloBackendImpl extends OffloadableBackendImpl implements HelloBac
                 for (String key : alternatives.keySet()) {
                     if (bestAlternative == null)
                         bestAlternative = key;
-                    SimpleValueNFPData nfpData = (SimpleValueNFPData) alternatives.get(key);
+                    SingleValueNFPData nfpData = (SingleValueNFPData) alternatives.get(key);
                     if (nfpData.getPerformance() > max) {
                         max = nfpData.getPerformance();
                         bestAlternative = key;

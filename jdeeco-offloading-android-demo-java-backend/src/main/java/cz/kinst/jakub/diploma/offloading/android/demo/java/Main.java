@@ -14,11 +14,11 @@ public class Main {
 
         Logger.setProvider(new JavaLogProvider());
         try {
-            mOffloadingManager = OffloadingManager.create(new JavaUDPBroadcast(), "hello");
+            mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "hello");
 
             mHelloResource = new HelloBackendImpl(HELLO_URI);
             mOffloadingManager.attachBackend(mHelloResource, HelloBackend.class);
-            mOffloadingManager.init(OffloadingManager.TYPE_ONLY_BACKEND);
+            mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
             mOffloadingManager.start();
 
         } catch (Exception e) {

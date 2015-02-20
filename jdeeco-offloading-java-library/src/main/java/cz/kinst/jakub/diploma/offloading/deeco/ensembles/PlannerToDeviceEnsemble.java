@@ -12,12 +12,16 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
+import cz.kinst.jakub.diploma.offloading.model.BackendMonitorDef;
 
 /**
  * This ensemble is responsible for pushing MonitorDefs from Planner to Device
  * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
  * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.DeviceComponent}
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 @Ensemble
 @PeriodicScheduling(period = 1500)

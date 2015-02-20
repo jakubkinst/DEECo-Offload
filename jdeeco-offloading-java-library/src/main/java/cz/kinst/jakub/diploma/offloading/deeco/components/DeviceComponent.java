@@ -12,11 +12,19 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendMonitorDef;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.model.BackendMonitorDef;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
+/**
+ * Device component gathers Monitor definitions from {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
+ * and spawns new {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent} for each of them
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 @Component
 public class DeviceComponent implements Serializable {
     public String ip;
@@ -53,7 +61,6 @@ public class DeviceComponent implements Serializable {
                     OffloadingManager.getInstance().spawnNewMonitor(backendMonitorComponent);
                     spawnedMonitors.value.add(monitorDef.getBackendId());
                 }
-                //TODO: handle situation when monitorDefs are deleted
             }
 
         }

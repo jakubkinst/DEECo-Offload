@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.kinst.jakub.diploma.offloading.Frontend;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.StateBundle;
+import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
  * Created by jakubkinst on 11/02/15.

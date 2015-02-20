@@ -1,7 +1,9 @@
 package cz.kinst.jakub.diploma.offloading.logger;
 
 /**
- * Created by jakubkinst on 23/01/15.
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public interface LogProvider {
     public void d(String message);

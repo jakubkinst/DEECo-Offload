@@ -1,4 +1,4 @@
-package cz.kinst.jakub.diploma.offloading;
+package cz.kinst.jakub.diploma.offloading.model;
 
 import com.google.gson.Gson;
 
@@ -7,7 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
+/**
+ * Simple wrapper around Java {@link java.util.HashMap} with getters and setters
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class StateBundle implements Serializable {
     private Map<String, Object> mMap = new HashMap<>();
 

@@ -24,13 +24,13 @@ import butterknife.OnClick;
 import cz.kinst.jakub.diploma.deecooffload.demo.R;
 import cz.kinst.jakub.diploma.offloading.Frontend;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.OnDeploymentPlanUpdatedListener;
+import cz.kinst.jakub.diploma.offloading.listeners.OnDeploymentPlanUpdatedListener;
 import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
 import cz.kinst.jakub.diploma.offloading.android.MovingProgressDialogListener;
-import cz.kinst.jakub.diploma.offloading.deeco.model.BackendDeploymentPlan;
+import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
-import cz.kinst.jakub.diploma.offloading.resource.MultipartHolder;
+import cz.kinst.jakub.diploma.offloading.backend.MultipartHolder;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -62,7 +62,7 @@ public class MainActivity extends ActionBarActivity {
         Logger.setProvider(new AndroidLogProvider());
 
         try {
-            mOffloadingManager = OffloadingManager.create(new AndroidUDPBroadcast(this), "hello");
+            mOffloadingManager = OffloadingManager.createInstance(new AndroidUDPBroadcast(this), "hello");
 
             mHelloResource = new HelloBackendImpl(HELLO_URI, this);
             mOffloadingManager.attachBackend(mHelloResource, HelloBackend.class);
@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity {
             });
             mFrontend.setOnBackendMoveListener(new MovingProgressDialogListener(this));
 
-            mOffloadingManager.init(OffloadingManager.TYPE_WITH_FRONTEND);
+            mOffloadingManager.init(OffloadingManager.MODE_WITH_FRONTEND);
             mOffloadingManager.start();
 
         } catch (Exception e) {
@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity {
                     ArrayList<File> files = new ArrayList<File>();
                     files.add(new File(Environment.getExternalStorageDirectory() + File.separator + "test.jpg"));
                     Message message = new Message("Sent message", new Date().getTime());
-                    return backend.testFile(new MultipartHolder<Message>(files, MediaType.IMAGE_JPEG, message).getForm());
+                    return backend.testFile(new MultipartHolder<Message>(files, MediaType.IMAGE_JPEG, message).getRepresentation());
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;

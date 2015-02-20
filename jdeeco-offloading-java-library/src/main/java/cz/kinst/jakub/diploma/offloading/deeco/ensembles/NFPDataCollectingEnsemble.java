@@ -8,17 +8,21 @@ import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.kinst.jakub.diploma.offloading.OffloadingConfig;
 import cz.kinst.jakub.diploma.offloading.deeco.DEECoManager;
-import cz.kinst.jakub.diploma.offloading.deeco.model.MonitorType;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.deeco.model.NFPDataHolder;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.model.MonitorType;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.NFPDataHolder;
+import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 
 /**
  * This ensemble takes care of pushing NFPData from Monitors to Planner
  * Coordinator: {@link cz.kinst.jakub.diploma.offloading.deeco.components.PlannerComponent}
  * Member: {@link cz.kinst.jakub.diploma.offloading.deeco.components.BackendMonitorComponent}
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.NFP_DATA_COLLECTING_INTERVAL_MS)

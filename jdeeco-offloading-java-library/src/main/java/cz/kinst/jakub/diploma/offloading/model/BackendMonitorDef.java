@@ -1,9 +1,13 @@
-package cz.kinst.jakub.diploma.offloading.deeco.model;
+package cz.kinst.jakub.diploma.offloading.model;
 
 import java.io.Serializable;
 
 /**
- * Created by jakubkinst on 21/01/15.
+ * Definition of a backend monitor (currently just backend id)
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class BackendMonitorDef implements Serializable {
     private final String mBackendId;

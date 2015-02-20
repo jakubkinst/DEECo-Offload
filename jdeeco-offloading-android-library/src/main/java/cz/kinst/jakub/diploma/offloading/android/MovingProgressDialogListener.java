@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 
-import cz.kinst.jakub.diploma.offloading.OnBackendMoveListener;
+import cz.kinst.jakub.diploma.offloading.listeners.OnBackendMoveListener;
 
 /**
  * Created by jakubkinst on 06/02/15.

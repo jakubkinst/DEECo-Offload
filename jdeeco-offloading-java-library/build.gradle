@@ -5,12 +5,11 @@ dependencies {
     compile project(':jdeeco-udp-broadcast-library')
     compile project(':jdeeco-java-library')
 
-    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.guava:guava:18.0' // for EventBus mainly
 
-    // server libraries
+    // Restlet libraries
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.simpleframework:simple:5.1.6'
-//    compile 'org.restlet.android:org.restlet:2.3.0'
     compile project(':restlet-android')
     compile('org.restlet.jse:org.restlet.ext.simple:2.3.0') {
         exclude module: 'org.restlet'
