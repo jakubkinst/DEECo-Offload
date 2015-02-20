@@ -28,15 +28,18 @@ import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
 import cz.kinst.jakub.diploma.offloadableocr.utils.FileUtils;
 import cz.kinst.jakub.diploma.offloading.Frontend;
 import cz.kinst.jakub.diploma.offloading.OffloadingManager;
-import cz.kinst.jakub.diploma.offloading.listeners.OnDeploymentPlanUpdatedListener;
 import cz.kinst.jakub.diploma.offloading.android.AndroidLogProvider;
 import cz.kinst.jakub.diploma.offloading.android.AndroidUDPBroadcast;
 import cz.kinst.jakub.diploma.offloading.android.MovingProgressDialogListener;
-import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
-import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.offloading.backend.MultipartHolder;
+import cz.kinst.jakub.diploma.offloading.listeners.OnDeploymentPlanUpdatedListener;
+import cz.kinst.jakub.diploma.offloading.logger.Logger;
+import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
 
-
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class MainActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PHOTO = 100;
     public static final String OCR_URI = "/ocr";

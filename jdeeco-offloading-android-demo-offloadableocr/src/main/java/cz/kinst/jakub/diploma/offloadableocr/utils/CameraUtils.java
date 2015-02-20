@@ -7,7 +7,8 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 /**
- * Created by jakubkinst on 11/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class CameraUtils {
 

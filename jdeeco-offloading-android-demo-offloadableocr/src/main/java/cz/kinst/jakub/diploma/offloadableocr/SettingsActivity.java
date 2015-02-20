@@ -18,7 +18,8 @@ import cz.kinst.jakub.diploma.offloading.OffloadingManager;
 import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
- * Created by jakubkinst on 11/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class SettingsActivity extends ActionBarActivity {
     public static final String DEFAULT_IMAGE_SIZE = "2500";

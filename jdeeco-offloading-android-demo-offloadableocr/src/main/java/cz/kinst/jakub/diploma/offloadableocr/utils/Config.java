@@ -1,7 +1,8 @@
 package cz.kinst.jakub.diploma.offloadableocr.utils;
 
 /**
- * Created by jakubkinst on 11/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class Config {
     public static final String TAG = "OffloadableOCR";

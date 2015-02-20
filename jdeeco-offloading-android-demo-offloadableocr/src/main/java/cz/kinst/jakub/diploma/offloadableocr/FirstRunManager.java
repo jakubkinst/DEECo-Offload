@@ -5,7 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 /**
- * Created by jakubkinst on 16/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class FirstRunManager {
     public static boolean isFirstRun(Context context) {

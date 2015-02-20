@@ -1,8 +1,9 @@
 package cz.kinst.jakub.diploma.offloading.android.demo.java;
 
 /**
-* Created by jakubkinst on 07/01/15.
-*/
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 class Message {
     public String message;
     public long timestamp;

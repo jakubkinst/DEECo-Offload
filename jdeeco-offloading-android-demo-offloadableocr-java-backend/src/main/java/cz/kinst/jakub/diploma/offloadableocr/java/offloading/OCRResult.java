@@ -3,7 +3,8 @@ package cz.kinst.jakub.diploma.offloadableocr.java.offloading;
 import java.io.Serializable;
 
 /**
- * Created by jakubkinst on 11/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class OCRResult implements Serializable {
     private String recognizedText;

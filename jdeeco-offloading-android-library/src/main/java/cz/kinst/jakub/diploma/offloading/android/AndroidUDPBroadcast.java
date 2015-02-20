@@ -14,14 +14,20 @@ import java.net.UnknownHostException;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast;
 import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig;
 
-
 /**
- * Created by jakubkinst on 12/11/14.
+ * Android {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} implementation
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class AndroidUDPBroadcast extends UDPBroadcast {
 
     private final Context mContext;
 
+    /**
+     * @param context Android app context
+     */
     public AndroidUDPBroadcast(Context context) {
         mContext = context;
         // Hack Prevent crash (sending should be done using an async task)
@@ -29,15 +35,20 @@ public class AndroidUDPBroadcast extends UDPBroadcast {
         StrictMode.setThreadPolicy(policy);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final String getMyIpAddress() {
         WifiManager wifiMgr = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
         int ip = wifiInfo.getIpAddress();
         return Formatter.formatIpAddress(ip);
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final InetAddress getBroadcastAddress() {
         WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
@@ -56,17 +67,26 @@ public class AndroidUDPBroadcast extends UDPBroadcast {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logDebug(String message) {
         if (UDPBroadcastConfig.DEBUG_MODE)
             Log.d(UDPBroadcastConfig.LOG_TAG, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logError(String message) {
         Log.e(UDPBroadcastConfig.LOG_TAG, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void logInfo(String message) {
         Log.i(UDPBroadcastConfig.LOG_TAG, message);

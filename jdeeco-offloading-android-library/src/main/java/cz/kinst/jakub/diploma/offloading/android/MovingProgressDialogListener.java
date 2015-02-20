@@ -7,11 +7,27 @@ import android.os.Handler;
 import cz.kinst.jakub.diploma.offloading.listeners.OnBackendMoveListener;
 
 /**
- * Created by jakubkinst on 06/02/15.
+ * Implementation of {@link cz.kinst.jakub.diploma.offloading.listeners.OnBackendMoveListener} showing
+ * a standard Android {@link android.app.ProgressDialog} informing user of movement process.
+ * <p/>
+ * ---------------------------
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class MovingProgressDialogListener implements OnBackendMoveListener {
+    /**
+     * Timeout after which the dialog is dismissed automatically
+     */
     private static final long PROGRESS_DIALOG_TIMEOUT_MS = 15000;
+
+    /**
+     * Dialog itself
+     */
     private ProgressDialog mProgressDialog;
+
+    /**
+     * Context reference
+     */
     private Context mContext;
 
     public MovingProgressDialogListener(Context context) {
@@ -20,7 +36,6 @@ public class MovingProgressDialogListener implements OnBackendMoveListener {
 
     @Override
     public void onBackendMovingStarted(String backendId, final String fromAddress, final String toAddress) {
-
         Handler mainHandler = new Handler(mContext.getMainLooper());
         mainHandler.post(new Runnable() {
             @Override

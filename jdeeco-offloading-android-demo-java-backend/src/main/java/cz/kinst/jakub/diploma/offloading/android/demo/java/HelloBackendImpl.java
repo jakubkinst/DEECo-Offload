@@ -9,12 +9,16 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.Map;
 
-import cz.kinst.jakub.diploma.offloading.model.NFPData;
-import cz.kinst.jakub.diploma.offloading.model.SingleValueNFPData;
 import cz.kinst.jakub.diploma.offloading.backend.BackendPerformanceProvider;
 import cz.kinst.jakub.diploma.offloading.backend.MultipartHolder;
 import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackendImpl;
+import cz.kinst.jakub.diploma.offloading.model.NFPData;
+import cz.kinst.jakub.diploma.offloading.model.SingleValueNFPData;
 
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class HelloBackendImpl extends OffloadableBackendImpl implements HelloBackend {
 
     public HelloBackendImpl() {

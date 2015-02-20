@@ -12,6 +12,10 @@ import java.io.IOException;
 import cz.kinst.jakub.diploma.offloadableocr.utils.CameraUtils;
 import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
 
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 @SuppressWarnings("deprecation")
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     public static final int CAMERA_ID = 0;

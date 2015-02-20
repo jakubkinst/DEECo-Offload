@@ -8,7 +8,8 @@ import java.io.File;
 import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
- * Created by jakubkinst on 04/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class OCR {
 

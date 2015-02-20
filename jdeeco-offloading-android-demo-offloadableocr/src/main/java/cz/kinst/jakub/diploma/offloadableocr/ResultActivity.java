@@ -10,7 +10,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
 
-
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class ResultActivity extends ActionBarActivity {
 
     private static final String EXTRA_RESULT = "result";

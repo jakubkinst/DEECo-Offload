@@ -7,6 +7,10 @@ import cz.kinst.jakub.diploma.offloading.logger.JavaLogProvider;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.udpbroadcast.JavaUDPBroadcast;
 
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class Main {
     private static final String OCR_URI = "/ocr";
     private static OffloadingManager mOffloadingManager;

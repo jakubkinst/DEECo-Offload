@@ -17,6 +17,7 @@
         android:text="@string/performance"
         android:layout_gravity="left"
         android:textSize="14sp" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"

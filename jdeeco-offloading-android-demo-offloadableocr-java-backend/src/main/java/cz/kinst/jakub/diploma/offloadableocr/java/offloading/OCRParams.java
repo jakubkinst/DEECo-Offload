@@ -1,7 +1,8 @@
 package cz.kinst.jakub.diploma.offloadableocr.java.offloading;
 
 /**
- * Created by jakubkinst on 12/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class OCRParams {
 }

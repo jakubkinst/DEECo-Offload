@@ -5,12 +5,16 @@ import cz.kinst.jakub.diploma.offloading.logger.JavaLogProvider;
 import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.udpbroadcast.JavaUDPBroadcast;
 
+/**
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
+ */
 public class Main {
     private static final String HELLO_URI = "/hello";
     private static OffloadingManager mOffloadingManager;
     private static HelloBackendImpl mHelloResource;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Logger.setProvider(new JavaLogProvider());
         try {

@@ -7,7 +7,8 @@ import android.os.AsyncTask;
 import cz.kinst.jakub.diploma.offloadableocr.utils.FileUtils;
 
 /**
- * Created by jakubkinst on 16/02/15.
+ * Created by Jakub Kinst 2015
+ * E-mail: jakub@kinst.cz
  */
 public class CopyAssetsTask extends AsyncTask {
     private final Context mContext;
