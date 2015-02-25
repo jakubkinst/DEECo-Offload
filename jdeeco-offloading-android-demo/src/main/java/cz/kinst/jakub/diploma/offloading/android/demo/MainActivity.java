@@ -33,6 +33,8 @@ import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
 
 /**
+ * Main Activity displaying controls to test DEECo offloading capabilities
+ * <p/>
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */
