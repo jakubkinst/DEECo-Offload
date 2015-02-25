@@ -16,6 +16,11 @@ import cz.kinst.jakub.diploma.offloadableocr.utils.Config;
 import cz.kinst.jakub.diploma.offloading.model.StateBundle;
 
 /**
+ * Wrapper around Tesseract in form of tess-two library for Android providing
+ * text recognition of an image.
+ * <p/>
+ * The Tesseract data (trained data for each language) must be available in device storage at {@link Config#APP_FOLDER}
+ * <p/>
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */
@@ -25,6 +30,11 @@ public class OCR {
     private static final String LANG = "eng";
     private final TessBaseAPI mBaseApi;
 
+    /**
+     * Get new instance of OCR implementation (not a singleton)
+     *
+     * @return
+     */
     public static OCR getInstance() {
         return new OCR();
     }
@@ -35,6 +45,14 @@ public class OCR {
         mBaseApi.init(DATA_PATH, LANG);
     }
 
+    /**
+     * Recognize text from given image with settings that can contain some of the Tesseract variables
+     * (see Tesseract docs)
+     *
+     * @param image    Image to recognize
+     * @param settings Tesseract settings
+     * @return recognized text
+     */
     public String recognizeText(File image, StateBundle settings) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;

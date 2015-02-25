@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
 
 /**
+ * Activity displaying result of an OCR process
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */

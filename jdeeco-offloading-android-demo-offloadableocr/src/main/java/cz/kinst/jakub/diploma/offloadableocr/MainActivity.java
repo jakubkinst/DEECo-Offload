@@ -37,6 +37,8 @@ import cz.kinst.jakub.diploma.offloading.logger.Logger;
 import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
 
 /**
+ * Main Activity displaying camera preview and able to take pictures or select a picture from gallery
+ * <p/>
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */

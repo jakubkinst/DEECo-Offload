@@ -12,6 +12,11 @@ public class OCRResult implements Serializable {
     private long timestamp;
     private String deviceIp;
 
+    /**
+     * @param recognizedText recognized text
+     * @param deviceIp       IP address of the device where the recognition took place
+     * @param duration       duration of the recognition process
+     */
     public OCRResult(String recognizedText, String deviceIp, long duration) {
         this.recognizedText = recognizedText;
         this.duration = duration;

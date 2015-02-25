@@ -18,6 +18,13 @@ import java.util.Date;
  */
 public class FileUtils {
 
+    /**
+     * Write input stream to a file
+     *
+     * @param input Input stream
+     * @param file  File to write IS to
+     * @throws IOException
+     */
     public static void writeInputStreamToFile(InputStream input, File file) throws IOException {
         final OutputStream output = new FileOutputStream(file);
         final byte[] buffer = new byte[1024];
@@ -30,6 +37,11 @@ public class FileUtils {
         input.close();
     }
 
+    /**
+     * Generate new imege file to store captured image into
+     *
+     * @return File
+     */
     public static File getNewImageFile() {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
@@ -55,17 +67,34 @@ public class FileUtils {
         return mediaFile;
     }
 
-    public static void writeByteArrayToFile(byte[] data, File pictureFile) throws IOException {
-        FileOutputStream fos = new FileOutputStream(pictureFile);
+    /**
+     * Write byte array to file
+     *
+     * @param data input byte array
+     * @param file file to writy BA into
+     * @throws IOException
+     */
+    public static void writeByteArrayToFile(byte[] data, File file) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
         fos.write(data);
         fos.close();
     }
 
+    /**
+     * Copy all assets to external storage directory
+     *
+     * @param assetManager
+     */
     public static void copyAllAssets(AssetManager assetManager) {
         copyFolderFromAssets(assetManager, "tessdata");
         copyFolderFromAssets(assetManager, "samples");
     }
 
+    /**
+     * Check if all assets are copied already
+     *
+     * @return true if copied
+     */
     public static boolean areAssetsCopied() {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER);
         return folder.exists() && folder.isDirectory();

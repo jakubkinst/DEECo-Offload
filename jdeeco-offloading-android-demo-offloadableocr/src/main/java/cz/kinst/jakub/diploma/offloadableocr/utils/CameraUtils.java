@@ -14,6 +14,13 @@ public class CameraUtils {
 
     public static final String FOLDER_NAME = "OCR";
 
+    /**
+     * Configure camera orientation based on display orientation
+     *
+     * @param context  Android app context
+     * @param cameraId camera ID
+     * @param camera   camera object reference
+     */
     public static void setCameraDisplayOrientation(Context context,
                                                    int cameraId, android.hardware.Camera camera) {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();

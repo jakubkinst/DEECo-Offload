@@ -26,6 +26,7 @@
             <TextView
                 android:id="@+id/ocr_result_device_ip"
                 tools:text="192.168.0.2"
+                android:textSize="30sp"
                 android:layout_width="match_parent"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_height="wrap_content" />
@@ -39,6 +40,7 @@
             <TextView
                 android:id="@+id/ocr_result_duration"
                 tools:text="3200 ms"
+                android:textSize="24sp"
                 android:layout_width="match_parent"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_height="wrap_content" />

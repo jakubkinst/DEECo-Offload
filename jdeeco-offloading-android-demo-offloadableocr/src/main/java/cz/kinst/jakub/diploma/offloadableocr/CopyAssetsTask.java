@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import cz.kinst.jakub.diploma.offloadableocr.utils.FileUtils;
 
 /**
+ * Async Task used to copy all asset files to external storage directory on the device
+ * <p/>
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */
