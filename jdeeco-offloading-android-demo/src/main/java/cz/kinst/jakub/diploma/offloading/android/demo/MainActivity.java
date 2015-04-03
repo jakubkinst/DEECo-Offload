@@ -1,5 +1,7 @@
 package cz.kinst.jakub.diploma.offloading.android.demo;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,10 @@ import android.widget.Toast;
 import org.restlet.data.MediaType;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -152,7 +158,7 @@ public class MainActivity extends ActionBarActivity {
             protected Message doInBackground(Void... params) {
                 try {
                     ArrayList<File> files = new ArrayList<File>();
-                    files.add(new File(Environment.getExternalStorageDirectory() + File.separator + "test.jpg"));
+                    files.add(getFileFromAssets(MainActivity.this, "testfile.jpg"));
                     Message message = new Message("Sent message", new Date().getTime());
                     return backend.testFile(new MultipartHolder<Message>(files, MediaType.IMAGE_JPEG, message).getRepresentation());
                 } catch (Exception e) {
@@ -203,5 +209,30 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    public static File getFileFromAssets(Context context, String name) {
+        AssetManager am = context.getAssets();
+        try {
+            InputStream inputStream = am.open(name);
+            File f = new File(Environment.getExternalStorageDirectory() + "/" + name);
+            OutputStream outputStream = new FileOutputStream(f);
+            byte buffer[] = new byte[1024];
+            int length = 0;
+
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            return f;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 }
