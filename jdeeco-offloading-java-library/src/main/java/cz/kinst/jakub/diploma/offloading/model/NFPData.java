@@ -11,24 +11,26 @@ import java.io.Serializable;
  * E-mail: jakub@kinst.cz
  */
 public abstract class NFPData implements Serializable {
-    private long timestamp;
+	private long timestamp;
 
-    /**
-     * Get time of creation
-     *
-     * @return time of creation in ms
-     */
-    public long getTimestamp() {
-        return timestamp;
-    }
 
-    /**
-     * Set time of creation
-     *
-     * @param timestamp time of creation in ms
-     */
-    public void setTimestamp(long timestamp) {
+	/**
+	 * Get time of creation
+	 *
+	 * @return time of creation in ms
+	 */
+	public long getTimestamp() {
+		return timestamp;
+	}
 
-        this.timestamp = timestamp;
-    }
+
+	/**
+	 * Set time of creation
+	 *
+	 * @param timestamp time of creation in ms
+	 */
+	public void setTimestamp(long timestamp) {
+
+		this.timestamp = timestamp;
+	}
 }

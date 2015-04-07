@@ -10,7 +10,7 @@ import cz.kinst.jakub.diploma.offloading.model.NFPData;
  * E-mail: jakub@kinst.cz
  */
 public abstract class BackendPerformanceProvider {
-    public abstract NFPData checkPerformance();
+	public abstract NFPData checkPerformance();
 
-    public abstract String findOptimalAlternative(Map<String, NFPData> alternatives);
+	public abstract String findOptimalAlternative(Map<String, NFPData> alternatives);
 }

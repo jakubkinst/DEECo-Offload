@@ -43,16 +43,20 @@ import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
  * E-mail: jakub@kinst.cz
  */
 public class MainActivity extends ActionBarActivity {
-	private static final int REQUEST_SELECT_PHOTO = 100;
 	public static final String OCR_URI = "/ocr";
+	private static final int REQUEST_SELECT_PHOTO = 100;
+	private static Frontend mFrontend;
 	@InjectView(R.id.camera_preview_container)
 	FrameLayout mCameraPreviewContainer;
 	@InjectView(R.id.current_ip)
 	TextView mCurrentIp;
-
 	private CameraPreview mCameraPreview;
 	private OffloadingManager mOffloadingManager;
-	private static Frontend mFrontend;
+
+
+	public static Frontend getFrontend() {
+		return mFrontend;
+	}
 
 
 	@Override
@@ -208,11 +212,6 @@ public class MainActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 		super.onStop();
-	}
-
-
-	public static Frontend getFrontend() {
-		return mFrontend;
 	}
 
 }

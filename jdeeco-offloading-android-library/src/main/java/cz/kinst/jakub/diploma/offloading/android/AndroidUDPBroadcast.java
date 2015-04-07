@@ -23,73 +23,79 @@ import cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig;
  */
 public class AndroidUDPBroadcast extends UDPBroadcast {
 
-    private final Context mContext;
+	private final Context mContext;
 
-    /**
-     * @param context Android app context
-     */
-    public AndroidUDPBroadcast(Context context) {
-        mContext = context;
-        // Hack Prevent crash (sending should be done using an async task)
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final String getMyIpAddress() {
-        WifiManager wifiMgr = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-        int ip = wifiInfo.getIpAddress();
-        return Formatter.formatIpAddress(ip);
-    }
+	/**
+	 * @param context Android app context
+	 */
+	public AndroidUDPBroadcast(Context context) {
+		mContext = context;
+		// Hack Prevent crash (sending should be done using an async task)
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final InetAddress getBroadcastAddress() {
-        WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-        DhcpInfo dhcp = wifi.getDhcpInfo();
-        // handle null somehow
 
-        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-        byte[] quads = new byte[4];
-        for (int k = 0; k < 4; k++)
-            quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-        try {
-            return InetAddress.getByAddress(quads);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getMyIpAddress() {
+		WifiManager wifiMgr = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+		int ip = wifiInfo.getIpAddress();
+		return Formatter.formatIpAddress(ip);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final void logDebug(String message) {
-        if (UDPBroadcastConfig.DEBUG_MODE)
-            Log.d(UDPBroadcastConfig.LOG_TAG, message);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final void logError(String message) {
-        Log.e(UDPBroadcastConfig.LOG_TAG, message);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final InetAddress getBroadcastAddress() {
+		WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		DhcpInfo dhcp = wifi.getDhcpInfo();
+		// handle null somehow
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final void logInfo(String message) {
-        Log.i(UDPBroadcastConfig.LOG_TAG, message);
-    }
+		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+		byte[] quads = new byte[4];
+		for (int k = 0; k < 4; k++)
+			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+		try {
+			return InetAddress.getByAddress(quads);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected final void logDebug(String message) {
+		if (UDPBroadcastConfig.DEBUG_MODE)
+			Log.d(UDPBroadcastConfig.LOG_TAG, message);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected final void logError(String message) {
+		Log.e(UDPBroadcastConfig.LOG_TAG, message);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected final void logInfo(String message) {
+		Log.i(UDPBroadcastConfig.LOG_TAG, message);
+	}
 
 }

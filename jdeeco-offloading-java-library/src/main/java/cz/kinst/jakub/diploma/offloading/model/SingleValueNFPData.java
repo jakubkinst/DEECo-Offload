@@ -8,18 +8,21 @@ package cz.kinst.jakub.diploma.offloading.model;
  * E-mail: jakub@kinst.cz
  */
 public class SingleValueNFPData extends NFPData {
-    private float mPerformance;
+	private float mPerformance;
 
-    public SingleValueNFPData(float performance) {
-        this.mPerformance = performance;
-    }
 
-    public float getPerformance() {
-        return mPerformance;
-    }
+	public SingleValueNFPData(float performance) {
+		this.mPerformance = performance;
+	}
 
-    @Override
-    public String toString() {
-        return String.valueOf(getPerformance());
-    }
+
+	public float getPerformance() {
+		return mPerformance;
+	}
+
+
+	@Override
+	public String toString() {
+		return String.valueOf(getPerformance());
+	}
 }

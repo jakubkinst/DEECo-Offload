@@ -12,6 +12,6 @@ import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackend;
  */
 public interface OCRBackend extends OffloadableBackend {
 
-    @Post("?recognize")
-    public OCRResult recognize(Representation file);
+	@Post("?recognize")
+	public OCRResult recognize(Representation file);
 }

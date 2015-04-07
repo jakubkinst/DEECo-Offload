@@ -1,59 +1,59 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+			 xmlns:tools="http://schemas.android.com/tools"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent"
+			 android:orientation="vertical"
+			 tools:context=".MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_material_dark"
-        android:id="@+id/camera_preview_container" />
+	<FrameLayout
+		android:id="@+id/camera_preview_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/background_material_dark"/>
 
 
-    <ImageButton
-        android:src="@drawable/ic_action_settings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:text="@string/pick_from_gallery"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:id="@+id/settings"
-        android:padding="8dp"
-        style="@style/HUDButton" />
+	<ImageButton
+		android:id="@+id/settings"
+		style="@style/HUDButton"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_gravity="bottom|left"
+		android:layout_margin="@dimen/activity_horizontal_margin"
+		android:padding="8dp"
+		android:src="@drawable/ic_action_settings"
+		android:text="@string/pick_from_gallery"/>
 
-    <ImageButton
-        android:src="@drawable/ic_image_camera"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:text="@string/take_a_picture"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:id="@+id/take_picture"
-        android:padding="4dp"
-        style="@style/HUDButton" />
+	<ImageButton
+		android:id="@+id/take_picture"
+		style="@style/HUDButton"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		android:layout_margin="@dimen/activity_horizontal_margin"
+		android:padding="4dp"
+		android:src="@drawable/ic_image_camera"
+		android:text="@string/take_a_picture"/>
 
-    <ImageButton
-        android:src="@drawable/ic_image_gallery"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:text="@string/pick_from_gallery"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:id="@+id/pick_from_gallery"
-        android:padding="8dp"
-        style="@style/HUDButton" />
+	<ImageButton
+		android:id="@+id/pick_from_gallery"
+		style="@style/HUDButton"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_gravity="bottom|right"
+		android:layout_margin="@dimen/activity_horizontal_margin"
+		android:padding="8dp"
+		android:src="@drawable/ic_image_gallery"
+		android:text="@string/pick_from_gallery"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        tools:text="192.168.0.1"
-        android:alpha="0.7"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:id="@+id/current_ip"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp" />
+	<TextView
+		android:id="@+id/current_ip"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right|top"
+		android:layout_marginRight="8dp"
+		android:layout_marginTop="24dp"
+		android:alpha="0.7"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="@color/white"
+		android:textSize="12sp"
+		tools:text="192.168.0.1"/>
 </FrameLayout>

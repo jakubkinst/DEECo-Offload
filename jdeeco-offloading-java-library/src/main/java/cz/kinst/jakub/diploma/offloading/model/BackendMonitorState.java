@@ -8,6 +8,6 @@ package cz.kinst.jakub.diploma.offloading.model;
  * E-mail: jakub@kinst.cz
  */
 public class BackendMonitorState {
-    public static final int NOT_ACTIVE = 0;
-    public static final int ACTIVE = 1;
+	public static final int NOT_ACTIVE = 0;
+	public static final int ACTIVE = 1;
 }

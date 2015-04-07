@@ -26,15 +26,16 @@ import cz.kinst.jakub.diploma.offloading.model.BackendMonitorDef;
 @Ensemble
 @PeriodicScheduling(period = 1500)
 public class PlannerToDeviceEnsemble {
-    @Membership
-    public static boolean membership(@In("coord.appId") String plannerAppId, @In("coord.lastPing") long plannerLastPing, @In("member.lastPing") long deviceLastPing, @In("member.ip") String deviceIp) {
-        return DEECoManager.areComponentsStillAlive(deviceLastPing) && DEECoManager.areComponentsStillAlive(plannerLastPing);
-    }
+	@Membership
+	public static boolean membership(@In("coord.appId") String plannerAppId, @In("coord.lastPing") long plannerLastPing, @In("member.lastPing") long deviceLastPing, @In("member.ip") String deviceIp) {
+		return DEECoManager.areComponentsStillAlive(deviceLastPing) && DEECoManager.areComponentsStillAlive(plannerLastPing);
+	}
 
-    @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("member.monitorDefs") ParamHolder<Map<String, Set<BackendMonitorDef>>> deviceMonitorDefs,
-                                         @In("coord.monitorDefs") Set<BackendMonitorDef> plannerMonitorDefs,
-                                         @In("coord.appId") String plannerAppId) {
-        deviceMonitorDefs.value.put(plannerAppId, plannerMonitorDefs);
-    }
+
+	@KnowledgeExchange
+	public static void knowledgeExchange(@InOut("member.monitorDefs") ParamHolder<Map<String, Set<BackendMonitorDef>>> deviceMonitorDefs,
+										 @In("coord.monitorDefs") Set<BackendMonitorDef> plannerMonitorDefs,
+										 @In("coord.appId") String plannerAppId) {
+		deviceMonitorDefs.value.put(plannerAppId, plannerMonitorDefs);
+	}
 }

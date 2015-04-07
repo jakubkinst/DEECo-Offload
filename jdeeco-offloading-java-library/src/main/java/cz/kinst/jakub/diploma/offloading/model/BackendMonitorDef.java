@@ -10,13 +10,15 @@ import java.io.Serializable;
  * E-mail: jakub@kinst.cz
  */
 public class BackendMonitorDef implements Serializable {
-    private final String mBackendId;
+	private final String mBackendId;
 
-    public BackendMonitorDef(String backendId) {
-        mBackendId = backendId;
-    }
 
-    public String getBackendId() {
-        return mBackendId;
-    }
+	public BackendMonitorDef(String backendId) {
+		mBackendId = backendId;
+	}
+
+
+	public String getBackendId() {
+		return mBackendId;
+	}
 }

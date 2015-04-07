@@ -17,29 +17,29 @@ import cz.kinst.jakub.diploma.offloading.model.StateBundle;
  * E-mail: jakub@kinst.cz
  */
 public class OCR {
-    /**
-     * Recognize text from given image with settings that can contain some of the Tesseract variables
-     * (see Tesseract docs)
-     *
-     * @param image    Image to recognize
-     * @param settings Tesseract settings
-     * @return recognized text
-     */
-    public static synchronized String recognizeText(File image, StateBundle settings) {
-        try {
-            Tesseract tesseract = Tesseract.getInstance();
-            if (settings != null) {
-                for (String key : settings.getKeys()) {
-                    tesseract.setTessVariable(key, settings.getString(key, ""));
-                }
-            }
-            String result = tesseract.doOCR(image);
-            System.out.println("Recognized: " + result);
-            return result;
-        } catch (TesseractException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	/**
+	 * Recognize text from given image with settings that can contain some of the Tesseract variables
+	 * (see Tesseract docs)
+	 *
+	 * @param image    Image to recognize
+	 * @param settings Tesseract settings
+	 * @return recognized text
+	 */
+	public static synchronized String recognizeText(File image, StateBundle settings) {
+		try {
+			Tesseract tesseract = Tesseract.getInstance();
+			if (settings != null) {
+				for (String key : settings.getKeys()) {
+					tesseract.setTessVariable(key, settings.getString(key, ""));
+				}
+			}
+			String result = tesseract.doOCR(image);
+			System.out.println("Recognized: " + result);
+			return result;
+		} catch (TesseractException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

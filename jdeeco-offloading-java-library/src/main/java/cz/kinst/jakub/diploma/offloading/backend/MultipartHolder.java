@@ -29,113 +29,122 @@ import java.util.List;
  */
 public class MultipartHolder<E> {
 
-    public static final String MULTIPART_FILE_PART = "file";
-    private static final String MULTIPART_PARAMS_PART = "params";
+	public static final String MULTIPART_FILE_PART = "file";
+	private static final String MULTIPART_PARAMS_PART = "params";
 
-    private List<FileItem> receivedFiles;
-    private List<File> filesToSend;
-    private MediaType fileMediaType;
-    private E payload;
+	private List<FileItem> receivedFiles;
+	private List<File> filesToSend;
+	private MediaType fileMediaType;
+	private E payload;
 
-    /**
-     * Construct MultipartHolder from a list of files and a payload
-     *
-     * @param files         Files to upload
-     * @param fileMediaType MIME type of uploaded files
-     * @param payload       Custom serializable payload
-     */
-    public MultipartHolder(List<File> files, MediaType fileMediaType, E payload) {
-        this.filesToSend = files;
-        this.payload = payload;
-        this.fileMediaType = fileMediaType;
-    }
 
-    /**
-     * Construct MultipartHolder from incoming representation on the server side
-     *
-     * @param representation representation of HTTP request body
-     * @param payloadClass   class of the payload to deserialize
-     * @throws FileUploadException
-     */
-    public MultipartHolder(Representation representation, Class<E> payloadClass) throws FileUploadException {
-        List<FileItem> files = MultipartHolder.getFiles(representation);
-        receivedFiles = new ArrayList<>();
-        for (FileItem file : files) {
-            if (file.getFieldName().startsWith(MULTIPART_FILE_PART)) {
-                receivedFiles.add(file);
-            } else if (file.getFieldName().equals(MULTIPART_PARAMS_PART)) {
-                String json = file.getString();
-                this.payload = new Gson().fromJson(json, payloadClass);
-            }
-        }
-    }
+	/**
+	 * Construct MultipartHolder from a list of files and a payload
+	 *
+	 * @param files         Files to upload
+	 * @param fileMediaType MIME type of uploaded files
+	 * @param payload       Custom serializable payload
+	 */
+	public MultipartHolder(List<File> files, MediaType fileMediaType, E payload) {
+		this.filesToSend = files;
+		this.payload = payload;
+		this.fileMediaType = fileMediaType;
+	}
 
-    /**
-     * Static method used to read a file from {@link org.restlet.representation.Representation}
-     *
-     * @param valueRepresentation representation with file content
-     * @return file in form of byte array
-     * @throws IOException
-     */
-    private static byte[] readFile(Representation valueRepresentation) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        valueRepresentation.write(outputStream);
-        return outputStream.toByteArray();
-    }
 
-    public List<File> getFilesToSend() {
-        return filesToSend;
-    }
+	/**
+	 * Construct MultipartHolder from incoming representation on the server side
+	 *
+	 * @param representation representation of HTTP request body
+	 * @param payloadClass   class of the payload to deserialize
+	 * @throws FileUploadException
+	 */
+	public MultipartHolder(Representation representation, Class<E> payloadClass) throws FileUploadException {
+		List<FileItem> files = MultipartHolder.getFiles(representation);
+		receivedFiles = new ArrayList<>();
+		for (FileItem file : files) {
+			if (file.getFieldName().startsWith(MULTIPART_FILE_PART)) {
+				receivedFiles.add(file);
+			} else if (file.getFieldName().equals(MULTIPART_PARAMS_PART)) {
+				String json = file.getString();
+				this.payload = new Gson().fromJson(json, payloadClass);
+			}
+		}
+	}
 
-    public List<FileItem> getReceivedFiles() {
-        return receivedFiles;
-    }
 
-    public E getPayload() {
-        return payload;
-    }
+	/**
+	 * Static method used to read a file from {@link org.restlet.representation.Representation}
+	 *
+	 * @param valueRepresentation representation with file content
+	 * @return file in form of byte array
+	 * @throws IOException
+	 */
+	private static byte[] readFile(Representation valueRepresentation) throws IOException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		valueRepresentation.write(outputStream);
+		return outputStream.toByteArray();
+	}
 
-    public MediaType getFileMediaType() {
-        return fileMediaType;
-    }
 
-    /**
-     * Build a representation that can be sent via Restlet HTTP interface
-     *
-     * @return
-     */
-    public Representation getRepresentation() {
-        FormDataSet form = new FormDataSet();
-        form.setMultipart(true);
-        int i = 0;
-        for (File file : getFilesToSend()) {
-            Representation fileRepresentation = new FileRepresentation(file, getFileMediaType());
-            form.getEntries().add(new FormData(MULTIPART_FILE_PART + "_" + i++, fileRepresentation));
-        }
+	/**
+	 * Parse files from {@link org.restlet.representation.Representation}
+	 *
+	 * @param representation representation to parse
+	 * @return List of Files
+	 * @throws FileUploadException
+	 */
+	public static List<FileItem> getFiles(Representation representation) throws FileUploadException {
+		RestletFileUpload upload = new RestletFileUpload(new DefaultFileItemFactory());
+		return upload.parseRepresentation(representation);
+	}
 
-        try {
-            String json = new Gson().toJson(getPayload());
-            File tmpFile = File.createTempFile("params", ".tmp");
-            PrintWriter fos = new PrintWriter(tmpFile);
-            fos.print(json);
-            fos.close();
-            form.getEntries().add(new FormData(MULTIPART_PARAMS_PART, new FileRepresentation(tmpFile, MediaType.TEXT_ALL)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return form;
-    }
+	public List<File> getFilesToSend() {
+		return filesToSend;
+	}
 
-    /**
-     * Parse files from {@link org.restlet.representation.Representation}
-     *
-     * @param representation representation to parse
-     * @return List of Files
-     * @throws FileUploadException
-     */
-    public static List<FileItem> getFiles(Representation representation) throws FileUploadException {
-        RestletFileUpload upload = new RestletFileUpload(new DefaultFileItemFactory());
-        return upload.parseRepresentation(representation);
-    }
+
+	public List<FileItem> getReceivedFiles() {
+		return receivedFiles;
+	}
+
+
+	public E getPayload() {
+		return payload;
+	}
+
+
+	public MediaType getFileMediaType() {
+		return fileMediaType;
+	}
+
+
+	/**
+	 * Build a representation that can be sent via Restlet HTTP interface
+	 *
+	 * @return
+	 */
+	public Representation getRepresentation() {
+		FormDataSet form = new FormDataSet();
+		form.setMultipart(true);
+		int i = 0;
+		for (File file : getFilesToSend()) {
+			Representation fileRepresentation = new FileRepresentation(file, getFileMediaType());
+			form.getEntries().add(new FormData(MULTIPART_FILE_PART + "_" + i++, fileRepresentation));
+		}
+
+		try {
+			String json = new Gson().toJson(getPayload());
+			File tmpFile = File.createTempFile("params", ".tmp");
+			PrintWriter fos = new PrintWriter(tmpFile);
+			fos.print(json);
+			fos.close();
+			form.getEntries().add(new FormData(MULTIPART_PARAMS_PART, new FileRepresentation(tmpFile, MediaType.TEXT_ALL)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return form;
+	}
 }

@@ -19,103 +19,113 @@ import java.net.InetAddress;
  */
 public abstract class UDPBroadcast {
 
-    public interface OnUdpPacketReceivedListener {
-        void onUdpPacketReceived(DatagramPacket packet);
-    }
+	/**
+	 * Thread responsible for receiving UDP broadcasts in background
+	 * so it does not block main (UI)thread.
+	 */
+	private UDPBroadcastReceivingThread mReceivingThread;
+	/**
+	 * Listener which can be registered from outside this class.
+	 * Used to listen for incoming UDP packets.
+	 */
+	private OnUdpPacketReceivedListener mOnPacketReceivedListener;
 
-    /**
-     * Thread responsible for receiving UDP broadcasts in background
-     * so it does not block main (UI)thread.
-     */
-    private UDPBroadcastReceivingThread mReceivingThread;
 
-    /**
-     * Listener which can be registered from outside this class.
-     * Used to listen for incoming UDP packets.
-     */
-    private OnUdpPacketReceivedListener mOnPacketReceivedListener;
+	/**
+	 * Broadcasts UDP packet into the local network.
+	 * This is the main method to use to send data to other devices
+	 * <p/>
+	 * Port used in this method is set in config class ({@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig#PORT})
+	 *
+	 * @param packet UDP Packet to send via UDP broadcast
+	 */
+	public final void sendPacket(byte[] packet) {
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			socket.setBroadcast(true);
+			DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, getBroadcastAddress(), UDPBroadcastConfig.PORT);
+			socket.send(sendPacket);
+			logDebug("Broadcast packet sent to: " + getBroadcastAddress().getHostAddress());
+		} catch (IOException e) {
+			logError("IOException during packet broadcast: " + e.getMessage());
+		}
+	}
 
-    /**
-     * Broadcasts UDP packet into the local network.
-     * This is the main method to use to send data to other devices
-     * <p/>
-     * Port used in this method is set in config class ({@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcastConfig#PORT})
-     *
-     * @param packet UDP Packet to send via UDP broadcast
-     */
-    public final void sendPacket(byte[] packet) {
-        try {
-            DatagramSocket socket = new DatagramSocket();
-            socket.setBroadcast(true);
-            DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, getBroadcastAddress(), UDPBroadcastConfig.PORT);
-            socket.send(sendPacket);
-            logDebug("Broadcast packet sent to: " + getBroadcastAddress().getHostAddress());
-        } catch (IOException e) {
-            logError("IOException during packet broadcast: " + e.getMessage());
-        }
-    }
 
-    /**
-     * Starts receiving UDP broadcast packets in the background thread.
-     * Using {@link UDPBroadcastReceivingThread} to do this.
-     */
-    public final void startReceiving() {
-        mReceivingThread = new UDPBroadcastReceivingThread(this);
-        mReceivingThread.start();
-    }
+	/**
+	 * Starts receiving UDP broadcast packets in the background thread.
+	 * Using {@link UDPBroadcastReceivingThread} to do this.
+	 */
+	public final void startReceiving() {
+		mReceivingThread = new UDPBroadcastReceivingThread(this);
+		mReceivingThread.start();
+	}
 
-    /**
-     * Stops receiving UDP broadcast packets in the background thread by interrupting the thread itself.
-     */
-    public final void stopReceiving() {
-        mReceivingThread.interrupt();
 
-        // let the thread be Garbage-Collected
-        mReceivingThread = null;
-    }
+	/**
+	 * Stops receiving UDP broadcast packets in the background thread by interrupting the thread itself.
+	 */
+	public final void stopReceiving() {
+		mReceivingThread.interrupt();
 
-    /**
-     * Provides IP address that should be used to broadcast UDP packets to
-     *
-     * @return IP address used to broadcast
-     */
-    protected abstract InetAddress getBroadcastAddress();
+		// let the thread be Garbage-Collected
+		mReceivingThread = null;
+	}
 
-    /**
-     * Provides current host's IP address.
-     *
-     * @return IP address of local host
-     */
-    public abstract String getMyIpAddress();
 
-    protected void onPacketReceived(DatagramPacket packet) {
-        if (getOnPacketReceivedListener() != null)
-            getOnPacketReceivedListener().onUdpPacketReceived(packet);
-        else
-            logError("No listener for incoming UDP packets registered");
-    }
+	/**
+	 * Provides IP address that should be used to broadcast UDP packets to
+	 *
+	 * @return IP address used to broadcast
+	 */
+	protected abstract InetAddress getBroadcastAddress();
 
-    /**
-     * Register listener for incoming UDP broadcast packets
-     *
-     * @param listener listener for incoming UDP broadcast packets
-     */
-    public void setOnPacketReceivedListener(OnUdpPacketReceivedListener listener) {
-        this.mOnPacketReceivedListener = listener;
-    }
 
-    /**
-     * Get registered listener for incoming UDP broadcast packets
-     *
-     * @return listener for incoming UDP broadcast packets
-     */
-    public OnUdpPacketReceivedListener getOnPacketReceivedListener() {
-        return mOnPacketReceivedListener;
-    }
+	/**
+	 * Provides current host's IP address.
+	 *
+	 * @return IP address of local host
+	 */
+	public abstract String getMyIpAddress();
 
-    protected abstract void logDebug(String message);
 
-    protected abstract void logError(String message);
+	protected void onPacketReceived(DatagramPacket packet) {
+		if (getOnPacketReceivedListener() != null)
+			getOnPacketReceivedListener().onUdpPacketReceived(packet);
+		else
+			logError("No listener for incoming UDP packets registered");
+	}
 
-    protected abstract void logInfo(String message);
+
+	/**
+	 * Get registered listener for incoming UDP broadcast packets
+	 *
+	 * @return listener for incoming UDP broadcast packets
+	 */
+	public OnUdpPacketReceivedListener getOnPacketReceivedListener() {
+		return mOnPacketReceivedListener;
+	}
+
+
+	/**
+	 * Register listener for incoming UDP broadcast packets
+	 *
+	 * @param listener listener for incoming UDP broadcast packets
+	 */
+	public void setOnPacketReceivedListener(OnUdpPacketReceivedListener listener) {
+		this.mOnPacketReceivedListener = listener;
+	}
+
+
+	protected abstract void logDebug(String message);
+
+
+	protected abstract void logError(String message);
+
+
+	protected abstract void logInfo(String message);
+
+	public interface OnUdpPacketReceivedListener {
+		void onUdpPacketReceived(DatagramPacket packet);
+	}
 }

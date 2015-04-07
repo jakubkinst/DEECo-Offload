@@ -28,13 +28,8 @@ import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
 public class OffloadEvaluator extends Evaluator {
 
 	public static final String OCR_URI = "/ocr";
-	private OffloadingManager mOffloadingManager;
 	private static Frontend mFrontend;
-
-	public interface OnHostUpdateListener {
-		void onHostUpdated(String host);
-	}
-
+	private OffloadingManager mOffloadingManager;
 
 	public OffloadEvaluator(Activity context, EvaluationListener listener) {
 		super(context, listener);
@@ -101,5 +96,10 @@ public class OffloadEvaluator extends Evaluator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public interface OnHostUpdateListener {
+		void onHostUpdated(String host);
 	}
 }

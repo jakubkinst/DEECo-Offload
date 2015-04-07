@@ -8,5 +8,5 @@ import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
  * E-mail: jakub@kinst.cz
  */
 public interface OnDeploymentPlanUpdatedListener {
-    public void onDeploymentPlanUpdated(BackendDeploymentPlan plan);
+	public void onDeploymentPlanUpdated(BackendDeploymentPlan plan);
 }

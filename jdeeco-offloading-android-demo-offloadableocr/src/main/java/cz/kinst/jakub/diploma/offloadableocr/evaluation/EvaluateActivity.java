@@ -25,7 +25,7 @@ import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
 
 /**
  * Evaluation activity used to measure durations and battery usage of OCR process when offloaded and when not
- *
+ * <p/>
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */
@@ -42,6 +42,32 @@ public class EvaluateActivity extends ActionBarActivity implements EvaluationLis
 	EditText mNumberCases;
 	private OffloadEvaluator mOffloadEvaluator;
 	private LocalEvaluator mLocalEvaluator;
+
+
+	public static File getFileFromAssets(Context context, String name) {
+		AssetManager am = context.getAssets();
+		try {
+			InputStream inputStream = am.open(name);
+			File f = new File(Environment.getExternalStorageDirectory() + "/" + name);
+			OutputStream outputStream = new FileOutputStream(f);
+			byte buffer[] = new byte[1024];
+			int length = 0;
+
+			while ((length = inputStream.read(buffer)) > 0) {
+				outputStream.write(buffer, 0, length);
+			}
+
+			outputStream.close();
+			inputStream.close();
+
+			return f;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
 
 
 	@Override
@@ -102,32 +128,6 @@ public class EvaluateActivity extends ActionBarActivity implements EvaluationLis
 			Toast.makeText(this, "ERROR Writing result to a file", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
-	}
-
-
-	public static File getFileFromAssets(Context context, String name) {
-		AssetManager am = context.getAssets();
-		try {
-			InputStream inputStream = am.open(name);
-			File f = new File(Environment.getExternalStorageDirectory() + "/" + name);
-			OutputStream outputStream = new FileOutputStream(f);
-			byte buffer[] = new byte[1024];
-			int length = 0;
-
-			while ((length = inputStream.read(buffer)) > 0) {
-				outputStream.write(buffer, 0, length);
-			}
-
-			outputStream.close();
-			inputStream.close();
-
-			return f;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-
 	}
 
 
