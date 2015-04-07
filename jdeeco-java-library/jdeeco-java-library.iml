@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="DEECo-Offloading-for-Android" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":jdeeco-java-library" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="DEECo-Offloading-for-Android" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":jdeeco-java-library" />
       </configuration>
     </facet>
+    <facet type="java-gradle" name="Java-Gradle">
+      <configuration>
+        <option name="BUILD_FOLDER_PATH" value="$MODULE_DIR$/build" />
+        <option name="BUILDABLE" value="false" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.cz.cuni.mff.d3s.jdeeco.core-2.0.0" level="project" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.cloning-1.9.0" level="project" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.objenesis-2.1" level="project" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.org.eclipse.emf.common-2.9.0-v20130528-0742" level="project" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.org.eclipse.emf.ecore.xmi-2.9.0-v20130528-0742" level="project" />
+    <orderEntry type="library" exported="" name="jdeeco-java-library.org.eclipse.emf.ecore-2.9.0-v20130528-0742" level="project" />
   </component>
 </module>
-

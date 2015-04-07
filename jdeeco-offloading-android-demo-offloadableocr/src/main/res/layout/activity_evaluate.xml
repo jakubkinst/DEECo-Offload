@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent">
+
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/number_cases"
+		android:text="100"
+		android:numeric="integer"/>
+
+	<Button
+		android:id="@+id/start_evaluation_local"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Evaluate Local"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<Button
+			android:id="@+id/start_deeco"
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Start DEECo"/>
+
+		<Button
+			android:id="@+id/start_evaluation_offload"
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Evaluate Offload"/>
+	</LinearLayout>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		tools:text="24%"
+		android:id="@+id/progress"/>
+
+</LinearLayout>

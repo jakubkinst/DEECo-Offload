@@ -79,10 +79,10 @@ public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend
 
 
     public static float measureSampleRecognition() {
-        long before = System.currentTimeMillis();
+        long before = System.nanoTime();
         File sample = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER + "/samples/test.png");
         OCR.getInstance().recognizeText(sample, null);
-        return System.currentTimeMillis() - before;
+        return System.nanoTime() - before;
     }
 
 }
