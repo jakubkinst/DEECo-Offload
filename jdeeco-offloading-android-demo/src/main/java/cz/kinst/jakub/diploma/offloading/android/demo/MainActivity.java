@@ -93,10 +93,8 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ButterKnife.inject(this);
-//        UDPBroadcastConfig.DEBUG_MODE = true;
-//        OffloadingConfig.JDEECO_LOGGING_LEVEL = Level.ALL;
 
-		// init DEECo
+		// start the offloading runtime
 		Logger.setProvider(new AndroidLogProvider());
 
 		try {
@@ -155,6 +153,8 @@ public class MainActivity extends ActionBarActivity {
 	void onGetHelloClicked() {
 		// Initialize the resource proxy.
 		final HelloBackend backend = mFrontend.getActiveBackendProxy(HelloBackend.class);
+
+		// call remote/local backend
 		new AsyncTask<Void, Void, Message>() {
 			@Override
 			protected Message doInBackground(Void... params) {
@@ -185,6 +185,7 @@ public class MainActivity extends ActionBarActivity {
 		// Initialize the resource proxy.
 		final HelloBackend backend = mFrontend.getActiveBackendProxy(HelloBackend.class);
 
+		// call remote/local backend
 		new AsyncTask<Void, Void, Message>() {
 			@Override
 			protected Message doInBackground(Void... params) {
@@ -238,6 +239,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onDestroy() {
+		// stop the offloading runtime
 		try {
 			mOffloadingManager.stop();
 		} catch (Exception e) {

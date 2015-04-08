@@ -19,8 +19,11 @@ import java.io.OutputStream;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.kinst.jakub.diploma.offloadableocr.CopyAssetsTask;
+import cz.kinst.jakub.diploma.offloadableocr.FirstRunManager;
 import cz.kinst.jakub.diploma.offloadableocr.R;
 import cz.kinst.jakub.diploma.offloadableocr.offloading.OCRResult;
+import cz.kinst.jakub.diploma.offloadableocr.utils.FileUtils;
 
 
 /**
@@ -75,6 +78,10 @@ public class EvaluateActivity extends ActionBarActivity implements EvaluationLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_evaluate);
 		ButterKnife.inject(this);
+
+		if (!FileUtils.areAssetsCopied() || FirstRunManager.isFirstRun(this)) {
+			new CopyAssetsTask(this).execute();
+		}
 	}
 
 
