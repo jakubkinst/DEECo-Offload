@@ -5,11 +5,12 @@ package cz.kinst.jakub.diploma.offloading.android.demo.java;
  * E-mail: jakub@kinst.cz
  */
 class Message {
-    public String message;
-    public long timestamp;
+	public String message;
+	public long timestamp;
 
-    Message(String message, long timestamp) {
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+
+	Message(String message, long timestamp) {
+		this.message = message;
+		this.timestamp = timestamp;
+	}
 }

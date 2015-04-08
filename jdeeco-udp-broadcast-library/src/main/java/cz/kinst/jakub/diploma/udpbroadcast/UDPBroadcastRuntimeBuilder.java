@@ -33,55 +33,55 @@ import cz.kinst.jakub.diploma.udpbroadcast.jdeecoextension.UDPBroadcastHost;
 public class UDPBroadcastRuntimeBuilder {
 
 
-    /**
-     * Build the UDP broadcast capable {@link cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework}
-     *
-     * @param ipAddress    local host's IP address
-     * @param model        runtime model containing Components and Ensemble definitions
-     * @param udpBroadcast UDP broadcast provider
-     * @return JDEECo runtime framework
-     */
-    public RuntimeFramework build(String ipAddress, RuntimeMetadata model, UDPBroadcast udpBroadcast) {
-        if (model == null) {
-            throw new IllegalArgumentException("Model must not be null");
-        }
+	/**
+	 * Build the UDP broadcast capable {@link cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework}
+	 *
+	 * @param ipAddress    local host's IP address
+	 * @param model        runtime model containing Components and Ensemble definitions
+	 * @param udpBroadcast UDP broadcast provider
+	 * @return JDEECo runtime framework
+	 */
+	public RuntimeFramework build(String ipAddress, RuntimeMetadata model, UDPBroadcast udpBroadcast) {
+		if (model == null) {
+			throw new IllegalArgumentException("Model must not be null");
+		}
 
-        // create UDP broadcast-capable host for knowledge cloning
-        UDPBroadcastHost host = new UDPBroadcastHost(ipAddress, udpBroadcast);
+		// create UDP broadcast-capable host for knowledge cloning
+		UDPBroadcastHost host = new UDPBroadcastHost(ipAddress, udpBroadcast);
 
-        // knowledge manager must not be rebroadcasting knowledge data
-        KnowledgeDataManager knowledgeDataManager = new NonRebroadcastingKnowledgeDataManager();
+		// knowledge manager must not be rebroadcasting knowledge data
+		KnowledgeDataManager knowledgeDataManager = new NonRebroadcastingKnowledgeDataManager();
 
-        KnowledgeManagerFactory knowledgeManagerFactory = new CloningKnowledgeManagerFactory();
+		KnowledgeManagerFactory knowledgeManagerFactory = new CloningKnowledgeManagerFactory();
 
-        // Set up the executor
-        Executor executor = new SameThreadExecutor();
+		// Set up the executor
+		Executor executor = new SameThreadExecutor();
 
-        // Set up the simulation scheduler
-        SingleThreadedScheduler scheduler = new SingleThreadedScheduler();
-        scheduler.setExecutor(executor);
+		// Set up the simulation scheduler
+		SingleThreadedScheduler scheduler = new SingleThreadedScheduler();
+		scheduler.setExecutor(executor);
 
-        // Set up the host container
-        KnowledgeManagerContainer container = new KnowledgeManagerContainer(knowledgeManagerFactory);
-        knowledgeDataManager.initialize(container, host.getKnowledgeDataSender(), host.getHostId(), scheduler);
-        host.setKnowledgeDataReceiver(knowledgeDataManager);
-        // Set up the publisher task
-        TimeTriggerExt publisherTrigger = new TimeTriggerExt();
-        publisherTrigger.setPeriod(Integer.getInteger(
-                DeecoProperties.PUBLISHING_PERIOD,
-                PublisherTask.DEFAULT_PUBLISHING_PERIOD));
-        long seed = 0;
-        for (char c : host.getHostId().toCharArray())
-            seed = seed * 32 + (c - 'a');
-        Random rnd = new Random(seed);
-        publisherTrigger.setOffset(rnd.nextInt((int) publisherTrigger
-                .getPeriod()) + 1);
-        PublisherTask publisherTask = new PublisherTask(scheduler, knowledgeDataManager,
-                publisherTrigger, host.getHostId());
+		// Set up the host container
+		KnowledgeManagerContainer container = new KnowledgeManagerContainer(knowledgeManagerFactory);
+		knowledgeDataManager.initialize(container, host.getKnowledgeDataSender(), host.getHostId(), scheduler);
+		host.setKnowledgeDataReceiver(knowledgeDataManager);
+		// Set up the publisher task
+		TimeTriggerExt publisherTrigger = new TimeTriggerExt();
+		publisherTrigger.setPeriod(Integer.getInteger(
+				DeecoProperties.PUBLISHING_PERIOD,
+				PublisherTask.DEFAULT_PUBLISHING_PERIOD));
+		long seed = 0;
+		for (char c : host.getHostId().toCharArray())
+			seed = seed * 32 + (c - 'a');
+		Random rnd = new Random(seed);
+		publisherTrigger.setOffset(rnd.nextInt((int) publisherTrigger
+				.getPeriod()) + 1);
+		PublisherTask publisherTask = new PublisherTask(scheduler, knowledgeDataManager,
+				publisherTrigger, host.getHostId());
 
-        // Add publisher task to the scheduler
-        scheduler.addTask(publisherTask);
+		// Add publisher task to the scheduler
+		scheduler.addTask(publisherTask);
 
-        return new RuntimeFrameworkImpl(model, scheduler, executor, container);
-    }
+		return new RuntimeFrameworkImpl(model, scheduler, executor, container);
+	}
 }

@@ -8,15 +8,16 @@ package cz.kinst.jakub.diploma.offloading.android.demo;
  * E-mail: jakub@kinst.cz
  */
 class Message {
-    public String message;
-    public long timestamp;
+	public String message;
+	public long timestamp;
 
-    /**
-     * @param message   Message content
-     * @param timestamp time of creation
-     */
-    Message(String message, long timestamp) {
-        this.message = message;
-        this.timestamp = timestamp;
-    }
+
+	/**
+	 * @param message   Message content
+	 * @param timestamp time of creation
+	 */
+	Message(String message, long timestamp) {
+		this.message = message;
+		this.timestamp = timestamp;
+	}
 }

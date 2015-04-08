@@ -12,15 +12,16 @@ import com.google.common.eventbus.EventBus;
  * E-mail: jakub@kinst.cz
  */
 public class BusProvider {
-    private static final EventBus sBus = new EventBus();
+	private static final EventBus sBus = new EventBus();
 
-    /**
-     * Get app-wide singleton {@link com.google.common.eventbus.EventBus} instance
-     * {@see https://code.google.com/p/guava-libraries/wiki/EventBusExplained}
-     *
-     * @return EventBus singleton instance
-     */
-    public static EventBus get() {
-        return sBus;
-    }
+
+	/**
+	 * Get app-wide singleton {@link com.google.common.eventbus.EventBus} instance
+	 * {@see https://code.google.com/p/guava-libraries/wiki/EventBusExplained}
+	 *
+	 * @return EventBus singleton instance
+	 */
+	public static EventBus get() {
+		return sBus;
+	}
 }

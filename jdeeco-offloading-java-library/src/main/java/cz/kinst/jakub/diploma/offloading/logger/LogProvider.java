@@ -6,9 +6,9 @@ package cz.kinst.jakub.diploma.offloading.logger;
  * E-mail: jakub@kinst.cz
  */
 public interface LogProvider {
-    public void d(String message);
+	public void d(String message);
 
-    public void i(String message);
+	public void i(String message);
 
-    public void e(String message);
+	public void e(String message);
 }

@@ -26,24 +26,25 @@ import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.FRONTEND_MONITOR_UPDATE_INTERVAL_MS)
 public class ActiveBackendMonitorToFrontendEnsemble {
-    @Membership
-    public static boolean membership(@In("coord.monitorType") int frontendMonitorType,
-                                     @In("member.monitorType") int backendMonitorType,
-                                     @In("member.monitorState") int backendMonitorState,
-                                     @In("member.lastPing") long backendMonitorLastPing,
-                                     @In("coord.lastPing") long frontendMonitorLastPing) {
-        // connect only active backend monitors with ui monitor
-        return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, frontendMonitorLastPing)
-                && frontendMonitorType == MonitorType.FRONTEND
-                && backendMonitorType == MonitorType.BACKEND
-                && backendMonitorState == BackendMonitorState.ACTIVE;
-    }
+	@Membership
+	public static boolean membership(@In("coord.monitorType") int frontendMonitorType,
+									 @In("member.monitorType") int backendMonitorType,
+									 @In("member.monitorState") int backendMonitorState,
+									 @In("member.lastPing") long backendMonitorLastPing,
+									 @In("coord.lastPing") long frontendMonitorLastPing) {
+		// connect only active backend monitors with ui monitor
+		return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, frontendMonitorLastPing)
+				&& frontendMonitorType == MonitorType.FRONTEND
+				&& backendMonitorType == MonitorType.BACKEND
+				&& backendMonitorState == BackendMonitorState.ACTIVE;
+	}
 
-    @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("coord.backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> frontendDeploymentPlan,
-                                         @In("member.backendId") String backendBackendId,
-                                         @In("member.deviceIp") String backendDeviceIp) {
-        frontendDeploymentPlan.value.plan(backendBackendId, backendDeviceIp);
-    }
+
+	@KnowledgeExchange
+	public static void knowledgeExchange(@InOut("coord.backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> frontendDeploymentPlan,
+										 @In("member.backendId") String backendBackendId,
+										 @In("member.deviceIp") String backendDeviceIp) {
+		frontendDeploymentPlan.value.plan(backendBackendId, backendDeviceIp);
+	}
 
 }

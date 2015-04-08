@@ -26,21 +26,21 @@ import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.STATE_DISTRIBUTING_INTERVAL_MS)
 public class BackendStateDistributingEnsemble {
-    @Membership
-    public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp, @In("member.monitorType") int monitorType, @In("member.lastPing") long monitorLastPing, @In("coord.lastPing") long plannerLastPing) {
-        // Eliminate disconnected devices' monitors by checking if they are still functional
-        return DEECoManager.areComponentsStillAlive(monitorLastPing, plannerLastPing) && monitorType == MonitorType.BACKEND;
-    }
+	@Membership
+	public static boolean membership(@In("coord.appId") String plannerAppId, @In("member.deviceIp") String monitorDeviceIp, @In("member.monitorType") int monitorType, @In("member.lastPing") long monitorLastPing, @In("coord.lastPing") long plannerLastPing) {
+		// Eliminate disconnected devices' monitors by checking if they are still functional
+		return DEECoManager.areComponentsStillAlive(monitorLastPing, plannerLastPing) && monitorType == MonitorType.BACKEND;
+	}
 
 
-    @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("member.monitorState") ParamHolder<Integer> monitorState,
-                                         @In("member.backendId") String monitorAppComponentId,
-                                         @In("member.deviceIp") String monitorDeviceIp,
-                                         @In("coord.backendDeploymentPlan") BackendDeploymentPlan plannerBackendDeploymentPlan) {
-        String activeIp = plannerBackendDeploymentPlan.getPlan(monitorAppComponentId);
-        boolean isThisMonitorActive = monitorDeviceIp.equals(activeIp);
-        monitorState.value = isThisMonitorActive ? BackendMonitorState.ACTIVE : BackendMonitorState.NOT_ACTIVE;
-    }
+	@KnowledgeExchange
+	public static void knowledgeExchange(@InOut("member.monitorState") ParamHolder<Integer> monitorState,
+										 @In("member.backendId") String monitorAppComponentId,
+										 @In("member.deviceIp") String monitorDeviceIp,
+										 @In("coord.backendDeploymentPlan") BackendDeploymentPlan plannerBackendDeploymentPlan) {
+		String activeIp = plannerBackendDeploymentPlan.getPlan(monitorAppComponentId);
+		boolean isThisMonitorActive = monitorDeviceIp.equals(activeIp);
+		monitorState.value = isThisMonitorActive ? BackendMonitorState.ACTIVE : BackendMonitorState.NOT_ACTIVE;
+	}
 
 }

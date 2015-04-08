@@ -15,9 +15,9 @@ import cz.kinst.jakub.diploma.offloading.model.StateBundle;
  * E-mail: jakub@kinst.cz
  */
 public abstract interface OffloadableBackend {
-    @Post("?setStateData")
-    public void setStateData(StateBundle stateData);
+	@Get("?getStateData")
+	public StateBundle getStateData();
 
-    @Get("?getStateData")
-    public StateBundle getStateData();
+	@Post("?setStateData")
+	public void setStateData(StateBundle stateData);
 }

@@ -25,26 +25,27 @@ import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 @Ensemble
 @PeriodicScheduling(period = OffloadingConfig.STATE_DATA_MONITOR_UPDATE_INTERVAL_MS)
 public class ActiveBackendMonitorToStateDataEnsemble {
-    @Membership
-    public static boolean membership(@In("coord.monitorType") int stateDataMonitorType,
-                                     @In("coord.backendId") String stateDataBackendId,
-                                     @In("member.monitorType") int backendMonitorType,
-                                     @In("member.monitorState") int backendMonitorState,
-                                     @In("member.backendId") String backendBackendId,
-                                     @In("member.lastPing") long backendMonitorLastPing,
-                                     @In("coord.lastPing") long stateDataMonitorLastPing) {
-        // connect only active backend monitors with ui monitor
-        return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, stateDataMonitorLastPing)
-                && stateDataMonitorType == MonitorType.STATE_DATA
-                && backendMonitorType == MonitorType.BACKEND
-                && backendMonitorState == BackendMonitorState.ACTIVE
-                && backendBackendId.equals(stateDataBackendId);
-    }
+	@Membership
+	public static boolean membership(@In("coord.monitorType") int stateDataMonitorType,
+									 @In("coord.backendId") String stateDataBackendId,
+									 @In("member.monitorType") int backendMonitorType,
+									 @In("member.monitorState") int backendMonitorState,
+									 @In("member.backendId") String backendBackendId,
+									 @In("member.lastPing") long backendMonitorLastPing,
+									 @In("coord.lastPing") long stateDataMonitorLastPing) {
+		// connect only active backend monitors with ui monitor
+		return DEECoManager.areComponentsStillAlive(backendMonitorLastPing, stateDataMonitorLastPing)
+				&& stateDataMonitorType == MonitorType.STATE_DATA
+				&& backendMonitorType == MonitorType.BACKEND
+				&& backendMonitorState == BackendMonitorState.ACTIVE
+				&& backendBackendId.equals(stateDataBackendId);
+	}
 
-    @KnowledgeExchange
-    public static void knowledgeExchange(@InOut("coord.currentBackendAddress") ParamHolder<String> stateDataCurrentBackendAddress,
-                                         @In("member.deviceIp") String backendDeviceIp) {
-        stateDataCurrentBackendAddress.value = backendDeviceIp;
-    }
+
+	@KnowledgeExchange
+	public static void knowledgeExchange(@InOut("coord.currentBackendAddress") ParamHolder<String> stateDataCurrentBackendAddress,
+										 @In("member.deviceIp") String backendDeviceIp) {
+		stateDataCurrentBackendAddress.value = backendDeviceIp;
+	}
 
 }

@@ -28,7 +28,7 @@ import cz.cuni.mff.d3s.deeco.scheduler.Scheduler;
 /**
  * {@link cz.cuni.mff.d3s.deeco.network.KnowledgeDataManager} without rebroadcasting feature. Otherwise it's almost the same implementation as
  * {@link cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager}
- *
+ * <p/>
  * ---------------------------
  * Created by Jakub Kinst 2014
  * E-mail: jakub@kinst.cz
@@ -40,20 +40,17 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 	 */
 	protected final Map<KnowledgeManager, KnowledgeMetaData> replicaMetadata;
 	/**
-	 * Global version counter for all outgoing local knowledge.
-	 */
-	protected long localVersion;
-
-
-	/**
 	 * Empty knowledge path enabling convenient query for all knowledge
 	 */
 	protected final List<KnowledgePath> emptyPath;
-
 	protected final boolean useIndividualPublishing;
 	protected final boolean checkGossipCondition;
 	protected final boolean checkBoundaryCondition;
 	protected final Random random;
+	/**
+	 * Global version counter for all outgoing local knowledge.
+	 */
+	protected long localVersion;
 
 
 	public NonRebroadcastingKnowledgeDataManager() {
@@ -72,6 +69,7 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 
 		random = new Random();
 	}
+
 
 	@Override
 	public void initialize(
@@ -113,10 +111,12 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 		}
 	}
 
+
 	@Override
 	public void rebroacast(KnowledgeMetaData metadata, NICType nicType) {
 		// not implemented here
 	}
+
 
 	@Override
 	public void receive(List<? extends KnowledgeData> knowledgeData) {
@@ -164,6 +164,7 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 		}
 	}
 
+
 	protected List<KnowledgeData> prepareLocalKnowledgeData() {
 		List<KnowledgeData> result = new LinkedList<>();
 		for (KnowledgeManager km : kmContainer.getLocals()) {
@@ -185,6 +186,7 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 				new KnowledgeMetaData(km.getId(), localVersion, host, timeProvider.getCurrentMilliseconds(), 1));
 	}
 
+
 	protected ValueSet getNonLocalKnowledge(ValueSet toFilter, KnowledgeManager km) {
 		ValueSet result = new ValueSet();
 		for (KnowledgePath kp : toFilter.getKnowledgePaths()) {
@@ -194,6 +196,7 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 		}
 		return result;
 	}
+
 
 	protected KnowledgeData filterLocalKnowledgeForKnownEnsembles(KnowledgeData kd) {
 //		// now we hardcode our demo (we filter the Leader knowledge to only
@@ -208,8 +211,9 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 //		} else {
 //			return kd;
 //		}
-        return kd;
+		return kd;
 	}
+
 
 	protected ChangeSet toChangeSet(ValueSet valueSet) {
 		if (valueSet != null) {
@@ -222,9 +226,11 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 		}
 	}
 
+
 	protected void logPublish(List<? extends KnowledgeData> data) {
 		logPublish(data, "");
 	}
+
 
 	protected void logPublish(List<? extends KnowledgeData> data, String recipient) {
 		if (Log.isDebugLoggable()) {
@@ -243,6 +249,7 @@ public class NonRebroadcastingKnowledgeDataManager extends KnowledgeDataManager 
 				}
 		}
 	}
+
 
 	protected void logReceive(List<? extends KnowledgeData> knowledgeData) {
 		if (Log.isDebugLoggable()) {

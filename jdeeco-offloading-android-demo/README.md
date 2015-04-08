@@ -1,0 +1,2 @@
+# How to run the application
+Either use Android Studio or IntelliJ IDEA to run the Android application using its Android plugin or use the `assembleRelease` or `assembleDebug` Gradle task to generate the APK file which can be installed on the device. See [http://developer.android.com](http://developer.android.com) for more info.

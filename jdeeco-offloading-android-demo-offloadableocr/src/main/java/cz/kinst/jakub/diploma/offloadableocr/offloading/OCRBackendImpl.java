@@ -26,63 +26,66 @@ import cz.kinst.jakub.diploma.offloading.model.SingleValueNFPData;
  */
 public class OCRBackendImpl extends OffloadableBackendImpl implements OCRBackend {
 
-    public OCRBackendImpl() {
-    }
-
-    public OCRBackendImpl(String path, final Context context) {
-        super(path, new BackendPerformanceProvider() {
-            @Override
-            public NFPData checkPerformance() {
-                float measuredTime = measureSampleRecognition();
-                Logger.d("Measured time: " + measuredTime);
-                return new SingleValueNFPData(measuredTime);
-            }
-
-            @Override
-            public String findOptimalAlternative(Map<String, NFPData> alternatives) {
-                String bestAlternative = null;
-                float min = Float.MAX_VALUE;
-                for (String key : alternatives.keySet()) {
-                    if (bestAlternative == null)
-                        bestAlternative = key;
-                    SingleValueNFPData nfpData = (SingleValueNFPData) alternatives.get(key);
-                    Logger.d("Alternative at " + key + ": " + nfpData.getPerformance());
-                    if (nfpData.getPerformance() < min) {
-                        min = nfpData.getPerformance();
-                        bestAlternative = key;
-                    }
-                }
-                return bestAlternative;
-            }
-        });
-    }
-
-    @Override
-    public OCRResult recognize(Representation representation) {
-        try {
-            MultipartHolder<OCRParams> multipartHolder = new MultipartHolder<>(representation, OCRParams.class);
-            byte[] file = multipartHolder.getReceivedFiles().get(0).get();
-
-            File outputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "received.jpg");
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
-            bos.write(file);
-            bos.flush();
-            bos.close();
-            String recognizedText = OCR.getInstance().recognizeText(outputFile, getStateData());
-
-            return new OCRResult(recognizedText, OffloadingManager.getInstance().getLocalIpAddress());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	public OCRBackendImpl() {
+	}
 
 
-    public static float measureSampleRecognition() {
-        long before = System.currentTimeMillis();
-        File sample = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER + "/samples/test.png");
-        OCR.getInstance().recognizeText(sample, null);
-        return System.currentTimeMillis() - before;
-    }
+	public OCRBackendImpl(String path, final Context context) {
+		super(path, new BackendPerformanceProvider() {
+			@Override
+			public NFPData checkPerformance() {
+				float measuredTime = measureSampleRecognition();
+				Logger.d("Measured time: " + measuredTime);
+				return new SingleValueNFPData(measuredTime);
+			}
+
+
+			@Override
+			public String findOptimalAlternative(Map<String, NFPData> alternatives) {
+				String bestAlternative = null;
+				float min = Float.MAX_VALUE;
+				for (String key : alternatives.keySet()) {
+					if (bestAlternative == null)
+						bestAlternative = key;
+					SingleValueNFPData nfpData = (SingleValueNFPData) alternatives.get(key);
+					Logger.d("Alternative at " + key + ": " + nfpData.getPerformance());
+					if (nfpData.getPerformance() < min) {
+						min = nfpData.getPerformance();
+						bestAlternative = key;
+					}
+				}
+				return bestAlternative;
+			}
+		});
+	}
+
+
+	public static float measureSampleRecognition() {
+		long before = System.nanoTime();
+		File sample = new File(Environment.getExternalStorageDirectory() + "/" + Config.APP_FOLDER + "/samples/test.png");
+		OCR.getInstance().recognizeText(sample, null);
+		return System.nanoTime() - before;
+	}
+
+
+	@Override
+	public OCRResult recognize(Representation representation) {
+		try {
+			MultipartHolder<OCRParams> multipartHolder = new MultipartHolder<>(representation, OCRParams.class);
+			byte[] file = multipartHolder.getReceivedFiles().get(0).get();
+
+			File outputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "received.jpg");
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
+			bos.write(file);
+			bos.flush();
+			bos.close();
+			String recognizedText = OCR.getInstance().recognizeText(outputFile, getStateData());
+
+			return new OCRResult(recognizedText, OffloadingManager.getInstance().getLocalIpAddress());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

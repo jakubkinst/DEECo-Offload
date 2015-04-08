@@ -8,13 +8,15 @@ import cz.kinst.jakub.diploma.offloading.model.BackendDeploymentPlan;
  * E-mail: jakub@kinst.cz
  */
 public class DeploymentPlanUpdateEvent {
-    private final BackendDeploymentPlan plan;
+	private final BackendDeploymentPlan plan;
 
-    public DeploymentPlanUpdateEvent(BackendDeploymentPlan plan) {
-        this.plan = plan;
-    }
 
-    public BackendDeploymentPlan getPlan() {
-        return plan;
-    }
+	public DeploymentPlanUpdateEvent(BackendDeploymentPlan plan) {
+		this.plan = plan;
+	}
+
+
+	public BackendDeploymentPlan getPlan() {
+		return plan;
+	}
 }

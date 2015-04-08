@@ -12,24 +12,25 @@ import cz.kinst.jakub.diploma.udpbroadcast.JavaUDPBroadcast;
  * E-mail: jakub@kinst.cz
  */
 public class Main {
-    private static final String OCR_URI = "/ocr";
-    private static OffloadingManager mOffloadingManager;
+	private static final String OCR_URI = "/ocr";
+	private static OffloadingManager mOffloadingManager;
 
-    public static void main(String[] args) {
-        //init DEECo
-        Logger.setProvider(new JavaLogProvider());
 
-        try {
-            mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "ocr");
+	public static void main(String[] args) {
+		//init DEECo
+		Logger.setProvider(new JavaLogProvider());
 
-            OCRBackendImpl ocrBackend = new OCRBackendImpl(OCR_URI);
-            mOffloadingManager.attachBackend(ocrBackend, OCRBackend.class);
+		try {
+			mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "ocr");
 
-            mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
-            mOffloadingManager.start();
+			OCRBackendImpl ocrBackend = new OCRBackendImpl(OCR_URI);
+			mOffloadingManager.attachBackend(ocrBackend, OCRBackend.class);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
+			mOffloadingManager.start();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

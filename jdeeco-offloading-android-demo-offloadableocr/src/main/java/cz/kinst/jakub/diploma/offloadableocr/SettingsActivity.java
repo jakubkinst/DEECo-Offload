@@ -24,73 +24,79 @@ import cz.kinst.jakub.diploma.offloading.model.StateBundle;
  * E-mail: jakub@kinst.cz
  */
 public class SettingsActivity extends ActionBarActivity {
-    public static final String DEFAULT_IMAGE_SIZE = "2500";
-    @InjectView(R.id.image_size)
-    EditText imageSize;
-    @InjectView(R.id.ocr_whitelist)
-    EditText ocrWhitelist;
-    @InjectView(R.id.ocr_blacklist)
-    EditText ocrBlacklist;
-    private Frontend mFrontend;
+	public static final String DEFAULT_IMAGE_SIZE = "2500";
+	@InjectView(R.id.image_size)
+	EditText imageSize;
+	@InjectView(R.id.ocr_whitelist)
+	EditText ocrWhitelist;
+	@InjectView(R.id.ocr_blacklist)
+	EditText ocrBlacklist;
+	private Frontend mFrontend;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ButterKnife.inject(this);
-        mFrontend = MainActivity.getFrontend();
 
-        imageSize.setText(PreferenceManager.getDefaultSharedPreferences(this).getString("image_size", DEFAULT_IMAGE_SIZE));
+	public static void start(Context context) {
+		context.startActivity(new Intent(context, SettingsActivity.class));
+	}
 
-        StateBundle settings = OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).getData();
-        ocrWhitelist.setText(settings.getString("tessedit_char_whitelist", ""));
-        ocrBlacklist.setText(settings.getString("tessedit_char_blacklist", ""));
-    }
 
-    public static void start(Context context) {
-        context.startActivity(new Intent(context, SettingsActivity.class));
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_settings);
+		ButterKnife.inject(this);
+		mFrontend = MainActivity.getFrontend();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+		imageSize.setText(PreferenceManager.getDefaultSharedPreferences(this).getString("image_size", DEFAULT_IMAGE_SIZE));
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_save) {
-            saveSettings();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+		StateBundle settings = OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).getData();
+		ocrWhitelist.setText(settings.getString("tessedit_char_whitelist", ""));
+		ocrBlacklist.setText(settings.getString("tessedit_char_blacklist", ""));
+	}
 
-    private void saveSettings() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("image_size", imageSize.getText().toString()).commit();
 
-        StateBundle settings = OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).getData();
-        settings.putString("tessedit_char_whitelist", ocrWhitelist.getText().toString());
-        settings.putString("tessedit_char_blacklist", ocrBlacklist.getText().toString());
-        new AsyncTask<Void, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Void[] params) {
-                try {
-                    OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).pushData(mFrontend.getActiveBackendAddress(MainActivity.OCR_URI));
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_settings, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    finish();
-                } else {
-                    Toast.makeText(SettingsActivity.this, getString(R.string.error_saving_settings), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute();
-    }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.action_save) {
+			saveSettings();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	private void saveSettings() {
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putString("image_size", imageSize.getText().toString()).commit();
+
+		StateBundle settings = OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).getData();
+		settings.putString("tessedit_char_whitelist", ocrWhitelist.getText().toString());
+		settings.putString("tessedit_char_blacklist", ocrBlacklist.getText().toString());
+		new AsyncTask<Void, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(Void[] params) {
+				try {
+					OffloadingManager.getInstance().getBackendStateData(MainActivity.OCR_URI).pushData(mFrontend.getActiveBackendAddress(MainActivity.OCR_URI));
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					finish();
+				} else {
+					Toast.makeText(SettingsActivity.this, getString(R.string.error_saving_settings), Toast.LENGTH_LONG).show();
+				}
+			}
+		}.execute();
+	}
 }

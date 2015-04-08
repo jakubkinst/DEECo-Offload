@@ -6,7 +6,7 @@ package cz.kinst.jakub.diploma.offloading.logger;
  * E-mail: jakub@kinst.cz
  */
 public class NoLogProviderRegisteredException extends RuntimeException {
-    public NoLogProviderRegisteredException() {
-        super("No LogProvider implementation provided. Call Logger.setProvider(...) with proper Provider.");
-    }
+	public NoLogProviderRegisteredException() {
+		super("No LogProvider implementation provided. Call Logger.setProvider(...) with proper Provider.");
+	}
 }

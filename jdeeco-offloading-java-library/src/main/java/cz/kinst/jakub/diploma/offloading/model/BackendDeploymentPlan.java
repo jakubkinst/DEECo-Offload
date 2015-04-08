@@ -13,39 +13,43 @@ import java.util.Map;
  * E-mail: jakub@kinst.cz
  */
 public class BackendDeploymentPlan implements Serializable {
-    private final String mLocalIpAddress;
-    private Map<String, String> mPlan = new HashMap<>(); //key: appComponentId, value: deviceIp
+	private final String mLocalIpAddress;
+	private Map<String, String> mPlan = new HashMap<>(); //key: appComponentId, value: deviceIp
 
-    public BackendDeploymentPlan(String localIpAddress) {
-        mLocalIpAddress = localIpAddress;
-    }
 
-    /**
-     * Set the plan to use device with deviceIp for backend with backendId
-     *
-     * @param backendId Backend ID
-     * @param deviceIp  Device IP address
-     */
-    public void plan(String backendId, String deviceIp) {
-        mPlan.put(backendId, deviceIp);
-    }
+	public BackendDeploymentPlan(String localIpAddress) {
+		mLocalIpAddress = localIpAddress;
+	}
 
-    /**
-     * Returns device IP address that should be used to call the backend with backendId
-     *
-     * @param backendId Backend ID
-     * @return Device IP address
-     */
-    public String getPlan(String backendId) {
-        return mPlan.containsKey(backendId) ? mPlan.get(backendId) : mLocalIpAddress;
-    }
 
-    /**
-     * Returns set of backend IDs which we have some plan for
-     *
-     * @return
-     */
-    public java.util.Set<String> getBackends() {
-        return mPlan.keySet();
-    }
+	/**
+	 * Set the plan to use device with deviceIp for backend with backendId
+	 *
+	 * @param backendId Backend ID
+	 * @param deviceIp  Device IP address
+	 */
+	public void plan(String backendId, String deviceIp) {
+		mPlan.put(backendId, deviceIp);
+	}
+
+
+	/**
+	 * Returns device IP address that should be used to call the backend with backendId
+	 *
+	 * @param backendId Backend ID
+	 * @return Device IP address
+	 */
+	public String getPlan(String backendId) {
+		return mPlan.containsKey(backendId) ? mPlan.get(backendId) : mLocalIpAddress;
+	}
+
+
+	/**
+	 * Returns set of backend IDs which we have some plan for
+	 *
+	 * @return
+	 */
+	public java.util.Set<String> getBackends() {
+		return mPlan.keySet();
+	}
 }

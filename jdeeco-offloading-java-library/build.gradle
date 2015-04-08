@@ -1,26 +1,26 @@
 apply plugin: 'java'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':jdeeco-udp-broadcast-library')
-    compile project(':jdeeco-java-library')
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile project(':jdeeco-udp-broadcast-library')
+	compile project(':jdeeco-java-library')
 
-    compile 'com.google.guava:guava:18.0' // for EventBus mainly
+	compile 'com.google.guava:guava:18.0' // for EventBus mainly
 
-    // Restlet libraries
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile 'org.simpleframework:simple:5.1.6'
-    compile project(':restlet-android')
-    compile('org.restlet.jse:org.restlet.ext.simple:2.3.0') {
-        exclude module: 'org.restlet'
-    }
-    compile('org.restlet.jse:org.restlet.ext.gson:2.3.0') {
-        exclude module: 'org.restlet'
-    }
-    compile('org.restlet.jse:org.restlet.ext.fileupload:2.3.0') {
-        exclude module: 'org.restlet'
-    }
-    compile('org.restlet.jse:org.restlet.ext.html:2.3.0') {
-        exclude module: 'org.restlet'
-    }
+	// Restlet libraries
+	compile 'com.google.code.gson:gson:2.3.1'
+	compile 'org.simpleframework:simple:5.1.6'
+	compile project(':restlet-android')
+	compile('org.restlet.jse:org.restlet.ext.simple:2.3.0') {
+		exclude module: 'org.restlet'
+	}
+	compile('org.restlet.jse:org.restlet.ext.gson:2.3.0') {
+		exclude module: 'org.restlet'
+	}
+	compile('org.restlet.jse:org.restlet.ext.fileupload:2.3.0') {
+		exclude module: 'org.restlet'
+	}
+	compile('org.restlet.jse:org.restlet.ext.html:2.3.0') {
+		exclude module: 'org.restlet'
+	}
 }

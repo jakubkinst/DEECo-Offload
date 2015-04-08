@@ -10,23 +10,24 @@ import cz.kinst.jakub.diploma.udpbroadcast.JavaUDPBroadcast;
  * E-mail: jakub@kinst.cz
  */
 public class Main {
-    private static final String HELLO_URI = "/hello";
-    private static OffloadingManager mOffloadingManager;
-    private static HelloBackendImpl mHelloResource;
+	private static final String HELLO_URI = "/hello";
+	private static OffloadingManager mOffloadingManager;
+	private static HelloBackendImpl mHelloResource;
 
-    public static void main(String[] args) {
 
-        Logger.setProvider(new JavaLogProvider());
-        try {
-            mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "hello");
+	public static void main(String[] args) {
 
-            mHelloResource = new HelloBackendImpl(HELLO_URI);
-            mOffloadingManager.attachBackend(mHelloResource, HelloBackend.class);
-            mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
-            mOffloadingManager.start();
+		Logger.setProvider(new JavaLogProvider());
+		try {
+			mOffloadingManager = OffloadingManager.createInstance(new JavaUDPBroadcast(), "hello");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			mHelloResource = new HelloBackendImpl(HELLO_URI);
+			mOffloadingManager.attachBackend(mHelloResource, HelloBackend.class);
+			mOffloadingManager.init(OffloadingManager.MODE_ONLY_BACKEND);
+			mOffloadingManager.start();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

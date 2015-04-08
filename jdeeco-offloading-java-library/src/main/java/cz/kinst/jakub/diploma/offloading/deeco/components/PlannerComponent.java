@@ -30,44 +30,48 @@ import cz.kinst.jakub.diploma.offloading.utils.OffloadingConfig;
 @Component
 public class PlannerComponent implements Serializable {
 
-    public String deployedBy;
-    public String appId;
-    public Set<BackendMonitorDef> monitorDefs;
-    public NFPDataHolder nfpDataHolder = new NFPDataHolder();
-    public Long lastPing;
-    public BackendDeploymentPlan backendDeploymentPlan;
+	public String deployedBy;
+	public String appId;
+	public Set<BackendMonitorDef> monitorDefs;
+	public NFPDataHolder nfpDataHolder = new NFPDataHolder();
+	public Long lastPing;
+	public BackendDeploymentPlan backendDeploymentPlan;
 
-    public PlannerComponent(String appId, Set<BackendMonitorDef> monitorDefs, String deviceIp) {
-        this.appId = appId;
-        this.monitorDefs = monitorDefs;
-        this.deployedBy = deviceIp;
-    }
 
-    @Process
-    @PeriodicScheduling(period = OffloadingConfig.PING_INTERVAL_MS)
-    public static void ping(@InOut("lastPing") ParamHolder<Long> lastPing) {
-        lastPing.value = System.currentTimeMillis();
-    }
+	public PlannerComponent(String appId, Set<BackendMonitorDef> monitorDefs, String deviceIp) {
+		this.appId = appId;
+		this.monitorDefs = monitorDefs;
+		this.deployedBy = deviceIp;
+	}
 
-    @Process
-    @PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)
-    public static void updateDeviceIp(@InOut("deployedBy") ParamHolder<String> deviceIp) {
-        deviceIp.value = OffloadingManager.getInstance().getLocalIpAddress();
-    }
 
-    @Process
-    @PeriodicScheduling(period = 5000)
-    public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
-        Logger.i("Planner: plan");
-        BackendDeploymentPlan newPlan = new BackendDeploymentPlan(OffloadingManager.getInstance().getLocalIpAddress());
-        for (String appComponentId : nfpDataHolder.getBackendIds()) {
-            HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByBackendId(appComponentId);
-            String selectedDeviceIp = OffloadingManager.getInstance().findOptimalAlternative(appComponentId, alternatives);
-            Logger.i("Found best alternative at " + selectedDeviceIp + ": " + alternatives.get(selectedDeviceIp).toString());
-            newPlan.plan(appComponentId, selectedDeviceIp);
+	@Process
+	@PeriodicScheduling(period = OffloadingConfig.PING_INTERVAL_MS)
+	public static void ping(@InOut("lastPing") ParamHolder<Long> lastPing) {
+		lastPing.value = System.currentTimeMillis();
+	}
 
-        }
-        deploymentPlan.value = newPlan;
-    }
+
+	@Process
+	@PeriodicScheduling(period = OffloadingConfig.IP_UPDATE_INTERVAL_MS)
+	public static void updateDeviceIp(@InOut("deployedBy") ParamHolder<String> deviceIp) {
+		deviceIp.value = OffloadingManager.getInstance().getLocalIpAddress();
+	}
+
+
+	@Process
+	@PeriodicScheduling(period = 5000)
+	public static void plan(@In("nfpDataHolder") NFPDataHolder nfpDataHolder, @InOut("backendDeploymentPlan") ParamHolder<BackendDeploymentPlan> deploymentPlan) {
+		Logger.i("Planner: plan");
+		BackendDeploymentPlan newPlan = new BackendDeploymentPlan(OffloadingManager.getInstance().getLocalIpAddress());
+		for (String appComponentId : nfpDataHolder.getBackendIds()) {
+			HashMap<String, NFPData> alternatives = nfpDataHolder.getActiveByBackendId(appComponentId);
+			String selectedDeviceIp = OffloadingManager.getInstance().findOptimalAlternative(appComponentId, alternatives);
+			Logger.i("Found best alternative at " + selectedDeviceIp + ": " + alternatives.get(selectedDeviceIp).toString());
+			newPlan.plan(appComponentId, selectedDeviceIp);
+
+		}
+		deploymentPlan.value = newPlan;
+	}
 }
 

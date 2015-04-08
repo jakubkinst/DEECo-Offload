@@ -7,11 +7,11 @@ import cz.cuni.mff.d3s.deeco.scheduler.CurrentTimeProvider;
  */
 public class DefaultCurrentTimeProvider implements CurrentTimeProvider {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long getCurrentMilliseconds() {
-        return System.currentTimeMillis();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long getCurrentMilliseconds() {
+		return System.currentTimeMillis();
+	}
 }

@@ -12,12 +12,12 @@ import cz.kinst.jakub.diploma.offloading.backend.OffloadableBackend;
  */
 public interface HelloBackend extends OffloadableBackend {
 
-    @Post("?hello")
-    public Message getHello(String name);
+	@Post("?hello")
+	public Message getHello(String name);
 
-    @Post("?hi")
-    public Message getHi(String name);
+	@Post("?hi")
+	public Message getHi(String name);
 
-    @Post("?file")
-    public Message testFile(Representation file);
+	@Post("?file")
+	public Message testFile(Representation file);
 }

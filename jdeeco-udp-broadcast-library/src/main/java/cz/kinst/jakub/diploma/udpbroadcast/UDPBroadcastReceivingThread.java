@@ -15,74 +15,77 @@ import java.util.Arrays;
  * E-mail: jakub@kinst.cz
  */
 public class UDPBroadcastReceivingThread extends Thread {
-    private final UDPBroadcast mUdpBroadcast;
-    private DatagramSocket mSocket;
-
-    /**
-     * Creates a new instance of this thread
-     *
-     * @param udpBroadcast reference to {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} implementation
-     */
-    public UDPBroadcastReceivingThread(UDPBroadcast udpBroadcast) {
-        mUdpBroadcast = udpBroadcast;
-    }
+	private final UDPBroadcast mUdpBroadcast;
+	private DatagramSocket mSocket;
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void run() {
-        try {
-            //Keep a socket open to listen to all the UDP trafic that is destined for this port
-            mSocket = new DatagramSocket(UDPBroadcastConfig.PORT, InetAddress.getByName("0.0.0.0"));
-            mSocket.setBroadcast(true);
+	/**
+	 * Creates a new instance of this thread
+	 *
+	 * @param udpBroadcast reference to {@link cz.kinst.jakub.diploma.udpbroadcast.UDPBroadcast} implementation
+	 */
+	public UDPBroadcastReceivingThread(UDPBroadcast udpBroadcast) {
+		mUdpBroadcast = udpBroadcast;
+	}
 
-            while (!isInterrupted()) {
-                mUdpBroadcast.logDebug("Ready to receive broadcast packets!");
 
-                //Receive a packet
-                byte[] recvBuf = new byte[UDPBroadcastConfig.PACKET_SIZE];
-                DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
-                if (!mSocket.isClosed())
-                    mSocket.receive(packet);
-                // get actual length of data and trim the byte array accordingly
-                int length = packet.getLength();
-                byte[] data = Arrays.copyOfRange(packet.getData(), 0, length);
-                packet.setData(data);
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void run() {
+		try {
+			//Keep a socket open to listen to all the UDP trafic that is destined for this port
+			mSocket = new DatagramSocket(UDPBroadcastConfig.PORT, InetAddress.getByName("0.0.0.0"));
+			mSocket.setBroadcast(true);
 
-                //Packet received
+			while (!isInterrupted()) {
+				mUdpBroadcast.logDebug("Ready to receive broadcast packets!");
 
-                String sender = packet.getAddress().getHostAddress();
+				//Receive a packet
+				byte[] recvBuf = new byte[UDPBroadcastConfig.PACKET_SIZE];
+				DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
+				if (!mSocket.isClosed())
+					mSocket.receive(packet);
+				// get actual length of data and trim the byte array accordingly
+				int length = packet.getLength();
+				byte[] data = Arrays.copyOfRange(packet.getData(), 0, length);
+				packet.setData(data);
 
-                // if received message is from myself, skip
-                if (sender.equals(mUdpBroadcast.getMyIpAddress())) continue;
+				//Packet received
 
-                mUdpBroadcast.logDebug("Packet received from: " + sender + "; Size: " + data.length);
-                //String content = new String(data).trim();
-                //logDebug("Content: " + content);
-                mUdpBroadcast.onPacketReceived(packet);
-            }
-        } catch (IOException ex) {
-            mUdpBroadcast.logError("Oops: " + ex.getMessage());
-        }
-    }
+				String sender = packet.getAddress().getHostAddress();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void interrupt() {
-        // make sure to close the socket to avoid Exception inside the thread implementation
-        closeSocket();
-        super.interrupt();
-    }
+				// if received message is from myself, skip
+				if (sender.equals(mUdpBroadcast.getMyIpAddress())) continue;
 
-    /**
-     * Closes UDP socket. Called before interrupting the thread!
-     */
-    private void closeSocket() {
-        mSocket.disconnect();
-        mSocket.close();
-    }
+				mUdpBroadcast.logDebug("Packet received from: " + sender + "; Size: " + data.length);
+				//String content = new String(data).trim();
+				//logDebug("Content: " + content);
+				mUdpBroadcast.onPacketReceived(packet);
+			}
+		} catch (IOException ex) {
+			mUdpBroadcast.logError("Oops: " + ex.getMessage());
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void interrupt() {
+		// make sure to close the socket to avoid Exception inside the thread implementation
+		closeSocket();
+		super.interrupt();
+	}
+
+
+	/**
+	 * Closes UDP socket. Called before interrupting the thread!
+	 */
+	private void closeSocket() {
+		mSocket.disconnect();
+		mSocket.close();
+	}
 }

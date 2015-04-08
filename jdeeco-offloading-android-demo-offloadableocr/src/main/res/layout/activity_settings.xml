@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin">
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:padding="@dimen/activity_vertical_margin">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Header"
-            android:text="@string/settings_image_size" />
+		<TextView
+			style="@style/Header"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_image_size"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/image_size"
-            android:text="2000" />
+		<EditText
+			android:id="@+id/image_size"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:inputType="number"
+			android:text="2000"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_image_size_summary"
-            style="@style/SettingsSummary" />
+		<TextView
+			style="@style/SettingsSummary"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_image_size_summary"/>
 
-        <TextView
-            style="@style/Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_ocr_whitelist"
-            android:id="@+id/textView" />
+		<TextView
+			android:id="@+id/textView"
+			style="@style/Header"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_ocr_whitelist"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/ocr_whitelist" />
+		<EditText
+			android:id="@+id/ocr_whitelist"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="10"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_ocr_whitelist_summary"
-            style="@style/SettingsSummary" />
+		<TextView
+			style="@style/SettingsSummary"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_ocr_whitelist_summary"/>
 
-        <TextView
-            style="@style/Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_ocr_blacklist"
-            android:id="@+id/textView2" />
+		<TextView
+			android:id="@+id/textView2"
+			style="@style/Header"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_ocr_blacklist"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/ocr_blacklist" />
+		<EditText
+			android:id="@+id/ocr_blacklist"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="10"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_ocr_blacklist_summary"
-            style="@style/SettingsSummary" />
-    </LinearLayout>
+		<TextView
+			style="@style/SettingsSummary"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_ocr_blacklist_summary"/>
+	</LinearLayout>
 </ScrollView>
