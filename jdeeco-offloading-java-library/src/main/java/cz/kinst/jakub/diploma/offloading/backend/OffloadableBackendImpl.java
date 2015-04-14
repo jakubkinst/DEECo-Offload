@@ -17,7 +17,7 @@ import cz.kinst.jakub.diploma.offloading.model.StateBundle;
  * Created by Jakub Kinst 2015
  * E-mail: jakub@kinst.cz
  */
-public abstract class OffloadableBackendImpl extends ServerResource {
+public abstract class OffloadableBackendImpl extends ServerResource implements OffloadableBackend{
 
 	/**
 	 * Performance provider responsible for measuring performance and producing {@link cz.kinst.jakub.diploma.offloading.model.NFPData}
@@ -82,6 +82,7 @@ public abstract class OffloadableBackendImpl extends ServerResource {
 	 *
 	 * @return
 	 */
+	@Override
 	public StateBundle getStateData() {
 		StateBundle bundle = (StateBundle) getContext().getAttributes().get(getClientInfo().getAddress());
 		if (bundle == null) {
@@ -97,6 +98,7 @@ public abstract class OffloadableBackendImpl extends ServerResource {
 	 *
 	 * @param stateData
 	 */
+	@Override
 	public void setStateData(StateBundle stateData) {
 		getContext().getAttributes().put(getClientInfo().getAddress(), stateData);
 		Logger.d("Received state data from " + getClientInfo().getAddress());
