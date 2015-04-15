@@ -13,7 +13,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
     <output-test url="file://$MODULE_DIR$/build/classes/test" />
     <exclude-output />
@@ -27,8 +27,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="org.joda.time" level="project" />
-    <orderEntry type="library" exported="" name="org.json" level="project" />
-    <orderEntry type="library" exported="" name="org.jsslutils" level="project" />
+    <orderEntry type="library" exported="" name="restlet-android.restlet-android" level="project" />
   </component>
 </module>
