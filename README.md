@@ -15,3 +15,6 @@ The build system is Gradle (Created in Android Studio/IntelliJ Idea)
 - **tess-two** - Android library module providing OCR via Android NDK (just a build of [tess-two](https://github.com/rmtheis/tess-two))
 - **jdeeco-offloading-android-demo-offloadableocr** - Demo Android application with simple OCR functionality taking advantage of offloading (Work in progress)
 - **jdeeco-offloading-android-demo-offloadableocr-java-backend** - Java command-line application with running backend for *jdeeco-offloading-android-demo-offloadableocr*
+
+## Presentation (in Czech)
+[https://goo.gl/X9yLQ7](https://goo.gl/X9yLQ7)
